@@ -1,0 +1,65 @@
+$panel-prefix: ".ms-panel";
+$panel-border-color: #e1e6eb;
+$panel-background-color: #ffffff;
+$panel-head-height: 40px;
+$panel-head-bg: #fafafa;
+$panel-cell-padding: 8px;
+
+.vs-panel {
+  position: relative;
+  display: block;
+  //   margin-bottom: 1em;
+  // background-color: $panel-background-color;
+
+  &__hd {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: $panel-head-height;
+    padding: 0 16px;
+    background: $panel-head-bg;
+
+    &-title {
+      font-weight: 500;
+      //   font-family: Roboto-Medium;
+      font-size: 16px;
+      line-height: 19px;
+      color: #212121;
+      letter-spacing: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    &-extra {
+      a,
+      button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  }
+  &__bd {
+    // padding: 20px 24px;
+
+    &.show-more-wrapper {
+      height: 30vh;
+      overflow: hidden;
+    }
+
+    &.show-more {
+      overflow: visible;
+      height: auto;
+    }
+  }
+
+  &__ft {
+    background-color: #ffffff;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

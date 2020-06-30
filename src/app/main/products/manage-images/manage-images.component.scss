@@ -1,0 +1,53 @@
+app-manage-images {
+  // .limit-height clr-datagrid {
+  //   height: 500px;
+  // }
+  clr-datagrid {
+    height: 100% !important;
+  }
+
+  h6 {
+    margin: 0 !important;
+  }
+
+  .product-col {
+    width: 250px !important;
+  }
+
+  .sku-col {
+    width: 150px !important;
+  }
+
+  .images-controller {
+    padding: 1rem 0 1rem 0;
+  }
+
+  .upload-wrapper {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+
+    .upload-item {
+      display: flex;
+      align-items: flex-start;
+      // padding: 24px 24px 48px 24px;
+      // margin-bottom: 20px;
+      margin: 0px 5px 5px 0px;
+    }
+  }
+
+  .datagrid-row:hover {
+    background-color: transparent;
+  }
+
+  // i[nz-icon] {
+  //   font-size: 32px;
+  //   color: #999;
+  // }
+  .ant-upload-text {
+    margin-top: 8px;
+    color: #666;
+  }
+}

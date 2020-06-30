@@ -1,0 +1,9 @@
+$pagebar-head-bg: #fafafa;
+
+vs-pagebar {
+  .vs-pagebar {
+    &__hd {
+      background: $pagebar-head-bg;
+    }
+  }
+}

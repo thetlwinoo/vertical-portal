@@ -1,0 +1,12 @@
+<div class="vs-panel__hd">
+    <div *ngIf="title" class="vs-panel__hd-title">
+        <ng-container>{{ title }}</ng-container>
+    </div>
+    <div class="vs-panel__hd-extra">
+        <!-- <ng-container>{{ extra }}</ng-container> -->
+        <ng-content select="[extra]"></ng-content>
+    </div>
+</div>
+<div class="vs-panel__bd">
+    <ng-content select="[body]"></ng-content>
+</div>

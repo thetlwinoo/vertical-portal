@@ -1,0 +1,70 @@
+<vs-pagebar [title]="'Batch Upload'"></vs-pagebar>
+<div class="pagebar-content-wrapper">
+    <vs-alert *ngIf="showAlertInd" [alert]="alert"></vs-alert>
+
+
+    <nz-tabset (nzSelectedIndexChange)="selectedChanged($event)">
+        <nz-tab nzTitle="Import"></nz-tab>
+        <nz-tab nzTitle="Import History"></nz-tab>
+    </nz-tabset>
+
+    <nz-space>
+        <input #file [style.display]="'none'" type="file" id="file" accept=".xls,.xlsx,.csv,.json"
+            (change)="onUpload($event)" hidden />
+        <nz-space-item>
+            <nz-select ngModel="createNew">
+                <nz-option nzValue="createNew" nzLabel="Create New Product"></nz-option>
+                <nz-option nzValue="disabled" nzLabel="Update Product" nzDisabled></nz-option>
+                <nz-option nzValue="disabled" nzLabel="Update Stock" nzDisabled></nz-option>
+                <nz-option nzValue="disabled" nzLabel="Update Price" nzDisabled></nz-option>
+            </nz-select>
+        </nz-space-item>
+
+        <nz-space-item>
+            <nz-button-group>
+                <button nz-button nzType="default" (click)="file.click()">Upload Files</button>
+                <button nz-button nzType="default" (click)="onImportToSystem($event)"
+                    [disabled]="!uploadData?.length">Import To System</button>
+                <button nz-button nzType="default" (click)="clearUploadedRecords()"
+                    [disabled]="!uploadData?.length">Clear</button>
+            </nz-button-group>
+        </nz-space-item>
+    </nz-space>
+
+    <nz-progress [nzPercent]="importPercentage.toFixed()" nzStatus="active"></nz-progress>
+
+    <nz-table #smallTable nzSize="small" nzTableLayout="auto" [nzData]="uploadData">
+        <thead>
+            <tr>
+                <th>Vendor Code</th>
+                <th>Vendor SKU</th>
+                <th>Barcode</th>
+                <th>Item Name</th>
+                <th>Brand Name</th>
+                <th>Product Cateogory</th>
+                <th>Product Sub Category</th>
+                <th>Model Name</th>
+                <th>Model Number</th>
+                <th>Quantity On Hand</th>
+                <th>Selling Price</th>
+                <th>Retail Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of smallTable.data">
+                <td>{{ data.vendorCode }}</td>
+                <td>{{ data.vendorSKU }}</td>
+                <td>{{ data.barcode }}</td>
+                <td>{{ data.itemName }}</td>
+                <td>{{ data.brandName }}</td>
+                <td>{{ data.productCategory }}</td>
+                <td>{{ data.productSubCategory}}</td>
+                <td>{{ data.modelName}}</td>
+                <td>{{ data.modelNumber}}</td>
+                <td>{{ data.quantityOnHand | number}}</td>
+                <td>{{ data.sellingPrice | currency}}</td>
+                <td>{{ data.retailPrice | currency}}</td>
+            </tr>
+        </tbody>
+    </nz-table>
+</div>

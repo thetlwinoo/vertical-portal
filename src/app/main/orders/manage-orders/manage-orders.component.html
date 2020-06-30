@@ -1,0 +1,69 @@
+<vs-pagebar [title]="'Manage Orders'"></vs-pagebar>
+<div class="pagebar-content-wrapper">
+    <vs-alert *ngIf="showAlertInd" [alert]="alert"></vs-alert>
+
+    <nz-tabset>
+        <nz-tab nzTitle="All"></nz-tab>
+        <nz-tab nzTitle="Un Paid"></nz-tab>
+        <nz-tab nzTitle="Pending"></nz-tab>
+        <nz-tab nzTitle="Ready To Ship"></nz-tab>
+        <nz-tab nzTitle="Shipped"></nz-tab>
+        <nz-tab nzTitle="Completed"></nz-tab>
+    </nz-tabset>
+
+    <div class="manage-orders-filter">
+        <div nz-row>
+            <div nz-col [nzXs]="24" [nzLg]="22">
+                <input nz-input placeholder="Order Number" nzSize="default" />
+
+                <input nz-input placeholder="Customer" nzSize="default" />
+
+                <input nz-input placeholder="Product" nzSize="default" />
+
+                <input nz-input placeholder="Seller SKU" nzSize="default" />
+
+                <input nz-input placeholder="Payment" nzSize="default" />
+
+                <nz-range-picker [(ngModel)]="dateRange" (ngModelChange)="onChange($event)"></nz-range-picker>
+            </div>
+            <div nz-col [nzXs]="24" [nzLg]="2"><button nz-button nzType="default">Search</button></div>
+        </div>
+    </div>
+
+    <nz-table #smallTable nzSize="small" nzTableLayout="auto" [nzData]="orders" [nzFrontPagination]="false"
+        [nzLoading]="loading" [nzTotal]="totalItems" [nzPageIndex]="page" [nzPageSize]="itemsPerPage"
+        [nzHideOnSinglePage]="true" (nzQueryParams)="onQueryParamsChange($event)">
+        <thead>
+            <tr>
+                <th [nzChecked]="checked" [nzIndeterminate]="indeterminate" (nzCheckedChange)="onAllChecked($event)">
+                </th>
+                <th [nzLeft]="true">Document</th>
+                <th>Order No</th>
+                <th>Order Date</th>
+                <th>Order Type</th>
+                <th>Pending Since</th>
+                <th>Payment Method</th>
+                <th>Retail Price</th>
+                <th>Status</th>
+                <th>Printed</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of smallTable.data">
+                <td [nzChecked]="setOfCheckedId.has(data.id)" [nzDisabled]="data.disabled"
+                    (nzCheckedChange)="onItemChecked(data.id, $event)"></td>
+                <td><a nz-button nzType="link">Invoice</a></td>
+                <td>{{ data.customerPurchaseOrderNumber }}</td>
+                <td>{{ data.orderDate | date:'medium' }}</td>
+                <td></td>
+                <td></td>
+                <td>{{data.paymentMethodName}}</td>
+                <td>{{data.totalDue | currency}}</td>
+                <td>{{data.status}}</td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </nz-table>
+</div>

@@ -1,0 +1,23 @@
+products-update {
+  h6.title {
+    margin-top: 0px !important;
+
+    fa-icon {
+      color: #333333;
+    }
+
+    .route-item {
+      cursor: pointer;
+    }
+  }
+
+  .panel-wrapper {
+    margin-top: 1rem;
+  }
+
+  .actions-wrapper {
+    background: #ffffff;
+    margin-top: 1em;
+    padding-left: 1em;
+  }
+}

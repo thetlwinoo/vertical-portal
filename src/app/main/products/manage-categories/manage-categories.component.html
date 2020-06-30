@@ -1,0 +1,106 @@
+<vs-pagebar [title]="'Manage Categories'">
+    <div extra>
+        <nz-space>
+            <nz-space-item>
+                <button nz-button nzType="default">Add Root Category</button>
+            </nz-space-item>
+            <nz-space-item>
+                <button nz-button nzType="default" (click)="showUpdateConfirm()">Confirm Update</button>
+            </nz-space-item>
+        </nz-space>
+    </div>
+</vs-pagebar>
+<div class="pagebar-content-wrapper">
+    <div class="manage-categories-wrapper">
+        <vs-alert *ngIf="showAlertInd" [alert]="alert"></vs-alert>
+
+        <div nz-row [nzGutter]="16">
+            <div nz-col [nzXs]="24" [nzLg]="7">
+                <nz-input-group [nzSuffix]="suffixIcon">
+                    <input type="text" nz-input placeholder="Search" [(ngModel)]="searchValue" />
+                </nz-input-group>
+                <ng-template #suffixIcon>
+                    <i nz-icon nzType="search"></i>
+                </ng-template>
+                <nz-tree [nzData]="(categories$ | async) | orderBy:'id'" [nzSearchValue]="searchValue" nzDraggable
+                    (nzClick)="nzClick($event)" (nzOnDrop)="nzEvent($event)"> </nz-tree>
+            </div>
+            <div nz-col [nzXs]="24" [nzLg]="17">
+                <vs-panel [title]="selectedCategory?selectedCategory.name:'Category'">
+                    <div extra>
+                        <nz-space>
+                            <nz-space-item>
+                                <button nz-button nzType="default" [nzSize]="'small'" [disabled]="!selectedCategory"
+                                    (click)="onEditMode(selectedCategory)" *ngIf="!editMode">Edit</button>
+                            </nz-space-item>
+                            <nz-space-item>
+                                <button nz-button nzType="default" [nzSize]="'small'"
+                                    (click)="onSaveItem(selectedCategory)" *ngIf="editMode">Save</button>
+                            </nz-space-item>
+                            <nz-space-item>
+                                <button nz-button nzType="default" [nzSize]="'small'"
+                                    (click)="onCancelMode(selectedCategory)" *ngIf="editMode">Cancel</button>
+                            </nz-space-item>
+                        </nz-space>
+                    </div>
+                    <div body class="content-wrapper">
+                        <nz-descriptions nzBordered *ngIf="selectedCategory;else noneselect" [nzColumn]="1">
+                            <nz-descriptions-item nzTitle="Name">
+                                <input nz-input placeholder="Name" [(ngModel)]="selectedCategory.name"
+                                    *ngIf="editMode;else viewName" />
+                                <ng-template #viewName>
+                                    <span>{{selectedCategory.name}}</span>
+                                </ng-template>
+                            </nz-descriptions-item>
+                            <nz-descriptions-item nzTitle="Parent Name">
+                                <span>{{selectedCategory.parentName}}</span>
+                            </nz-descriptions-item>
+                            <nz-descriptions-item nzTitle="Icon">
+                                <div *ngIf="editMode;else viewThumbnailUrl">
+                                    <nz-upload class="avatar-uploader" [nzAction]="blobUrl + 'upload'"
+                                        nzListType="picture-card" [nzShowUploadList]="false"
+                                        [nzBeforeUpload]="beforeUpload"
+                                        (nzChange)="handleChange($event, selectedCategory)">
+                                        <ng-container *ngIf="!selectedCategory.iconThumbnailUrl">
+                                            <i class="upload-icon" nz-icon [nzType]="loading ? 'loading' : 'plus'"></i>
+                                            <div class="ant-upload-text">Upload</div>
+                                        </ng-container>
+                                        <img *ngIf="selectedCategory.iconThumbnailUrl"
+                                            [src]="blobUrl + selectedCategory.iconThumbnailUrl" style="width: 100%" />
+                                    </nz-upload>
+                                </div>
+                                <ng-template #viewThumbnailUrl>
+                                    <img width="100" *ngIf="selectedCategory.iconThumbnailUrl"
+                                        [src]="blobUrl + selectedCategory.iconThumbnailUrl" />
+                                </ng-template>
+                            </nz-descriptions-item>
+                            <nz-descriptions-item nzTitle="Icon Font">
+                                <input nz-input placeholder="Icon Font" [(ngModel)]="selectedCategory.iconFont"
+                                    *ngIf="editMode;else viewIconFont" />
+                                <ng-template #viewIconFont>
+                                    <span>{{selectedCategory.iconFont}}</span>
+                                </ng-template>
+                            </nz-descriptions-item>
+                            <nz-descriptions-item nzTitle="Just For You">
+                                <nz-switch [(ngModel)]="selectedCategory.justForYouInd"
+                                    [nzDisabled]="!editMode || !selectedCategory.parentId">
+                                </nz-switch>
+                            </nz-descriptions-item>
+                            <nz-descriptions-item nzTitle="Show In Nav">
+                                <nz-switch [(ngModel)]="selectedCategory.showInNavInd"
+                                    [nzDisabled]="!editMode || selectedCategory.parentId"></nz-switch>
+                            </nz-descriptions-item>
+                            <nz-descriptions-item nzTitle="Sort Order">
+                                <span>{{selectedCategory.sortOrder}}</span>
+                            </nz-descriptions-item>
+                        </nz-descriptions>
+                        <ng-template #noneselect>
+                            <nz-empty></nz-empty>
+                        </ng-template>
+                    </div>
+                </vs-panel>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,13 @@
+app-manage-orders {
+  .manage-orders-controller {
+    padding-bottom: 1em;
+  }
+
+  .manage-orders-filter {
+    padding-bottom: 1em;
+    .ant-input {
+      width: 150px;
+      margin: 0px 0.5em 0.5em 0px;
+    }
+  }
+}

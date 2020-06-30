@@ -1,0 +1,20 @@
+:host {
+  background-color: #ffffff;
+
+  .content-wrapper {
+    padding: 20px;
+    min-height: 30vh;
+  }
+
+  nz-button-group {
+    display: flex !important;
+  }
+
+  nz-empty {
+    padding: 5em;
+  }
+
+  .pagebar-content-wrapper {
+    background-color: #ffffff;
+  }
+}

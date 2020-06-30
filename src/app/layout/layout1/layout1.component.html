@@ -1,0 +1,127 @@
+<nz-layout>
+    <nz-sider class="menu-sidebar" nzCollapsible nzBreakpoint="lg" nzWidth="230px" [nzCollapsedWidth]="0"
+        [ngSwitch]="isAuthenticated()" *ngIf="!vsConfig.layout.sidenav.hidden">
+        <div class="sidebar-logo">
+            <a href="https://ng.ant.design/" target="_blank">
+                <img src="assets/logo/zezawar.svg" alt="logo">
+                <h1>ZEZAWAR PORTAL</h1>
+            </a>
+        </div>
+        <ul nz-menu nzTheme="dark" nzMode="inline">
+            <ng-container *ngTemplateOutlet="menuTpl; context: { $implicit: navigation }"></ng-container>
+            <ng-template #menuTpl let-menus>
+                <ng-container *ngFor="let menu of menus">
+                    <li *ngIf="!menu.children" nz-menu-item [nzPaddingLeft]="menu.level * 24"
+                        [nzDisabled]="menu.disabled" nzMatchRouter>
+                        <a *ngIf="menu.url;else noroute" [routerLink]="[menu.url]">
+                            <i nz-icon [nzType]="menu.icon" *ngIf="menu.icon"></i>
+                            <span>{{ menu.title }}</span>
+                        </a>
+                        <ng-template #noroute>
+                            <i nz-icon [nzType]="menu.icon" *ngIf="menu.icon"></i>
+                            <span>{{ menu.title }}</span>
+                        </ng-template>
+                    </li>
+                    <li *ngIf="menu.children" nz-submenu [nzPaddingLeft]="menu.level * 24" [nzOpen]="menu.open"
+                        [nzTitle]="menu.title" [nzIcon]="menu.icon" [nzDisabled]="menu.disabled">
+                        <ul>
+                            <ng-container *ngTemplateOutlet="menuTpl; context: { $implicit: menu.children }">
+                            </ng-container>
+                        </ul>
+                    </li>
+                </ng-container>
+            </ng-template>
+        </ul>
+    </nz-sider>
+    <nz-layout>
+        <nz-header *ngIf="!vsConfig.layout.header.hidden">
+            <div class="header">
+                <div class="header__lh">
+                </div>
+                <div class="header__rh">
+                    <a nz-dropdown [nzDropdownMenu]="menu" [nzPlacement]="'bottomRight'">
+                        {{account?.login | titlecase}}
+                        <i nz-icon nzType="down"></i>
+                    </a>
+                    <nz-dropdown-menu #menu="nzDropdownMenu">
+                        <ul nz-menu>
+                            <li nz-menu-item>About</li>
+                            <li nz-menu-divider></li>
+                            <li nz-menu-item>Preferences</li>
+                            <li nz-menu-divider></li>
+                            <li nz-menu-item (click)="logout()">Log out</li>
+                        </ul>
+                    </nz-dropdown-menu>
+                </div>
+            </div>
+        </nz-header>
+        <nz-content>
+            <div class="inner-content">
+                <router-outlet></router-outlet>
+            </div>
+        </nz-content>
+    </nz-layout>
+</nz-layout>
+
+<!-- <clr-main-container class="main-container">
+    <ng-container>
+        <ng-container *ngTemplateOutlet="alert"></ng-container>
+    </ng-container>
+
+    <clr-header class="header-6" *ngIf="!rootConfig.layout.header.hidden" [ngSwitch]="isAuthenticated()">
+        <div class="branding">
+            <a href="javascript:void(0)" class="nav-link" [routerLink]="'/dashboard'">
+                <img src="assets/logo/zezawar.svg">
+                <span class="title">Zezawar Seller</span>
+            </a>
+        </div>
+        <div class="header-nav" fxHide fxShow.gt-xs>
+            <a href="javascript:void(0)" class="nav-link active" [routerLink]="'/dashboard'"><span
+                    class="nav-text">Dashboard</span></a>
+        </div>
+
+        <div class="header-actions" *ngSwitchCase="true">
+            <clr-dropdown>
+                <button class="nav-text" clrDropdownTrigger aria-label="open user profile" *ngIf="account">
+                    {{account.login | titlecase}}
+                    <clr-icon shape="caret down"></clr-icon>
+                </button>
+                <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
+                    <a href="javascript:void(0)" clrDropdownItem>About</a>
+                    <a href="javascript:void(0)" clrDropdownItem>Preferences</a>
+                    <a href="javascript:void(0)" clrDropdownItem (click)="logout()">Log out</a>
+                </clr-dropdown-menu>
+            </clr-dropdown>
+        </div>
+    </clr-header>
+
+    <ng-container>
+        <ng-container *ngTemplateOutlet="subnav"></ng-container>
+    </ng-container>
+
+    <div class="content-container">
+        <ng-container *ngIf="rootConfig.layout.sidenav.position === 'left'">
+            <ng-container *ngTemplateOutlet="sidenav"></ng-container>
+        </ng-container>
+        <div class="content-area">
+            <content></content>
+        </div>
+    </div>
+
+    <ng-container>
+        <ng-container *ngTemplateOutlet="footer"></ng-container>
+    </ng-container>
+</clr-main-container>
+
+<ng-template #alert>
+    <app-alert class="alert alert-app-level" *ngIf="!rootConfig.layout.alert.hidden"></app-alert>
+</ng-template>
+
+<ng-template #sidenav>
+    <navbar [variant]="rootConfig.layout.sidenav.variant" class="left-navbar" *ngIf="!rootConfig.layout.sidenav.hidden">
+    </navbar>
+</ng-template>
+
+<ng-template #footer>
+    <footer id="footer" *ngIf="!rootConfig.layout.footer.hidden"></footer>
+</ng-template> -->

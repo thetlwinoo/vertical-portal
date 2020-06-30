@@ -1,0 +1,72 @@
+<vs-pagebar [title]="'Manage Products'">
+  <div extra>
+    <nz-button-group>
+      <button nz-button nzType="default" [routerLink]="'/products/new'">Add New</button>
+      <button nz-button nzType="default" [routerLink]="'/products/batch-upload'">Import</button>
+      <button nz-button nz-dropdown [nzDropdownMenu]="menu1">
+        Export
+        <i nz-icon nzType="down"></i>
+      </button>
+      <nz-dropdown-menu #menu1="nzDropdownMenu">
+        <ul nz-menu>
+          <li nz-menu-item>Export All</li>
+          <li nz-menu-item>Export Selected Items</li>
+        </ul>
+      </nz-dropdown-menu>
+    </nz-button-group>
+  </div>
+</vs-pagebar>
+<div class="pagebar-content-wrapper">
+  <vs-alert *ngIf="showAlertInd" [alert]="alert"></vs-alert>
+
+  <nz-tabset (nzSelectedIndexChange)="selectedChanged($event)">
+    <nz-tab nzTitle="All({{statistics?.all}})"></nz-tab>
+    <nz-tab nzTitle="Live({{statistics?.active}})"></nz-tab>
+    <nz-tab nzTitle="Sold Out({{statistics?.soldout}})"></nz-tab>
+    <nz-tab nzTitle="Inactive({{statistics?.inactive}})"></nz-tab>
+  </nz-tabset>
+
+  <nz-table #smallTable nzSize="small" nzTableLayout="auto" [nzData]="stockItems" [nzFrontPagination]="false"
+    [nzLoading]="loading" [nzTotal]="totalItems" [nzPageIndex]="page" [nzPageSize]="itemsPerPage"
+    (nzQueryParams)="onQueryParamsChange($event)">
+    <thead>
+      <tr>
+        <th></th>
+        <th [nzLeft]="true">Name</th>
+        <th>Attribute</th>
+        <th>Option</th>
+        <th>UnitPrice</th>
+        <th>RetailPrice</th>
+        <th>LastEdited</th>
+        <th>Active</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of smallTable.data">
+        <td>
+          <a nz-button nzType="link" nzDanger nz-popover [nzPopoverContent]="contentTemplate" nzPopoverPlacement="right"
+            (nzVisibleChange)="changePopover(data,$event)" nzPopoverTrigger="click">
+            <i nz-icon nzType="more" nzTheme="outline"></i>
+          </a>
+        </td>
+        <td nzEllipsis>{{ data.name }}</td>
+        <td nzEllipsis>{{ data.productAttributeValue }}</td>
+        <td>{{ data.productOptionValue }}</td>
+        <td>{{ data.unitPrice | currency }}</td>
+        <td>{{ data.recommendedRetailPrice | currency }}</td>
+        <td>{{ data.lastEditedWhen | date }}</td>
+        <td>
+          <nz-switch [(ngModel)]="data.activeInd" (ngModelChange)="updateStockItemActive(data)"
+            [nzLoading]="activeLoading"></nz-switch>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+</div>
+<ng-template #contentTemplate>
+  <div>
+    <p><a nz-button nzType="link" [routerLink]="'/products/product-update/' + currentStockItem.productId">Edit</a></p>
+    <p><a nz-button nzType="link" [routerLink]="'/products/manage-images'">Manage Images</a></p>
+    <p><a nz-button nzType="link" (click)="onDelete(currentStockItem)">Delete</a></p>
+  </div>
+</ng-template>

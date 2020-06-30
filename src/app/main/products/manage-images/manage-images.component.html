@@ -1,0 +1,38 @@
+<vs-pagebar [title]="'Manage Images'"></vs-pagebar>
+<div class="pagebar-content-wrapper">
+  <vs-alert *ngIf="showAlertInd" [alert]="alert"></vs-alert>
+
+  <nz-table #smallTable nzSize="small" nzTableLayout="auto" [nzData]="stockItems | orderBy: 'id'"
+    [nzFrontPagination]="false" [nzLoading]="loading" [nzTotal]="totalItems" [nzPageIndex]="page"
+    [nzPageSize]="itemsPerPage" (nzQueryParams)="onQueryParamsChange($event)">
+    <thead>
+      <tr>
+        <th [nzLeft]="true">StockItem</th>
+        <th>SKU</th>
+        <th>All Images</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of smallTable.data">
+        <td nzEllipsis>{{ data.name }}</td>
+        <td nzEllipsis>{{ data.vendorSKU }}</td>
+        <td>
+          <div class="clearfix">
+            <nz-upload [nzAction]="blobUrl + 'upload'" nzListType="picture-card" [(nzFileList)]="data.photoLists"
+              [nzShowButton]="data.photoLists?.length < 8" [nzFileType]="fileTypes" [nzPreview]="handlePreview"
+              [nzBeforeUpload]="beforeUpload" [nzRemove]="removeUpload" (nzChange)="handleChange($event,data)">
+              <i nz-icon nzType="plus"></i>
+              <div class="ant-upload-text">Upload</div>
+            </nz-upload>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+</div>
+<nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null"
+  (nzOnCancel)="previewVisible = false">
+  <ng-template #modalContent>
+    <img [src]="previewImage" [ngStyle]="{ width: '100%' }" />
+  </ng-template>
+</nz-modal>

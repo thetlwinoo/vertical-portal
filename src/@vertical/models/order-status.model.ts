@@ -1,0 +1,19 @@
+export const enum OrderStatus {
+    NEW_ORDER = 'NEW_ORDER',
+
+    COMPLETED = 'COMPLETED',
+
+    PENDING = 'PENDING',
+
+    CANCELLED = 'CANCELLED',
+
+    READY_TO_SHIP = 'READY_TO_SHIP',
+
+    SHIPPED = 'SHIPPED',
+
+    DELIVERED = 'DELIVERED',
+
+    RETURNED = 'RETURNED',
+
+    REFUNDED = 'REFUNDED',
+}
