@@ -1,0 +1,61 @@
+<vs-pagebar [title]="'Users'"></vs-pagebar>
+<div class="pagebar-content-wrapper">
+    <div class="card-container">
+        <nz-tabset [nzTabPosition]="'top'" [nzType]="'card'">
+            <nz-tab [nzTitle]="'Look Up'">
+                <div class="control-bar">
+                    <nz-space>
+                        <nz-space-item>
+                            <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
+                                <input type="text" nz-input placeholder="Search..." />
+                            </nz-input-group>
+                            <ng-template #suffixIconButton>
+                                <button nz-button nzType="default" nzSearch><i nz-icon nzType="search"></i></button>
+                            </ng-template>
+                        </nz-space-item>
+
+                        <nz-space-item>
+                            <button nz-button nzType="default">View all users</button>
+                        </nz-space-item>
+                    </nz-space>
+
+                    <nz-space>
+                        <nz-space-item>
+                            <button nz-button nzType="default" [routerLink]="['/main/store/users/create']">Add
+                                user</button>
+                        </nz-space-item>
+                    </nz-space>
+                </div>
+
+                <div class="record-list">
+                    <nz-table #basicTable [nzData]="dataSet">
+                        <thead>
+                            <tr>
+                                <th scope="col"><span>ID</span></th>
+                                <th scope="col"><span>Full Name</span></th>
+                                <th scope="col"><span>Logon Name</span></th>
+                                <th scope="col"><span>Phone Number</span></th>
+                                <th scope="col"><span>Email Address</span></th>
+                                <th scope="col"><span>Actions</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let data of basicTable.data">
+                                <td>{{data.id}}</td>
+                                <td>{{data.fullName}}</td>
+                                <td>{{data.logonName}}</td>
+                                <td>{{data.phoneNumber}}</td>
+                                <td>{{data.emailAddress}}</td>
+                                <td>
+                                    <a>Edit</a>
+                                    <nz-divider nzType="vertical"></nz-divider>
+                                    <a>Delete</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </div>
+            </nz-tab>
+        </nz-tabset>
+    </div>
+</div>

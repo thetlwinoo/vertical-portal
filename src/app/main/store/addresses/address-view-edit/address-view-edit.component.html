@@ -1,0 +1,186 @@
+<div class="pagebar-content-wrapper">
+    <div class="page-header">
+        <nz-breadcrumb nzSeparator=">">
+            <nz-breadcrumb-item>
+                <a href="javascript:void(0)" [routerLink]="['../']">Addresses</a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                <span>Name</span>
+            </nz-breadcrumb-item>
+        </nz-breadcrumb>
+    </div>
+
+    <div class="page-sub-header">
+        <span class="page-sub-header__title">Name</span>
+        <a><i nz-icon nzType="delete" nzTheme="fill"></i></a>
+    </div>
+
+    <div class="page-body">
+        <div class="card-container">
+            <nz-tabset [nzTabPosition]="'top'" [nzType]="'card'">
+                <nz-tab [nzTitle]="'Details'">
+                    <div class="record-details">
+                        <div nz-row>
+                            <div nz-col class="gutter-row" [nzXs]="24" [nzLg]="15">
+                                <form nz-form [formGroup]="editForm" (ngSubmit)="save()">
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="id">ID
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                                            <input nz-input formControlName="id" id="id" disabled />
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="contactPerson">Contact Person
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                                            <input nz-input formControlName="contactPerson" id="contactPerson" />
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="contactNumber">Contact Number
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                                            <input nz-input formControlName="contactNumber" id="contactNumber" />
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="contactEmailAddress">
+                                            Contact Email
+                                            Address
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                                            <input nz-input formControlName="contactEmailAddress"
+                                                id="contactEmailAddress" />
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="region">Region
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                                            <nz-select name="region" nzShowSearch nzAllowClear
+                                                formControlName="regionId" (ngModelChange)="selectRegion(regionId)">
+                                                <nz-option [nzValue]="regionsOption.id" [nzLabel]="regionsOption.name"
+                                                    *ngFor="let regionsOption of regions; trackBy: trackById">
+                                                    {{ regionsOption.code }}
+                                                </nz-option>
+                                            </nz-select>
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="city">Cities
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                                            <nz-select name="city" formControlName="cityId"
+                                                (ngModelChange)="selectCity(cityId)" [nzDisabled]="!regionId">
+                                                <nz-option [nzValue]="citiesOption.id" [nzLabel]="citiesOption.name"
+                                                    *ngFor="let citiesOption of cities; trackBy: trackById">
+                                                </nz-option>
+                                            </nz-select>
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="township">Townships
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                                            <nz-select name="township" formControlName="townshipId"
+                                                (ngModelChange)="selectTownship(townshipId)" [nzDisabled]="!cityId">
+                                                <nz-option [nzValue]="townshipsOption.id"
+                                                    [nzLabel]="townshipsOption.name"
+                                                    *ngFor="let townshipsOption of townships; trackBy: trackById">
+                                                </nz-option>
+                                            </nz-select>
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="town">Town
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                                            <nz-select name="town" formControlName="townId"
+                                                (ngModelChange)="selectTown(town)" [nzDisabled]="!townshipId">
+                                                <nz-option [nzValue]="townsOption.id" [nzLabel]="townsOption.name"
+                                                    *ngFor="let townsOption of towns; trackBy: trackById">
+                                                </nz-option>
+                                            </nz-select>
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="addressLine1">Address
+                                            Line 1
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                                            <input nz-input formControlName="addressLine1" id="addressLine1"
+                                                placeholder="Example: Build(1), Room(1)" />
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="addressLine2">Address Line 2
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                                            <input nz-input formControlName="addressLine2" id="addressLine2"
+                                                placeholder="Example: Street Name" />
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="validFrom">Valid From
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                                            <nz-date-picker [nzFormat]="'dd-MM-yyyy'" formControlName="validFrom"
+                                                id="validFrom">
+                                            </nz-date-picker>
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="validTo">Valid To
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                                            <nz-date-picker [nzFormat]="'dd-MM-yyyy'" formControlName="validTo"
+                                                id="validTo">
+                                            </nz-date-picker>
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-row>
+                                        <nz-col nzOffset="5" [nzSm]="10" [nzXs]="24">
+                                            <nz-space>
+                                                <nz-space-item>
+                                                    <button nz-button nzType="primary" type="submit" id="save-entity"
+                                                        [disabled]="editForm.invalid || isSaving">
+                                                        <span>Save</span>
+                                                    </button>
+                                                </nz-space-item>
+
+                                                <nz-space-item>
+                                                    <button nz-button nzType="default" type="button" id="cancel-save"
+                                                        (click)="previousState()">
+                                                        <span>Cancel</span>
+                                                    </button>
+                                                </nz-space-item>
+                                            </nz-space>
+                                        </nz-col>
+                                    </nz-row>
+                                </form>
+                            </div>
+                            <div nz-col class="gutter-row" [nzXs]="24" [nzLg]="9">
+
+                            </div>
+                        </div>
+                    </div>
+                </nz-tab>
+            </nz-tabset>
+        </div>
+
+
+    </div>
+</div>

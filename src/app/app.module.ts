@@ -19,7 +19,7 @@ import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { vsConfig } from 'app/vs-config';
 import { VsSharedModule } from '@vertical/shared.module';
 import { VerticalModule } from '@vertical/vertical.module';
-import { LayoutModule } from 'app/layout/layout.module';
+import { MainModule } from 'app/main/main.module';
 import { CoreModule } from '@vertical/core/core.module';
 
 import { NgrxAuthModule } from 'app/ngrx/auth';
@@ -58,7 +58,7 @@ const keycloakService: KeycloakService = new KeycloakService();
     }),
     EffectsModule.forRoot([RouterEffects]),
 
-    LayoutModule,
+    MainModule,
     VerticalModule.forRoot(vsConfig),
     VsSharedModule,
     CoreModule,
@@ -85,12 +85,17 @@ export class AppModule implements DoBootstrap {
         initOptions: {
           onLoad: 'check-sso',
           checkLoginIframe: false,
+          flow: 'implicit',
         },
         enableBearerInterceptor: true,
         bearerExcludedUrls: ['/assets', '/clients/public'],
       })
-      .then(() => {
+      .then((auth) => {
         console.log('[ngDoBootstrap] bootstrap app');
+
+        if (auth && !keycloakService.isUserInRole('ROLE_PORTAL')) {
+          keycloakService.logout(`${location.origin}/welcome`);
+        }
 
         appRef.bootstrap(AppComponent);
       })

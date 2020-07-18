@@ -43,8 +43,8 @@ export class UploadExcel {
   warrantyType?: string;
   isChillerStock?: boolean;
   dangerousGoodsRegulations?: string;
-  sellingPrice?: number;
   retailPrice?: number;
+  promotionPrice?: number;
   currencyCode?: string;
   itemLength?: number;
   itemLengthUnit?: string;
@@ -105,8 +105,8 @@ export class UploadExcel {
       this.warrantyType = data['Warrenty Type'] || '';
       this.isChillerStock = data['Is Chiller Stock'].toLowerCase() === 'yes' ? true : false || false;
       this.dangerousGoodsRegulations = data['Dangerous Goods Regulations'] || '';
-      this.sellingPrice = data['Selling Price'] || 0.0;
       this.retailPrice = data['Retail Price'] || 0.0;
+      this.promotionPrice = data['Promotion Price'] || 0.0;
       this.currencyCode = data['Currency Code'] || '';
       this.itemLength = data['Item Length'] || 0;
       this.itemLengthUnit = data['Item Length Unit'] || '';

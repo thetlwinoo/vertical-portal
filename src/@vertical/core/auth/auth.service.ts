@@ -8,11 +8,12 @@ import { KeycloakLoginOptions } from 'keycloak-js';
 export class AuthService {
   constructor(private location: Location, protected keycloakService: KeycloakService) { }
 
-  login(): void {
+  login(redirectUri?: any): void {
     const scopes = 'openid profile offline_access';
+
     const options: KeycloakLoginOptions = {
       scope: scopes,
-      redirectUri: `${location.origin}`
+      redirectUri: redirectUri ? redirectUri : `${location.origin}`
     };
     this.keycloakService.login(options);
   }

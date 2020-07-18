@@ -196,8 +196,8 @@ export class ManageImagesComponent implements OnInit, OnDestroy {
       case 'done':
         // Get this url from response in real world.
         const photos: IPhotos = new Photos();
-        photos.thumbnailUrl = info.file.response.thumbUrl;
-        photos.originalUrl = info.file.response.url;
+        photos.thumbUrl = info.file.response.thumbUrl;
+        photos.url = info.file.response.url;
         photos.blobId = info.file.response.id;
         photos.stockItemId = entity.id;
         this.save(photos);
@@ -284,8 +284,8 @@ export class ManageImagesComponent implements OnInit, OnDestroy {
               uid: item.blobId.toString(),
               name: item.blobId,
               status: 'done',
-              thumbUrl: `${this.blobUrl}${item.thumbnailUrl}`,
-              url: `${this.blobUrl}${item.originalUrl}`,
+              thumbUrl: `${this.blobUrl}${item.thumbUrl}`,
+              url: `${this.blobUrl}${item.url}`,
               photoId: item.id,
               defaultInd: item.defaultInd,
             });

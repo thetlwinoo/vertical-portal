@@ -7,7 +7,10 @@ import { KeycloakConfig } from 'keycloak-angular';
 const keycloakConfig: KeycloakConfig = {
   url: 'http://localhost:9080/auth',
   realm: 'jhipster',
-  clientId: 'web_app',
+  clientId: 'web_portal',
+  credentials: {
+    secret: '91288b89-aed5-44ab-9581-08a081c3797c'
+  }
 };
 
 export const environment = {

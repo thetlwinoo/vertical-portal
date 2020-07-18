@@ -1,37 +1,50 @@
+import { Moment } from 'moment';
+
 export interface IPhotos {
-  uid?: string;
   id?: number;
-  blobId?: number;
-  thumbnailUrl?: string;
-  originalUrl?: string;
-  bannerTallUrl?: string;
-  bannerWideUrl?: string;
-  circleUrl?: string;
-  sharpenedUrl?: string;
-  squareUrl?: string;
-  watermarkUrl?: string;
+  blobId?: string;
   priority?: number;
+  uid?: string;
+  size?: number;
+  name?: string;
+  fileName?: string;
+  url?: string;
+  status?: string;
+  thumbUrl?: string;
+  percent?: number;
+  type?: string;
   defaultInd?: boolean;
+  activeFlag?: boolean;
+  lastModified?: string;
+  lastModifiedDate?: Moment;
   stockItemId?: number;
+  supplierBannerId?: number;
+  supplierDocumentId?: number;
 }
 
 export class Photos implements IPhotos {
   constructor(
-    public uid?: string,
     public id?: number,
-    public blobId?: number,
-    public thumbnailUrl?: string,
-    public originalUrl?: string,
-    public bannerTallUrl?: string,
-    public bannerWideUrl?: string,
-    public circleUrl?: string,
-    public sharpenedUrl?: string,
-    public squareUrl?: string,
-    public watermarkUrl?: string,
+    public blobId?: string,
     public priority?: number,
+    public uid?: string,
+    public size?: number,
+    public name?: string,
+    public fileName?: string,
+    public url?: string,
+    public status?: string,
+    public thumbUrl?: string,
+    public percent?: number,
+    public type?: string,
     public defaultInd?: boolean,
-    public stockItemId?: number
+    public activeFlag?: boolean,
+    public lastModified?: string,
+    public lastModifiedDate?: Moment,
+    public stockItemId?: number,
+    public supplierBannerId?: number,
+    public supplierDocumentId?: number
   ) {
     this.defaultInd = this.defaultInd || false;
+    this.activeFlag = this.activeFlag || false;
   }
 }

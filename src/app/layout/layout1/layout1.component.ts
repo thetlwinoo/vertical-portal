@@ -47,6 +47,10 @@ export class Layout1Component implements OnInit, OnDestroy {
     this.authService.logout();
   }
 
+  onOpenChanged(event): void {
+    console.log('open', event);
+  }
+
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();

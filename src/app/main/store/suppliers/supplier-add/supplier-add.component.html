@@ -1,0 +1,374 @@
+<div class="pagebar-content-wrapper">
+    <div class="page-header">
+        <nz-breadcrumb nzSeparator=">">
+            <nz-breadcrumb-item>
+                <a href="javascript:void(0)" [routerLink]="['../']">Suppliers</a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                <span>Add Supplier</span>
+            </nz-breadcrumb-item>
+        </nz-breadcrumb>
+    </div>
+
+    <div class="page-sub-header">
+        <span class="page-sub-header__title">Add Supplier</span>
+    </div>
+
+    <div class="page-body">
+        <form nz-form [formGroup]="editForm" (ngSubmit)="save()">
+            <div nz-row>
+                <div nz-col class="gutter-row" [nzXs]="24" [nzLg]="15">
+
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="id">ID
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                            <input nz-input formControlName="id" id="id" disabled />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="supplierCategory">Supplier
+                            Category
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                            <nz-radio-group formControlName="supplierCategoryId">
+                                <label nz-radio [nzValue]="supplierCategoriesOption.id"
+                                    *ngFor="let supplierCategoriesOption of suppliercategories; trackBy: trackById">{{supplierCategoriesOption.name}}</label>
+                            </nz-radio-group>
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="officialStoreInd">Official
+                            Store Ind
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                            <label nz-checkbox formControlName="officialStoreInd" id="officialStoreInd"></label>
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="storeName">Store Name
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                            <input nz-input formControlName="storeName" id="storeName" [disabled]="!officialStoreInd" />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="name">Name(Personal / Company)
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                            <input nz-input formControlName="name" id="name" />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item *ngIf="selectedCategory?.name === 'Personal'">
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="nric">NRIC
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                            <input nz-input formControlName="nric" id="nric" />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item *ngIf="selectedCategory?.name === 'Business'">
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="companyRegistrationNo">Company
+                            Registration No
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                            <input nz-input formControlName="companyRegistrationNo" id="companyRegistrationNo" />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="supplierReference">Supplier
+                            Reference
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                            <input nz-input formControlName="supplierReference" id="supplierReference" />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="bankAccountName">Bank
+                            Account Name
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                            <input nz-input formControlName="bankAccountName" id="bankAccountName" />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="bankAccountBranch">Bank
+                            Account Branch
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                            <input nz-input formControlName="bankAccountBranch" id="bankAccountBranch" />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="bankAccountCode">Bank
+                            Account Code
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                            <input nz-input formControlName="bankAccountCode" id="bankAccountCode" />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="bankAccountNumber">Bank
+                            Account Number
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                            <input nz-input formControlName="bankAccountNumber" id="bankAccountNumber" />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="bankInternationalCode">Bank
+                            International Code
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                            <input nz-input formControlName="bankInternationalCode" id="bankInternationalCode" />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="paymentDays">
+                            Payment Days
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                            <input nz-input formControlName="paymentDays" id="paymentDays" />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="internalComments">Internal
+                            Comments
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                            <input nz-input formControlName="internalComments" id="internalComments" />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="phoneNumber">
+                            Phone Number
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                            <input nz-input formControlName="phoneNumber" id="phoneNumber" />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="faxNumber">Fax Number
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                            <input nz-input formControlName="faxNumber" id="faxNumber" />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="websiteUrl">Website Url
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                            <input nz-input formControlName="websiteUrl" id="websiteUrl" />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="webServiceUrl">Web Service
+                            Url
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                            <input nz-input formControlName="webServiceUrl" id="webServiceUrl" />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="activeFlag">Active Flag
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                            <label nz-checkbox formControlName="activeFlag" id="activeFlag"></label>
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="deliveryMethod">Delivery
+                            Method
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                            <nz-select [nzMaxTagCount]="3" [nzMaxTagPlaceholder]="tagPlaceHolder" nzMode="multiple"
+                                nzPlaceHolder="Please select" formControlName="deliveryMethods">
+                                <nz-option *ngFor="let deliveryMethodsOption of deliverymethods; trackBy: trackById"
+                                    [nzLabel]="deliveryMethodsOption.name"
+                                    [nzValue]="getSelected(editForm.get('deliveryMethods')!.value, deliveryMethodsOption)">
+                                </nz-option>
+                            </nz-select>
+                            <ng-template #tagPlaceHolder let-selectedList> and {{ selectedList.length }}
+                                more selected </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="validFrom">Valid
+                            From
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                            <nz-date-picker [nzFormat]="'dd-MM-yyyy'" formControlName="validFrom" id="validFrom">
+                            </nz-date-picker>
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="validTo">Valid To
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                            <nz-date-picker [nzFormat]="'dd-MM-yyyy'" formControlName="validTo" id="validTo">
+                            </nz-date-picker>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col class="gutter-row" [nzXs]="24" [nzLg]="9">
+                    <vs-panel [title]="'Supplier Logo'">
+                        <div body>
+                            <div class="upload-body-wrapper">
+                                <nz-upload class="avatar-uploader" [nzAction]="blobUrl + 'upload'"
+                                    nzListType="picture-card" [nzShowUploadList]="false" [nzBeforeUpload]="beforeUpload"
+                                    (nzChange)="handleLogoChange($event)">
+                                    <ng-container *ngIf="!logo">
+                                        <i class="upload-icon" nz-icon [nzType]="loading ? 'loading' : 'plus'"></i>
+                                        <div class="ant-upload-text">Upload</div>
+                                    </ng-container>
+                                    <img *ngIf="logo" [src]="blobUrl + logo + '/thumbnail'" style="width: 100%" />
+                                </nz-upload>
+                            </div>
+                        </div>
+                    </vs-panel>
+
+                    <vs-panel [title]="'NRIC Front Image'" *ngIf="selectedCategory?.name === 'Personal'">
+                        <div body>
+                            <div class="upload-body-wrapper">
+                                <div class="clearfix">
+                                    <nz-upload class="avatar-uploader" [nzAction]="blobUrl + 'upload'"
+                                        nzListType="picture-card" [nzShowUploadList]="false"
+                                        [nzBeforeUpload]="beforeUpload" (nzChange)="handleNricFrontChange($event)">
+                                        <ng-container *ngIf="!nricFrontPhoto">
+                                            <i class="upload-icon" nz-icon [nzType]="loading ? 'loading' : 'plus'"></i>
+                                            <div class="ant-upload-text">Upload</div>
+                                        </ng-container>
+                                        <img *ngIf="nricFrontPhoto" [src]="blobUrl + nricFrontPhoto + '/thumbnail'"
+                                            style="width: 100%" />
+                                    </nz-upload>
+                                </div>
+                            </div>
+                        </div>
+                    </vs-panel>
+
+                    <vs-panel [title]="'NRIC Back Image'" *ngIf="selectedCategory?.name === 'Personal'">
+                        <div body>
+                            <div class="upload-body-wrapper">
+                                <div class="clearfix">
+                                    <nz-upload class="avatar-uploader" [nzAction]="blobUrl + 'upload'"
+                                        nzListType="picture-card" [nzShowUploadList]="false"
+                                        [nzBeforeUpload]="beforeUpload" (nzChange)="handleNricBackChange($event)">
+                                        <ng-container *ngIf="!nricBackPhoto">
+                                            <i class="upload-icon" nz-icon [nzType]="loading ? 'loading' : 'plus'"></i>
+                                            <div class="ant-upload-text">Upload</div>
+                                        </ng-container>
+                                        <img *ngIf="nricBackPhoto" [src]="blobUrl + nricBackPhoto + '/thumbnail'"
+                                            style="width: 100%" />
+                                    </nz-upload>
+                                </div>
+                            </div>
+                        </div>
+                    </vs-panel>
+
+                    <vs-panel [title]="'Bank Book Front Page Image'">
+                        <div body>
+                            <div class="upload-body-wrapper">
+                                <div class="clearfix">
+                                    <nz-upload class="avatar-uploader" [nzAction]="blobUrl + 'upload'"
+                                        nzListType="picture-card" [nzShowUploadList]="false"
+                                        [nzBeforeUpload]="beforeUpload"
+                                        (nzChange)="handleBankBookFirstPageChange($event)">
+                                        <ng-container *ngIf="!bankBookPhoto">
+                                            <i class="upload-icon" nz-icon [nzType]="loading ? 'loading' : 'plus'"></i>
+                                            <div class="ant-upload-text">Upload</div>
+                                        </ng-container>
+                                        <img *ngIf="bankBookPhoto" [src]="blobUrl + bankBookPhoto + '/thumbnail'"
+                                            style="width: 100%" />
+                                    </nz-upload>
+                                </div>
+                            </div>
+                        </div>
+                    </vs-panel>
+
+                    <vs-panel [title]="'Company Registration Document'" *ngIf="selectedCategory?.name === 'Business'">
+                        <div body>
+                            <div class="upload-body-wrapper">
+                                <div class="clearfix">
+                                    <nz-upload class="avatar-uploader" [nzAction]="blobUrl + 'upload'"
+                                        nzListType="picture-card" [nzShowUploadList]="false"
+                                        [nzBeforeUpload]="beforeUpload"
+                                        (nzChange)="handleCompanyRegistrationPhotoChange($event)">
+                                        <ng-container *ngIf="!companyRegistrationPhoto">
+                                            <i class="upload-icon" nz-icon [nzType]="loading ? 'loading' : 'plus'"></i>
+                                            <div class="ant-upload-text">Upload</div>
+                                        </ng-container>
+                                        <img *ngIf="companyRegistrationPhoto"
+                                            [src]="blobUrl + companyRegistrationPhoto + '/thumbnail'"
+                                            style="width: 100%" />
+                                    </nz-upload>
+                                </div>
+                            </div>
+                        </div>
+                    </vs-panel>
+
+                    <vs-panel [title]="'Distributor Certificate'"
+                        *ngIf="selectedCategory?.name === 'Business' && officialStoreInd">
+                        <div body>
+                            <div class="upload-body-wrapper">
+                                <div class="clearfix">
+                                    <nz-upload class="avatar-uploader" [nzAction]="blobUrl + 'upload'"
+                                        nzListType="picture-card" [nzShowUploadList]="false"
+                                        [nzBeforeUpload]="beforeUpload"
+                                        (nzChange)="handleDistributorCertificatePhotoChange($event)">
+                                        <ng-container *ngIf="!distributorCertificatePhoto">
+                                            <i class="upload-icon" nz-icon [nzType]="loading ? 'loading' : 'plus'"></i>
+                                            <div class="ant-upload-text">Upload</div>
+                                        </ng-container>
+                                        <img *ngIf="distributorCertificatePhoto"
+                                            [src]="blobUrl + distributorCertificatePhoto + '/thumbnail'"
+                                            style="width: 100%" />
+                                    </nz-upload>
+                                </div>
+                            </div>
+                        </div>
+                    </vs-panel>
+                </div>
+            </div>
+
+            <nz-row>
+                <nz-col nzOffset="5" [nzSm]="10" [nzXs]="24">
+                    <nz-space>
+                        <nz-space-item>
+                            <button nz-button nzType="primary" type="submit" id="save-entity"
+                                [disabled]="editForm.invalid || isSaving">
+                                <span>Save</span>
+                            </button>
+                        </nz-space-item>
+
+                        <nz-space-item>
+                            <button nz-button nzType="default" type="button" id="cancel-save" (click)="previousState()">
+                                <span>Cancel</span>
+                            </button>
+                        </nz-space-item>
+                    </nz-space>
+                </nz-col>
+            </nz-row>
+        </form>
+    </div>
+</div>

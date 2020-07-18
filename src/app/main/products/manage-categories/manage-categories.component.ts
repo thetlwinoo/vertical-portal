@@ -173,8 +173,8 @@ export class ManageCategoriesComponent implements OnInit, OnDestroy {
       case 'done':
         // Get this url from response in real world.
         const photos: IPhotos = new Photos();
-        photos.thumbnailUrl = info.file.response.thumbUrl;
-        photos.originalUrl = info.file.response.url;
+        photos.thumbUrl = info.file.response.thumbUrl;
+        photos.url = info.file.response.url;
         photos.blobId = info.file.response.id;
         this.photosService
           .create(photos)
@@ -185,7 +185,7 @@ export class ManageCategoriesComponent implements OnInit, OnDestroy {
           )
           .subscribe(res => {
             entity.iconId = res.id;
-            entity.iconThumbnailUrl = res.thumbnailUrl;
+            entity.iconThumbnailUrl = res.thumbUrl;
             this.loading = false;
           }, err => {
             this.loading = false;

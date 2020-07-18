@@ -20,7 +20,7 @@ const ROUTES = [
             pagingParams: JhiResolvePagingParams,
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_PORTAL'],
             defaultSort: 'id,asc',
             pageTitle: 'resourceApp.products.home.title',
         },

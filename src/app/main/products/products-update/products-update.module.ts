@@ -66,7 +66,7 @@ const ROUTES = [
             pagingParams: JhiResolvePagingParams,
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_PORTAL'],
             defaultSort: 'id,asc',
             pageTitle: 'resourceApp.products.home.title',
         },
@@ -79,7 +79,7 @@ const ROUTES = [
             products: ProductsResolve,
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_PORTAL'],
             pageTitle: 'PRODUCTS.TITLE',
         },
         // canActivate: [UserRouteAccessService],
@@ -91,7 +91,7 @@ const ROUTES = [
             products: ProductsResolve,
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_PORTAL'],
             pageTitle: 'PRODUCTS.TITLE',
         },
         // canActivate: [UserRouteAccessService],
@@ -103,7 +103,7 @@ const ROUTES = [
             products: ProductsResolve,
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_PORTAL'],
             pageTitle: 'PRODUCTS.TITLE',
         },
         // canActivate: [UserRouteAccessService],
@@ -115,7 +115,7 @@ const ROUTES = [
             products: ProductsResolve,
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_PORTAL'],
             pageTitle: 'PRODUCTS.TITLE',
         },
         // canActivate: [UserRouteAccessService],

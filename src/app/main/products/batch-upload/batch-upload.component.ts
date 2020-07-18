@@ -144,7 +144,7 @@ export class BatchUploadComponent implements OnInit, OnDestroy {
           stockItem.vendorCode = item.vendorCode;
           stockItem.vendorSKU = item.vendorSKU;
           stockItem.barcode = item.barcode;
-          stockItem.unitPrice = item.sellingPrice;
+          stockItem.unitPrice = item.promotionPrice;
           stockItem.recommendedRetailPrice = item.retailPrice;
           stockItem.quantityOnHand = item.quantityOnHand;
           stockItem.itemLength = item.itemLength;

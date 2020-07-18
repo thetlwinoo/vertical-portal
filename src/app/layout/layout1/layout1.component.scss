@@ -12,6 +12,13 @@
   justify-content: space-between;
   padding: 0px 16px;
   color: #ffffff;
+
+  &__rh {
+    > a {
+      color: #ffffff;
+      font-weight: 500;
+    }
+  }
 }
 
 .app-layout {

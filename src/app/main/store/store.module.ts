@@ -1,18 +1,30 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { ManageStoreModule } from './manage-store/manage-store.module';
+import { SuppliersModule } from './suppliers/suppliers.module';
+import { UsersModule } from './users/users.module';
+import { AddressesModule } from './addresses/addresses.module';
 
 const MODULES = [
-  ManageStoreModule
+  SuppliersModule,
+  UsersModule,
+  AddressesModule
 ];
 
 const ROUTES = [
-  { path: '', pathMatch: 'full', redirectTo: '/manage-store' },
+  { path: '', pathMatch: 'full', redirectTo: '/suppliers' },
   {
-    path: 'manage-store',
-    loadChildren: () => import('./manage-store/manage-store.module').then(m => m.ManageStoreModule)
+    path: 'suppliers',
+    loadChildren: () => import('./suppliers/suppliers.module').then(m => m.SuppliersModule)
   },
-  { path: '**', redirectTo: 'manage-store' },
+  {
+    path: 'users',
+    loadChildren: () => import('./users/users.module').then(m => m.UsersModule)
+  },
+  {
+    path: 'addresses',
+    loadChildren: () => import('./addresses/addresses.module').then(m => m.AddressesModule)
+  },
+  { path: '**', redirectTo: 'suppliers' },
 ];
 
 @NgModule({

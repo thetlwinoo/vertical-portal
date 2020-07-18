@@ -4,6 +4,8 @@ import { vsAnimations } from '@vertical/animations';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { Router } from '@angular/router';
+import { AuthService } from '@vertical/core/auth/auth.service';
+import { AccountService } from '@vertical/core';
 
 @Component({
   selector: 'app-welcome',
@@ -27,36 +29,38 @@ export class WelcomeComponent implements OnInit {
   ];
 
   constructor(
-    private vsConfigService: VsConfigService,
+    // private vsConfigService: VsConfigService,
     fb: FormBuilder,
     private msg: NzMessageService,
     private router: Router,
+    private accountService: AccountService,
+    private authService: AuthService,
   ) {
-    this.vsConfigService.config = {
-      layout: {
-        alert: {
-          hidden: true,
-        },
-        header: {
-          hidden: true,
-        },
-        subnav: {
-          hidden: true,
-        },
-        sidenav: {
-          hidden: true,
-        },
-        toolbar: {
-          hidden: true,
-        },
-        footer: {
-          hidden: true,
-        },
-        sidepanel: {
-          hidden: true,
-        },
-      },
-    };
+    // this.vsConfigService.config = {
+    //   layout: {
+    //     alert: {
+    //       hidden: true,
+    //     },
+    //     header: {
+    //       hidden: true,
+    //     },
+    //     subnav: {
+    //       hidden: true,
+    //     },
+    //     sidenav: {
+    //       hidden: true,
+    //     },
+    //     toolbar: {
+    //       hidden: true,
+    //     },
+    //     footer: {
+    //       hidden: true,
+    //     },
+    //     sidepanel: {
+    //       hidden: true,
+    //     },
+    //   },
+    // };
 
     this.form = fb.group({
       userName: [null, [Validators.required, Validators.pattern(/^(admin|user)$/)]],
@@ -80,6 +84,6 @@ export class WelcomeComponent implements OnInit {
   }
 
   login(): void {
-    this.router.navigate(['/products/manage-products']);
+    this.authService.login(`${location.origin}/main/products/manage-products`);
   }
 }

@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import * as moment from 'moment';
 import { map } from 'rxjs/operators';
+import * as moment from 'moment';
 
-import { SERVER_API_URL, DATE_FORMAT } from '@vertical/constants';
+import { SERVER_API_URL } from '@vertical/constants';
 import { createRequestOption } from '@vertical/utils';
 import { ISuppliers } from '@vertical/models';
 
@@ -45,8 +45,8 @@ export class SuppliersService {
       .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 
-  delete(id: number): Observable<HttpResponse<any>> {
-    return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
+  delete(id: number): Observable<HttpResponse<{}>> {
+    return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
   getSupplierByPrincipal(): Observable<EntityResponseType> {
@@ -55,16 +55,16 @@ export class SuppliersService {
 
   protected convertDateFromClient(suppliers: ISuppliers): ISuppliers {
     const copy: ISuppliers = Object.assign({}, suppliers, {
-      validFrom: suppliers.validFrom != null && suppliers.validFrom.isValid() ? suppliers.validFrom.format(DATE_FORMAT) : null,
-      validTo: suppliers.validTo != null && suppliers.validTo.isValid() ? suppliers.validTo.format(DATE_FORMAT) : null,
+      validFrom: suppliers.validFrom && suppliers.validFrom.isValid() ? suppliers.validFrom.toJSON() : undefined,
+      validTo: suppliers.validTo && suppliers.validTo.isValid() ? suppliers.validTo.toJSON() : undefined,
     });
     return copy;
   }
 
   protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
     if (res.body) {
-      res.body.validFrom = res.body.validFrom != null ? moment(res.body.validFrom) : null;
-      res.body.validTo = res.body.validTo != null ? moment(res.body.validTo) : null;
+      res.body.validFrom = res.body.validFrom ? moment(res.body.validFrom) : undefined;
+      res.body.validTo = res.body.validTo ? moment(res.body.validTo) : undefined;
     }
     return res;
   }
@@ -72,8 +72,8 @@ export class SuppliersService {
   protected convertDateArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
     if (res.body) {
       res.body.forEach((suppliers: ISuppliers) => {
-        suppliers.validFrom = suppliers.validFrom != null ? moment(suppliers.validFrom) : null;
-        suppliers.validTo = suppliers.validTo != null ? moment(suppliers.validTo) : null;
+        suppliers.validFrom = suppliers.validFrom ? moment(suppliers.validFrom) : undefined;
+        suppliers.validTo = suppliers.validTo ? moment(suppliers.validTo) : undefined;
       });
     }
     return res;
