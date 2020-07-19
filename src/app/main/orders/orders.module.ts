@@ -13,7 +13,10 @@ const MODULES = [
 const ROUTES = [
   { path: '', pathMatch: 'full', redirectTo: '/manage-orders' },
   { path: 'manage-orders', loadChildren: () => import('./manage-orders/manage-orders.module').then(m => m.ManageOrdersModule) },
-  { path: 'manage-return-orders', loadChildren: () => import('./manage-return-orders/manage-return-orders.module').then(m => m.ManageReturnOrdersModule) },
+  {
+    path: 'manage-return-orders',
+    loadChildren: () => import('./manage-return-orders/manage-return-orders.module').then(m => m.ManageReturnOrdersModule)
+  },
   { path: 'manage-reviews', loadChildren: () => import('./manage-reviews/manage-reviews.module').then(m => m.ManageReviewsModule) },
   { path: '**', redirectTo: 'manage-orders' },
 ];

@@ -43,3 +43,4 @@ export * from './countries.model';
 export * from './cities.model';
 export * from './townships.model';
 export * from './towns.model';
+export * from './upload-category.model';

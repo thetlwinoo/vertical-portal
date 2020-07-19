@@ -22,24 +22,6 @@ type SelectableManyToManyEntity = IDeliveryMethods | IPeople;
   styleUrls: ['./supplier-view-edit.component.scss']
 })
 export class SupplierViewEditComponent implements OnInit {
-
-  defaultFileList: UploadFile[] = [
-    {
-      uid: '-1',
-      name: 'xxx.png',
-      status: 'done',
-      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-      thumbUrl: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
-    },
-    {
-      uid: '-2',
-      name: 'yyy.png',
-      status: 'error'
-    }
-  ];
-
-  fileList1 = [...this.defaultFileList];
-
   isSaving = false;
   suppliercategories: ISupplierCategories[] = [];
   addresses: IAddresses[] = [];
@@ -52,6 +34,9 @@ export class SupplierViewEditComponent implements OnInit {
   suppliers: ISuppliers;
   previewImage: string | undefined = '';
   previewVisible = false;
+  pickupAddressId: number;
+  headOfficeAddressId: number;
+  returnAddressId: number;
 
   get logo(): string {
     return this.editForm.get('logo')?.value || null;
@@ -153,16 +138,20 @@ export class SupplierViewEditComponent implements OnInit {
       console.log(suppliers);
       if (suppliers?.id) {
         this.suppliers = suppliers;
+        this.pickupAddressId = suppliers.pickupAddressId;
+        this.headOfficeAddressId = suppliers.headOfficeAddressId;
+        this.returnAddressId = suppliers.returnAddressId;
+
         this.updateForm(suppliers);
         this.loadDocumentList();
         this.loadBannerList();
+
+        this.addressesService.query({ 'supplierAddressId.equals': suppliers.id }).subscribe((res: HttpResponse<IAddresses[]>) => (this.addresses = res.body || []));
       }
 
       this.supplierCategoriesService
         .query()
         .subscribe((res: HttpResponse<ISupplierCategories[]>) => (this.suppliercategories = res.body || []));
-
-      this.addressesService.query().subscribe((res: HttpResponse<IAddresses[]>) => (this.addresses = res.body || []));
 
       this.deliveryMethodsService.query().subscribe((res: HttpResponse<IDeliveryMethods[]>) => (this.deliverymethods = res.body || []));
 
@@ -233,8 +222,13 @@ export class SupplierViewEditComponent implements OnInit {
   save(): void {
     this.isSaving = true;
     const suppliers = this.createFromForm();
-    // this.subscribeToSaveResponse(this.suppliersService.update(suppliers));
-    console.log(this.documentList, this.bannerList);
+    this.subscribeToSaveResponse(this.suppliersService.update(suppliers));
+  }
+
+  saveAddress(): void {
+    const suppliers = this.createFromForm();
+    this.suppliersService.update(suppliers).subscribe((res) => this.msg.success('Save Addresses Sucessfully'));
+
   }
 
   private createFromForm(): ISuppliers {
@@ -515,6 +509,18 @@ export class SupplierViewEditComponent implements OnInit {
     this.photosService.create(photos).subscribe(() => {
       this.loadBannerList();
     });
+  }
+
+  pickupAddressChanged(event): void {
+    this.editForm.patchValue({ pickupAddressId: event });
+  }
+
+  headOfficeAddressChanged(event): void {
+    this.editForm.patchValue({ headOfficeAddressId: event });
+  }
+
+  returnAddressChanged(event): void {
+    this.editForm.patchValue({ returnAddressId: event });
   }
 
   ngOnDestroy(): void {

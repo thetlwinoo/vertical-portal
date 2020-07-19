@@ -8,27 +8,35 @@ export const supplierFeatureKey = 'supplier';
 export interface State {
   loaded: boolean;
   loading: boolean;
-  supplier: ISuppliers;
+  suppliers: ISuppliers[];
+  selected: ISuppliers;
   error: string;
 }
 
 const initialState: State = {
   loaded: false,
   loading: false,
-  supplier: null,
+  suppliers: [],
+  selected: null,
   error: '',
 };
 
 export const reducer = createReducer(
   initialState,
-  on(SupplierActions.getLoginSupplier, state => ({
+  on(SupplierActions.fetchSuppliers, state => ({
     ...state,
     loading: true,
   })),
-  on(SupplierActions.getLoginSupplierSuccess, (state, { supplier }) => ({
+  on(SupplierActions.fetchSuppliersSuccess, (state, { suppliers }) => ({
     loaded: true,
     loading: false,
-    supplier,
+    suppliers,
+    selected: suppliers[0],
+    error: '',
+  })),
+  on(SupplierActions.selectSupplier, (state, { supplier }) => ({
+    ...state,
+    selected: supplier,
     error: '',
   })),
   on(SupplierActions.supplierError, (state, { errorMsg }) => ({
@@ -42,6 +50,8 @@ export const getLoaded = (state: State) => state.loaded;
 
 export const getLoading = (state: State) => state.loading;
 
-export const getSupplier = (state: State) => state.supplier;
+export const getSuppliers = (state: State) => state.suppliers;
+
+export const getSelected = (state: State) => state.selected;
 
 export const getError = (state: State) => state.error;

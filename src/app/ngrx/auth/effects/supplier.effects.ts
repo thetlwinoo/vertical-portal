@@ -9,13 +9,13 @@ import { SuppliersService } from '@vertical/services';
 
 @Injectable()
 export class SupplierEffects {
-  getLoginSupplier$ = createEffect(() =>
+  fetchSuppliers$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(SupplierActions.getLoginSupplier),
-      switchMap(() =>
-        this.supplierService.getSupplierByPrincipal().pipe(
-          filter((res: HttpResponse<ISuppliers>) => res.ok),
-          map((res: HttpResponse<ISuppliers>) => SupplierActions.getLoginSupplierSuccess({ supplier: res.body })),
+      ofType(SupplierActions.fetchSuppliers),
+      switchMap(({ query }) =>
+        this.supplierService.query(query).pipe(
+          filter((res: HttpResponse<ISuppliers[]>) => res.ok),
+          map((res: HttpResponse<ISuppliers[]>) => SupplierActions.fetchSuppliersSuccess({ suppliers: res.body })),
           catchError(err => of(SupplierActions.supplierError({ errorMsg: err.message })))
         )
       )

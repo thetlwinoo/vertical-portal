@@ -32,6 +32,15 @@
     padding: 16px;
     background-color: #ffffff;
   }
+
+  nz-radio-group {
+    width: 100%;
+  }
+
+  .address-content-wrapper {
+    padding: 16px;
+    background-color: #ffffff;
+  }
 }
 
 :host ::ng-deep .upload-list-inline .ant-upload-list-item {

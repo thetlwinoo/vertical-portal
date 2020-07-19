@@ -6,6 +6,12 @@ import { Account } from '@vertical/core/user/account.model';
 import { navigation } from 'app/navigation/navigation';
 import { VsConfigService } from '@vertical/services';
 import { takeUntil } from 'rxjs/operators';
+import { ISuppliers } from '@vertical/models';
+import { select, Store } from '@ngrx/store';
+import * as fromAuth from 'app/ngrx/auth/reducers';
+import { SupplierActions } from 'app/ngrx/auth/actions';
+
+type SelectableEntity = ISuppliers;
 
 @Component({
   selector: 'app-layout1',
@@ -18,6 +24,11 @@ export class Layout1Component implements OnInit, OnDestroy {
   isCollapsed = false;
   navigation: any;
   vsConfig: any;
+  suppliers$: Observable<ISuppliers[]>;
+  suppliers: ISuppliers[];
+  selectedSupplier$: Observable<ISuppliers>;
+  selectedSupplier: ISuppliers;
+
 
   private unsubscribe$: Subject<any> = new Subject();
 
@@ -25,7 +36,10 @@ export class Layout1Component implements OnInit, OnDestroy {
     private vsConfigService: VsConfigService,
     private accountService: AccountService,
     private authService: AuthService,
+    private store: Store<fromAuth.State>,
   ) {
+    this.suppliers$ = this.store.pipe(select(fromAuth.getSuppliersFetched));
+    this.selectedSupplier$ = this.store.pipe(select(fromAuth.getSupplierSelected));
   }
 
   ngOnInit(): void {
@@ -37,6 +51,8 @@ export class Layout1Component implements OnInit, OnDestroy {
       console.log('layout config', this.vsConfig);
     });
 
+    this.suppliers$.subscribe(suppliers => this.suppliers = suppliers);
+    this.selectedSupplier$.subscribe(selectedSupplier => (this.selectedSupplier = selectedSupplier));
   }
 
   isAuthenticated(): boolean {
@@ -49,6 +65,14 @@ export class Layout1Component implements OnInit, OnDestroy {
 
   onOpenChanged(event): void {
     console.log('open', event);
+  }
+
+  onChangeSupplier(event): void {
+    this.store.dispatch(SupplierActions.selectSupplier({ supplier: event }));
+  }
+
+  trackById(index: number, item: SelectableEntity): any {
+    return item.id;
   }
 
   ngOnDestroy(): void {

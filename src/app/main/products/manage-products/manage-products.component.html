@@ -1,8 +1,8 @@
-<vs-pagebar [title]="'Manage Products'">
+<vs-pagebar [title]="'Manage Products'" [subtitle]="selectedSupplier?.name">
   <div extra>
     <nz-button-group>
-      <button nz-button nzType="default" [routerLink]="'/products/new'">Add New</button>
-      <button nz-button nzType="default" [routerLink]="'/products/batch-upload'">Import</button>
+      <button nz-button nzType="default" [routerLink]="'/main/products/new'">Add New</button>
+      <button nz-button nzType="default" [routerLink]="'/main/products/batch-upload'">Import</button>
       <button nz-button nz-dropdown [nzDropdownMenu]="menu1">
         Export
         <i nz-icon nzType="down"></i>
@@ -65,8 +65,9 @@
 </div>
 <ng-template #contentTemplate>
   <div>
-    <p><a nz-button nzType="link" [routerLink]="'/products/product-update/' + currentStockItem.productId">Edit</a></p>
-    <p><a nz-button nzType="link" [routerLink]="'/products/manage-images'">Manage Images</a></p>
+    <p><a nz-button nzType="link" [routerLink]="'/main/products/product-update/' + currentStockItem.productId">Edit</a>
+    </p>
+    <p><a nz-button nzType="link" [routerLink]="'/main/products/manage-images'">Manage Images</a></p>
     <p><a nz-button nzType="link" (click)="onDelete(currentStockItem)">Delete</a></p>
   </div>
 </ng-template>

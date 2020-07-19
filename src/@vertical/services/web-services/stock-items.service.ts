@@ -62,7 +62,7 @@ export class StockItemsService {
   findAll(req?: any): Observable<any> {
     const options = createRequestOption(req);
     return this.http
-      .get<any>(this.extendUrl + '/filter/vendor', { params: options, observe: 'response' })
+      .get<any>(this.extendUrl, { params: options, observe: 'response' })
       .pipe(map((res: any) => this.convertDateArrayFromServer(res)));
   }
 
@@ -86,6 +86,8 @@ export class StockItemsService {
       sellStartDate: stockItems.sellStartDate && stockItems.sellStartDate.isValid() ? stockItems.sellStartDate.toJSON() : undefined,
       sellEndDate: stockItems.sellEndDate && stockItems.sellEndDate.isValid() ? stockItems.sellEndDate.toJSON() : undefined,
       lastEditedWhen: stockItems.lastEditedWhen && stockItems.lastEditedWhen.isValid() ? stockItems.lastEditedWhen.toJSON() : undefined,
+      validFrom: stockItems.validFrom && stockItems.validFrom.isValid() ? stockItems.validFrom.toJSON() : undefined,
+      validTo: stockItems.validTo && stockItems.validTo.isValid() ? stockItems.validTo.toJSON() : undefined,
     });
     return copy;
   }
@@ -95,6 +97,8 @@ export class StockItemsService {
       res.body.sellStartDate = res.body.sellStartDate ? moment(res.body.sellStartDate) : undefined;
       res.body.sellEndDate = res.body.sellEndDate ? moment(res.body.sellEndDate) : undefined;
       res.body.lastEditedWhen = res.body.lastEditedWhen ? moment(res.body.lastEditedWhen) : undefined;
+      res.body.validFrom = res.body.validFrom ? moment(res.body.validFrom) : undefined;
+      res.body.validTo = res.body.validTo ? moment(res.body.validTo) : undefined;
     }
     return res;
   }
@@ -105,6 +109,8 @@ export class StockItemsService {
         stockItems.sellStartDate = stockItems.sellStartDate ? moment(stockItems.sellStartDate) : undefined;
         stockItems.sellEndDate = stockItems.sellEndDate ? moment(stockItems.sellEndDate) : undefined;
         stockItems.lastEditedWhen = stockItems.lastEditedWhen ? moment(stockItems.lastEditedWhen) : undefined;
+        stockItems.validFrom = stockItems.validFrom ? moment(stockItems.validFrom) : undefined;
+        stockItems.validTo = stockItems.validTo ? moment(stockItems.validTo) : undefined;
       });
     }
     return res;

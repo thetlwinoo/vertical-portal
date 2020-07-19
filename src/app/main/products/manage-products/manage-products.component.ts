@@ -11,6 +11,9 @@ import { ITEMS_PER_PAGE } from '@vertical/constants';
 import { ErrorHandler } from '@vertical/utils/error.handler';
 import { NzTableQueryParams } from 'ng-zorro-antd/table/public-api';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { ISuppliers } from '@vertical/models';
+import { select, Store } from '@ngrx/store';
+import * as fromAuth from 'app/ngrx/auth/reducers';
 
 @Component({
   selector: 'app-manage-products',
@@ -41,6 +44,8 @@ export class ManageProductsComponent implements OnInit, OnDestroy {
   showAlertInd = false;
   alert: IAlerts = new Alerts();
   activeLoading = false;
+  selectedSupplier$: Observable<ISuppliers>;
+  selectedSupplier: ISuppliers;
 
   constructor(
     protected stockItemsService: StockItemsService,
@@ -51,6 +56,7 @@ export class ManageProductsComponent implements OnInit, OnDestroy {
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
     protected eventManager: JhiEventManager,
+    private store: Store<fromAuth.State>,
     private msg: NzMessageService
   ) {
     this.itemsPerPage = ITEMS_PER_PAGE;
@@ -60,10 +66,12 @@ export class ManageProductsComponent implements OnInit, OnDestroy {
       this.reverse = data.pagingParams.ascending;
       this.predicate = data.pagingParams.predicate;
     });
+
+    this.selectedSupplier$ = this.store.pipe(select(fromAuth.getSupplierSelected));
   }
 
   ngOnInit(): void {
-    this.loadAll();
+
     this.accountService.identity().pipe(
       map(account => {
         this.account = account;
@@ -71,6 +79,14 @@ export class ManageProductsComponent implements OnInit, OnDestroy {
     );
 
     this.registerChangeInStockItems();
+
+    this.selectedSupplier$.subscribe(selectedSupplier => {
+      this.selectedSupplier = selectedSupplier;
+
+      if (this.selectedSupplier && this.selectedSupplier.id) {
+        this.loadAll();
+      }
+    });
   }
 
   loadAll(): void {
@@ -78,6 +94,7 @@ export class ManageProductsComponent implements OnInit, OnDestroy {
       page: this.page - 1,
       size: this.itemsPerPage,
       sort: this.sort(),
+      supplierId: this.selectedSupplier?.id
     };
 
     if (this.filterType === 1) {
@@ -117,7 +134,7 @@ export class ManageProductsComponent implements OnInit, OnDestroy {
   }
 
   transition(): void {
-    this.router.navigate(['/products/manage-products'], {
+    this.router.navigate(['/main/products/manage-products'], {
       queryParams: {
         page: this.page,
         size: this.itemsPerPage,
@@ -136,7 +153,7 @@ export class ManageProductsComponent implements OnInit, OnDestroy {
   clear(): void {
     this.page = 0;
     this.router.navigate([
-      '/products/manage-products',
+      '/main/products/manage-products',
       {
         page: this.page,
         sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc'),

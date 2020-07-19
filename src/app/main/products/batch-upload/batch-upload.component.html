@@ -46,7 +46,7 @@
                 <th>Model Name</th>
                 <th>Model Number</th>
                 <th>Quantity On Hand</th>
-                <th>Selling Price</th>
+                <th>Promotion Price</th>
                 <th>Retail Price</th>
             </tr>
         </thead>
@@ -62,7 +62,7 @@
                 <td>{{ data.modelName}}</td>
                 <td>{{ data.modelNumber}}</td>
                 <td>{{ data.quantityOnHand | number}}</td>
-                <td>{{ data.sellingPrice | currency}}</td>
+                <td>{{ data.promotionPrice | currency}}</td>
                 <td>{{ data.retailPrice | currency}}</td>
             </tr>
         </tbody>

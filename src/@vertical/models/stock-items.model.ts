@@ -10,6 +10,7 @@ export interface IStockItems {
   guid?: string;
   id?: number;
   name?: string;
+  cultureDetails?: any;
   vendorCode?: string;
   vendorSKU?: string;
   generatedSKU?: string;
@@ -47,14 +48,16 @@ export interface IStockItems {
   tags?: string;
   searchDetails?: string;
   customFields?: any;
-  thumbnailUrl?: string;
-  activeInd?: boolean;
+  thumbnailPhoto?: string;
   liveInd?: boolean;
   cashOnDeliveryInd?: boolean;
   lastEditedBy?: string;
   lastEditedWhen?: Moment;
-  photoLists?: any[];
+  activeFlag?: boolean;
+  validFrom?: Moment;
+  validTo?: Moment;
   specialDealLists?: ISpecialDeals[];
+  photoLists?: IPhotos[];
   itemLengthUnitCode?: string;
   itemLengthUnitId?: number;
   itemWidthUnitCode?: string;
@@ -87,6 +90,7 @@ export class StockItems implements IStockItems {
     public guid?: string,
     public id?: number,
     public name?: string,
+    public cultureDetails?: any,
     public vendorCode?: string,
     public vendorSKU?: string,
     public generatedSKU?: string,
@@ -124,14 +128,16 @@ export class StockItems implements IStockItems {
     public tags?: string,
     public searchDetails?: string,
     public customFields?: any,
-    public thumbnailUrl?: string,
-    public activeInd?: boolean,
+    public thumbnailPhoto?: string,
     public liveInd?: boolean,
     public cashOnDeliveryInd?: boolean,
     public lastEditedBy?: string,
     public lastEditedWhen?: Moment,
-    public photoLists?: any[],
+    public activeFlag?: boolean,
+    public validFrom?: Moment,
+    public validTo?: Moment,
     public specialDealLists?: ISpecialDeals[],
+    public photoLists?: IPhotos[],
     public itemLengthUnitCode?: string,
     public itemLengthUnitId?: number,
     public itemWidthUnitCode?: string,
@@ -159,9 +165,9 @@ export class StockItems implements IStockItems {
     public productId?: number
   ) {
     this.isChillerStock = this.isChillerStock || false;
-    this.activeInd = this.activeInd || false;
     this.liveInd = this.liveInd || false;
     this.cashOnDeliveryInd = this.cashOnDeliveryInd || false;
+    this.activeFlag = this.activeFlag || false;
     this.guid = RootUtils.generateGUID();
   }
 }

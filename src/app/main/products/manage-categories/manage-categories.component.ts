@@ -1,13 +1,13 @@
 import { Component, OnInit, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { vsAnimations } from '@vertical/animations';
 import { SERVER_API_URL } from '@vertical/constants';
-import { AlertType, IAlerts, Alerts, IProductCategory, IPhotos, Photos } from '@vertical/models';
+import { AlertType, IAlerts, Alerts, IProductCategory, IPhotos, Photos, UploadCategory } from '@vertical/models';
 import { Subscription, Observer } from 'rxjs';
 import { JhiEventManager } from 'ng-jhipster';
 import { NzFormatEmitEvent } from 'ng-zorro-antd/tree';
 import { select, Store } from '@ngrx/store';
 import { Observable, Subject } from 'rxjs';
-import { map, takeUntil, filter } from 'rxjs/operators';
+import { map, takeUntil, filter, debounceTime, tap } from 'rxjs/operators';
 import * as fromProducts from 'app/ngrx/products/reducers';
 import { FetchActions, CategoryActions } from 'app/ngrx/products/actions';
 import * as _ from 'lodash';
@@ -15,7 +15,7 @@ import { ErrorHandler } from '@vertical/utils/error.handler';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { UploadFile } from 'ng-zorro-antd/upload/interface';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { PhotosService, ImagesService, ProductCategoryService } from '@vertical/services';
+import { PhotosService, ImagesService, ProductCategoryService, DocumentProcessService } from '@vertical/services';
 import { NzModalService } from 'ng-zorro-antd/modal';
 
 @Component({
@@ -38,6 +38,12 @@ export class ManageCategoriesComponent implements OnInit, OnDestroy {
   selectedCategory: any;
   editMode = false;
   loading = false;
+
+  uploadedFiles: any[] = [];
+  uploadData$: Observable<UploadCategory[]>;
+  uploadData: UploadCategory[];
+  loadingUploadExcel = false;
+
   private unsubscribe$: Subject<any> = new Subject();
 
   constructor(
@@ -47,6 +53,7 @@ export class ManageCategoriesComponent implements OnInit, OnDestroy {
     private photosService: PhotosService,
     private imagesService: ImagesService,
     private productCategoryService: ProductCategoryService,
+    protected documentProcessService: DocumentProcessService,
     private modal: NzModalService
   ) {
     this.categories$ = store.pipe(select(fromProducts.getFetchCategoriesTree));
@@ -56,6 +63,24 @@ export class ManageCategoriesComponent implements OnInit, OnDestroy {
     this.store.dispatch(FetchActions.fetchCategories());
 
     this.categories$.subscribe(data => this.categories = data);
+
+    this.uploadData$ = this.documentProcessService.data$.pipe(
+      debounceTime(0),
+      map(data => data.map(item => new UploadCategory(item))),
+      tap((data: UploadCategory[]) => data)
+    );
+
+    this.uploadData$.subscribe(res => console.log('upload success', res));
+  }
+
+  onUpload(event: any): void {
+    this.uploadedFiles = [];
+    for (const file of event.target.files) {
+      this.uploadedFiles.push(file);
+    }
+
+    this.documentProcessService.parseExcelFile(this.uploadedFiles[0]);
+    this.loadingUploadExcel = false;
   }
 
   onEditMode(item) {

@@ -6,7 +6,7 @@ import { DATE_FORMAT, SERVER_API_URL } from '@vertical/constants';
 import { map } from 'rxjs/operators';
 
 import { createRequestOption } from '@vertical/utils';
-import { IProducts, Products, IStockItems, IPhotos } from '@vertical/models';
+import { IProducts, Products, IStockItems, IPhotos, IProductTags } from '@vertical/models';
 import { StockItemsService } from '@vertical/services/web-services/stock-items.service';
 import { PhotosService } from '@vertical/services/web-services/photos.service';
 import { filter } from 'rxjs/operators';
@@ -95,8 +95,9 @@ export class ProductsService {
       );
   }
 
-  importProduct(products: IProducts): Observable<IProducts> {
+  importProduct(products: IProductTags): Observable<IProducts> {
     const copy = this.convertDateFromClient(products);
+
     return this.http
       .post<IProducts>(this.extendUrl + '/import', copy, { observe: 'response' })
       .pipe(
@@ -117,18 +118,22 @@ export class ProductsService {
 
   protected convertDateFromClient(products: IProducts): IProducts {
     const copy: IProducts = Object.assign({}, products, {
-      lastEditedWhen: products.lastEditedWhen && products.lastEditedWhen.isValid() ? products.lastEditedWhen.toJSON() : undefined,
       releaseDate: products.releaseDate && products.releaseDate.isValid() ? products.releaseDate.toJSON() : undefined,
       availableDate: products.availableDate && products.availableDate.isValid() ? products.availableDate.toJSON() : undefined,
+      lastEditedWhen: products.lastEditedWhen && products.lastEditedWhen.isValid() ? products.lastEditedWhen.toJSON() : undefined,
+      validFrom: products.validFrom && products.validFrom.isValid() ? products.validFrom.toJSON() : undefined,
+      validTo: products.validTo && products.validTo.isValid() ? products.validTo.toJSON() : undefined,
     });
     return copy;
   }
 
   protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
     if (res.body) {
-      res.body.lastEditedWhen = res.body.lastEditedWhen ? moment(res.body.lastEditedWhen) : undefined;
       res.body.releaseDate = res.body.releaseDate ? moment(res.body.releaseDate) : undefined;
       res.body.availableDate = res.body.availableDate ? moment(res.body.availableDate) : undefined;
+      res.body.lastEditedWhen = res.body.lastEditedWhen ? moment(res.body.lastEditedWhen) : undefined;
+      res.body.validFrom = res.body.validFrom ? moment(res.body.validFrom) : undefined;
+      res.body.validTo = res.body.validTo ? moment(res.body.validTo) : undefined;
     }
     return res;
   }
@@ -136,9 +141,11 @@ export class ProductsService {
   protected convertDateArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
     if (res.body) {
       res.body.forEach((products: IProducts) => {
-        products.lastEditedWhen = products.lastEditedWhen ? moment(products.lastEditedWhen) : undefined;
         products.releaseDate = products.releaseDate ? moment(products.releaseDate) : undefined;
         products.availableDate = products.availableDate ? moment(products.availableDate) : undefined;
+        products.lastEditedWhen = products.lastEditedWhen ? moment(products.lastEditedWhen) : undefined;
+        products.validFrom = products.validFrom ? moment(products.validFrom) : undefined;
+        products.validTo = products.validTo ? moment(products.validTo) : undefined;
       });
     }
     return res;

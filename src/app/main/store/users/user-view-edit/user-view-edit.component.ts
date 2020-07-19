@@ -14,6 +14,8 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 
 type SelectableEntity = IPhotos | ISuppliers;
 
+type SelectableManyToManyEntity = ISuppliers | IPeople;
+
 @Component({
   selector: 'app-user-view-edit',
   templateUrl: './user-view-edit.component.html',
@@ -25,6 +27,7 @@ export class UserViewEditComponent implements OnInit, OnDestroy {
   photos: IPhotos[] = [];
   suppliers: ISuppliers[] = [];
   loading = false;
+  selectedSupplier: ISuppliers;
 
   get profilePhoto(): string {
     return this.editForm.get('profilePhoto')?.value || null;
@@ -37,14 +40,14 @@ export class UserViewEditComponent implements OnInit, OnDestroy {
     searchName: [null, [Validators.required]],
     gender: [],
     dateOfBirth: [],
-    isPermittedToLogon: [null, [Validators.required]],
+    isPermittedToLogon: [false, [Validators.required]],
     logonName: [],
-    isExternalLogonProvider: [null, [Validators.required]],
-    isSystemUser: [null, [Validators.required]],
-    isEmployee: [null, [Validators.required]],
-    isSalesPerson: [null, [Validators.required]],
-    isGuestUser: [null, [Validators.required]],
-    emailPromotion: [null, [Validators.required]],
+    isExternalLogonProvider: [false, [Validators.required]],
+    isSystemUser: [false, [Validators.required]],
+    isEmployee: [false, [Validators.required]],
+    isSalesPerson: [false, [Validators.required]],
+    isGuestUser: [false, [Validators.required]],
+    emailPromotion: [false, [Validators.required]],
     userPreferences: [],
     phoneNumber: [],
     emailAddress: [null, [Validators.required, Validators.pattern('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$')]],
@@ -54,6 +57,7 @@ export class UserViewEditComponent implements OnInit, OnDestroy {
     profilePhoto: [],
     validFrom: [null, [Validators.required]],
     validTo: [],
+    suppliers: [],
   });
 
   public blobUrl = SERVER_API_URL + 'services/cloudblob/api/images-extend/';
@@ -73,6 +77,7 @@ export class UserViewEditComponent implements OnInit, OnDestroy {
     this.activatedRoute.data.subscribe(({ people }) => {
 
       if (people && people.id) {
+        console.log(people)
         this.updateForm(people);
       }
 
@@ -107,6 +112,7 @@ export class UserViewEditComponent implements OnInit, OnDestroy {
       profilePhoto: people.profilePhoto,
       validFrom: people.validFrom ? people.validFrom.format(DATE_TIME_FORMAT) : null,
       validTo: people.validTo ? people.validTo.format(DATE_TIME_FORMAT) : null,
+      suppliers: people.suppliers,
     });
   }
 
@@ -153,6 +159,7 @@ export class UserViewEditComponent implements OnInit, OnDestroy {
       profilePhoto: this.editForm.get(['profilePhoto'])!.value,
       validFrom: this.editForm.get(['validFrom'])!.value ? moment(this.editForm.get(['validFrom'])!.value, DATE_TIME_FORMAT) : undefined,
       validTo: this.editForm.get(['validTo'])!.value ? moment(this.editForm.get(['validTo'])!.value, DATE_TIME_FORMAT) : undefined,
+      suppliers: this.editForm.get(['suppliers'])!.value,
     };
   }
 
@@ -174,6 +181,17 @@ export class UserViewEditComponent implements OnInit, OnDestroy {
 
   trackById(index: number, item: SelectableEntity): any {
     return item.id;
+  }
+
+  getSelected(selectedVals: SelectableManyToManyEntity[], option: SelectableManyToManyEntity): SelectableManyToManyEntity {
+    if (selectedVals) {
+      for (let i = 0; i < selectedVals.length; i++) {
+        if (option.id === selectedVals[i].id) {
+          return selectedVals[i];
+        }
+      }
+    }
+    return option;
   }
 
   beforeUpload = (file: File) =>

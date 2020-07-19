@@ -21,6 +21,10 @@ type SelectableEntity = IPhotos | ISuppliers;
 })
 export class UserAddComponent implements OnInit, OnDestroy {
 
+  get profilePhoto(): string {
+    return this.editForm.get('profilePhoto')?.value || null;
+  }
+
   isSaving = false;
   photos: IPhotos[] = [];
   suppliers: ISuppliers[] = [];
@@ -34,24 +38,24 @@ export class UserAddComponent implements OnInit, OnDestroy {
     searchName: [null, [Validators.required]],
     gender: [],
     dateOfBirth: [],
-    isPermittedToLogon: [null, [Validators.required]],
+    isPermittedToLogon: [false, [Validators.required]],
     logonName: [],
-    isExternalLogonProvider: [null, [Validators.required]],
-    isSystemUser: [null, [Validators.required]],
-    isEmployee: [null, [Validators.required]],
-    isSalesPerson: [null, [Validators.required]],
-    isGuestUser: [null, [Validators.required]],
-    emailPromotion: [null, [Validators.required]],
+    isExternalLogonProvider: [false, [Validators.required]],
+    isSystemUser: [false, [Validators.required]],
+    isEmployee: [false, [Validators.required]],
+    isSalesPerson: [false, [Validators.required]],
+    isGuestUser: [false, [Validators.required]],
+    emailPromotion: [false, [Validators.required]],
     userPreferences: [],
     phoneNumber: [],
     emailAddress: [null, [Validators.required, Validators.pattern('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$')]],
     customFields: [],
     otherLanguages: [],
     userId: [null, [Validators.required]],
+    profilePhoto: [],
     validFrom: [null, [Validators.required]],
     validTo: [],
-    profileId: [],
-    supplierId: [],
+    suppliers: [],
   });
 
   public blobUrl = SERVER_API_URL + 'services/cloudblob/api/images-extend/';
@@ -120,10 +124,10 @@ export class UserAddComponent implements OnInit, OnDestroy {
       customFields: this.editForm.get(['customFields'])!.value,
       otherLanguages: this.editForm.get(['otherLanguages'])!.value,
       userId: this.editForm.get(['userId'])!.value,
+      profilePhoto: this.editForm.get(['profilePhoto'])!.value,
       validFrom: this.editForm.get(['validFrom'])!.value ? moment(this.editForm.get(['validFrom'])!.value, DATE_TIME_FORMAT) : undefined,
       validTo: this.editForm.get(['validTo'])!.value ? moment(this.editForm.get(['validTo'])!.value, DATE_TIME_FORMAT) : undefined,
-      profilePhoto: this.editForm.get(['profilePhoto'])!.value,
-      supplierId: this.editForm.get(['supplierId'])!.value,
+      suppliers: this.editForm.get(['suppliers'])!.value,
     };
   }
 
@@ -165,7 +169,7 @@ export class UserAddComponent implements OnInit, OnDestroy {
       observer.complete();
     });
 
-  handleChange(info: { file: UploadFile }, entity): void {
+  handleChange(info: { file: UploadFile }): void {
     switch (info.file.status) {
       case 'uploading':
         this.loading = true;

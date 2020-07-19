@@ -159,7 +159,7 @@ export class ManageOrdersComponent implements OnInit, OnDestroy {
     this.loading = false;
     this.totalItems = Number(headers.get('X-Total-Count'));
     this.page = page;
-    this.router.navigate(['/orders/manage-orders'], {
+    this.router.navigate(['/main/orders/manage-orders'], {
       queryParams: {
         page: this.page,
         size: this.itemsPerPage,

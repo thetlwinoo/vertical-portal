@@ -1,4 +1,5 @@
 import { Moment } from 'moment';
+import { ISuppliers } from './suppliers.model';
 import { Gender } from './gender.model';
 
 export interface IPeople {
@@ -25,11 +26,10 @@ export interface IPeople {
     profilePhoto?: string;
     validFrom?: Moment;
     validTo?: Moment;
+    suppliers?: ISuppliers[];
     cartId?: number;
     wishlistId?: number;
     compareId?: number;
-    supplierName?: string;
-    supplierId?: number;
 }
 
 export class People implements IPeople {
@@ -57,11 +57,10 @@ export class People implements IPeople {
         public profilePhoto?: string,
         public validFrom?: Moment,
         public validTo?: Moment,
+        public suppliers?: ISuppliers[],
         public cartId?: number,
         public wishlistId?: number,
-        public compareId?: number,
-        public supplierName?: string,
-        public supplierId?: number
+        public compareId?: number
     ) {
         this.isPermittedToLogon = this.isPermittedToLogon || false;
         this.isExternalLogonProvider = this.isExternalLogonProvider || false;

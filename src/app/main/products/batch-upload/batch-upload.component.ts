@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 import { Account } from '@vertical/core/user/account.model';
 import { AccountService } from '@vertical/core';
 
-import { UploadExcel, Products, StockItems, ProductDocument, ProductTags, IAlerts, Alerts, StockItemHoldings } from '@vertical/models';
+import { UploadExcel, Products, StockItems, ProductDocument, ProductTags, IAlerts, Alerts, StockItemHoldings, ISuppliers } from '@vertical/models';
 import {
   StockItemsService,
   ProductsService,
@@ -24,7 +24,7 @@ import {
 } from '@vertical/services';
 
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { faStopCircle } from '@fortawesome/free-solid-svg-icons';
+import * as fromAuth from 'app/ngrx/auth/reducers';
 
 @Component({
   selector: 'app-batch-upload',
@@ -58,10 +58,13 @@ export class BatchUploadComponent implements OnInit, OnDestroy {
   uploadData: UploadExcel[];
   selectedRows: UploadExcel[] = [];
   productList: Products[] = [];
-  tagList: string[] = [];
+  // tagList: string[] = [];
 
   showAlertInd = false;
   alert: IAlerts = new Alerts();
+
+  selectedSupplier$: Observable<ISuppliers>;
+  selectedSupplier: ISuppliers;
 
   private unsubscribe$: Subject<any> = new Subject();
 
@@ -78,8 +81,10 @@ export class BatchUploadComponent implements OnInit, OnDestroy {
     private productTagsService: ProductTagsService,
     protected stockItemHoldingsService: StockItemHoldingsService,
     private store: Store<fromProducts.State>,
+    private authStore: Store<fromAuth.State>,
     private msg: NzMessageService,
   ) {
+    this.selectedSupplier$ = this.authStore.pipe(select(fromAuth.getSupplierSelected));
   }
 
   ngOnInit(): void {
@@ -93,10 +98,14 @@ export class BatchUploadComponent implements OnInit, OnDestroy {
       this.account = account;
     });
 
+    this.selectedSupplier$.subscribe(selectedSupplier => {
+      this.selectedSupplier = selectedSupplier;
+    });
+
     this.uploadData$.subscribe(data => {
       console.log('upload data', data);
 
-      this.tagList = [];
+      // this.tagList = [];
       this.importTotalCount = data.length;
       this.uploadData = data;
 
@@ -114,6 +123,7 @@ export class BatchUploadComponent implements OnInit, OnDestroy {
         product.availableDate = values[0].availableDate;
         product.lastEditedBy = this.account.id;
         product.lastEditedWhen = moment();
+        product.validFrom = moment();
 
         product.stockItemLists = [];
         const productDocument: ProductDocument = new ProductDocument();
@@ -161,8 +171,8 @@ export class BatchUploadComponent implements OnInit, OnDestroy {
           stockItem.sellStartDate = moment();
           stockItem.sellEndDate = moment();
           stockItem.customFields = '';
-          stockItem.thumbnailUrl = '';
-          stockItem.activeInd = false;
+          stockItem.thumbnailPhoto = '';
+          stockItem.activeFlag = false;
           stockItem.itemLengthUnitCode = item.itemLengthUnit;
           stockItem.itemWidthUnitCode = item.itemWidthUnit;
           stockItem.itemHeightUnitCode = item.itemHeightUnit;
@@ -184,14 +194,15 @@ export class BatchUploadComponent implements OnInit, OnDestroy {
           stockItem.targetStockLevel = 100;
           stockItem.searchDetails = item.searchKeywords;
           stockItem.isChillerStock = item.isChillerStock;
+          stockItem.validFrom = moment();
           product.stockItemLists.push(stockItem);
           searchDetails = searchDetails + item.searchKeywords + ';';
 
-          item.searchKeywords.split(';').map(keyword => {
-            if (!this.tagList.includes(keyword)) {
-              this.tagList.push(keyword);
-            }
-          });
+          // item.searchKeywords.split(';').map(keyword => {
+          //   if (!this.tagList.includes(keyword)) {
+          //     this.tagList.push(keyword);
+          //   }
+          // });
         });
 
         product.searchDetails = [...new Set(searchDetails.split(';'))].join(';').slice(0, -1);
@@ -207,7 +218,6 @@ export class BatchUploadComponent implements OnInit, OnDestroy {
       this.uploadedFiles.push(file);
     }
 
-    // this.subscribeToUploadResponse(this.productsService.upload(this.uploadedFiles[0]));
     this.documentProcessService.parseExcelFile(this.uploadedFiles[0]);
     this.loadingUploadExcel = false;
   }
@@ -238,16 +248,17 @@ export class BatchUploadComponent implements OnInit, OnDestroy {
       console.log('product.productDocument', product.productDocument);
       this.productDocumentService.importProductDocument(product.productDocument).subscribe(productDocumentRes => {
         product.productDocumentId = productDocumentRes.id;
+        product.supplierId = this.selectedSupplier.id;
         this.productsService.importProduct(product).subscribe(productResource => {
           product.stockItemLists.map(stockItem => {
             stockItem.productId = productResource.id;
-            this.stockItemsService.importStockItem(stockItem).subscribe(stockItemResource => {
+            this.stockItemsService.importStockItem(stockItem).subscribe(() => {
               this.importCount++;
               this.importPercentage = Math.floor((this.importCount * 100) / this.importTotalCount);
               if (this.importPercentage >= 100) {
                 // this.showImportCompleted = true;
                 this.msg.success(`Total ${this.importCount} imported`);
-                this.router.navigate(['/products/manage-products']);
+                this.router.navigate(['/main/products/manage-products']);
               }
             });
           });
@@ -255,13 +266,13 @@ export class BatchUploadComponent implements OnInit, OnDestroy {
       });
     });
 
-    this.tagList.map(tag => {
-      if (tag.length > 0) {
-        const productTag: ProductTags = new ProductTags();
-        productTag.name = tag;
-        this.productTagsService.create(productTag).subscribe();
-      }
-    });
+    // this.tagList.map(tag => {
+    //   if (tag.length > 0) {
+    //     const productTag: ProductTags = new ProductTags();
+    //     productTag.name = tag;
+    //     this.productTagsService.create(productTag).subscribe();
+    //   }
+    // });
   }
 
   openFile(contentType, field): any {
@@ -270,7 +281,7 @@ export class BatchUploadComponent implements OnInit, OnDestroy {
 
   onCompletedImport(): void {
     // this.showImportCompleted = false;
-    this.router.navigate(['/products/manage-products']);
+    this.router.navigate(['/main/products/manage-products']);
   }
 
   selectedChanged(event) {

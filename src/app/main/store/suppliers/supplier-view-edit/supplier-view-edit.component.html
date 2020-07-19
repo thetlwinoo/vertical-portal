@@ -489,21 +489,82 @@
 
                     <vs-panel [title]="'Pickup Address'">
                         <div body>
-                            <div class="panel-content-wrapper">
-
+                            <div class="address-content-wrapper">
+                                <nz-radio-group [(ngModel)]="pickupAddressId"
+                                    (ngModelChange)="pickupAddressChanged($event)">
+                                    <nz-table #pickupAddressTable nzSize="small" [nzData]="addresses"
+                                        [nzHideOnSinglePage]="true">
+                                        <tbody>
+                                            <tr *ngFor="let data of pickupAddressTable.data">
+                                                <td><label nz-radio [nzValue]="data.id"></label></td>
+                                                <td>{{data.contactPerson}}</td>
+                                                <td>{{data.contactNumber}}</td>
+                                                <td>{{data.contactEmailAddress}}</td>
+                                                <td>{{data.addressLine1}}, {{data.addressLine2}}</td>
+                                                <td>
+                                                    <a [routerLink]="'/main/store/addresses/edit/' + data.id">Edit</a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </nz-table>
+                                </nz-radio-group>
                             </div>
                         </div>
                     </vs-panel>
 
                     <vs-panel [title]="'Head Office Address'">
                         <div body>
-                            <div class="panel-content-wrapper">
+                            <div class="address-content-wrapper">
+                                <nz-radio-group [(ngModel)]="headOfficeAddressId"
+                                    (ngModelChange)="headOfficeAddressChanged($event)">
+                                    <nz-table #headOfficeAddressTable nzSize="small" [nzData]="addresses"
+                                        [nzHideOnSinglePage]="true">
+                                        <tbody>
+                                            <tr *ngFor="let data of headOfficeAddressTable.data">
+                                                <td><label nz-radio [nzValue]="data.id"></label></td>
+                                                <td>{{data.contactPerson}}</td>
+                                                <td>{{data.contactNumber}}</td>
+                                                <td>{{data.contactEmailAddress}}</td>
+                                                <td>{{data.addressLine1}}, {{data.addressLine2}}</td>
+                                                <td>
+                                                    <a [routerLink]="'/main/store/addresses/edit/' + data.id">Edit</a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </nz-table>
+                                </nz-radio-group>
 
                             </div>
                         </div>
                     </vs-panel>
 
-                    <button nz-button nzType="primary" type="button" id="save-address">
+                    <vs-panel [title]="'Return Address'">
+                        <div body>
+                            <div class="address-content-wrapper">
+                                <nz-radio-group [(ngModel)]="returnAddressId"
+                                    (ngModelChange)="returnAddressChanged($event)">
+                                    <nz-table #returnAddressTable nzSize="small" [nzData]="addresses"
+                                        [nzHideOnSinglePage]="true">
+                                        <tbody>
+                                            <tr *ngFor="let data of returnAddressTable.data">
+                                                <td><label nz-radio [nzValue]="data.id"></label></td>
+                                                <td>{{data.contactPerson}}</td>
+                                                <td>{{data.contactNumber}}</td>
+                                                <td>{{data.contactEmailAddress}}</td>
+                                                <td>{{data.addressLine1}}, {{data.addressLine2}}</td>
+                                                <td>
+                                                    <a [routerLink]="'/main/store/addresses/edit/' + data.id">Edit</a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </nz-table>
+                                </nz-radio-group>
+
+                            </div>
+                        </div>
+                    </vs-panel>
+
+                    <button nz-button nzType="primary" type="button" id="save-address" (click)="saveAddress()">
                         <span>Save</span>
                     </button>
                 </nz-tab>

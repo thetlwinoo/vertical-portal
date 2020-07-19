@@ -43,7 +43,7 @@ export class ManageImagesComponent implements OnInit, OnDestroy {
   predicate: any;
   previousPage: any;
   reverse: any;
-  loading = true;
+  loading = false;
   selectedRows: any;
 
   closeAlertInd = true;
@@ -124,7 +124,7 @@ export class ManageImagesComponent implements OnInit, OnDestroy {
   }
 
   transition(): void {
-    this.router.navigate(['/products/manage-images'], {
+    this.router.navigate(['/main/products/manage-images'], {
       queryParams: {
         page: this.page,
         size: this.itemsPerPage,
@@ -137,7 +137,7 @@ export class ManageImagesComponent implements OnInit, OnDestroy {
   clear(): void {
     this.page = 0;
     this.router.navigate([
-      '/products/manage-products',
+      '/main/products/manage-products',
       {
         page: this.page,
         sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc'),
@@ -278,18 +278,7 @@ export class ManageImagesComponent implements OnInit, OnDestroy {
           map((res: HttpResponse<IPhotos[]>) => res.body)
         )
         .subscribe((res: IPhotos[]) => {
-          stockItem.photoLists = [];
-          res.map(item => {
-            stockItem.photoLists.push({
-              uid: item.blobId.toString(),
-              name: item.blobId,
-              status: 'done',
-              thumbUrl: `${this.blobUrl}${item.thumbUrl}`,
-              url: `${this.blobUrl}${item.url}`,
-              photoId: item.id,
-              defaultInd: item.defaultInd,
-            });
-          });
+          stockItem.photoLists = res;
         });
     });
 

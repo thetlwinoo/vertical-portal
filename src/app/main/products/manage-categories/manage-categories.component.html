@@ -1,6 +1,11 @@
 <vs-pagebar [title]="'Manage Categories'">
     <div extra>
+        <input #file [style.display]="'none'" type="file" id="file" accept=".xls,.xlsx,.csv,.json"
+            (change)="onUpload($event)" hidden />
         <nz-space>
+            <nz-space-item>
+                <button nz-button nzType="default" (click)="file.click()">Import</button>
+            </nz-space-item>
             <nz-space-item>
                 <button nz-button nzType="default">Add Root Category</button>
             </nz-space-item>
@@ -15,17 +20,24 @@
         <vs-alert *ngIf="showAlertInd" [alert]="alert"></vs-alert>
 
         <div nz-row [nzGutter]="16">
-            <div nz-col [nzXs]="24" [nzLg]="7">
-                <nz-input-group [nzSuffix]="suffixIcon">
-                    <input type="text" nz-input placeholder="Search" [(ngModel)]="searchValue" />
-                </nz-input-group>
-                <ng-template #suffixIcon>
-                    <i nz-icon nzType="search"></i>
-                </ng-template>
-                <nz-tree [nzData]="(categories$ | async) | orderBy:'id'" [nzSearchValue]="searchValue" nzDraggable
-                    (nzClick)="nzClick($event)" (nzOnDrop)="nzEvent($event)"> </nz-tree>
+            <div nz-col [nzXs]="24" [nzLg]="12">
+                <vs-panel [title]="'Look up'">
+                    <div extra>
+                        <nz-input-group [nzSuffix]="suffixIcon">
+                            <input type="text" nz-input placeholder="Search" [(ngModel)]="searchValue" />
+                        </nz-input-group>
+                        <ng-template #suffixIcon>
+                            <i nz-icon nzType="search"></i>
+                        </ng-template>
+                    </div>
+
+                    <div body class="content-wrapper">
+                        <nz-tree [nzData]="(categories$ | async) | orderBy:'id'" [nzSearchValue]="searchValue"
+                            nzDraggable (nzClick)="nzClick($event)" (nzOnDrop)="nzEvent($event)"> </nz-tree>
+                    </div>
+                </vs-panel>
             </div>
-            <div nz-col [nzXs]="24" [nzLg]="17">
+            <div nz-col [nzXs]="24" [nzLg]="12">
                 <vs-panel [title]="selectedCategory?selectedCategory.name:'Category'">
                     <div extra>
                         <nz-space>

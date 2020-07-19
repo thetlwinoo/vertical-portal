@@ -20,9 +20,23 @@
             <nz-tabset [nzTabPosition]="'top'" [nzType]="'card'">
                 <nz-tab [nzTitle]="'Details'">
                     <div class="record-details">
-                        <div nz-row>
-                            <div nz-col class="gutter-row" [nzXs]="24" [nzLg]="15">
-                                <form nz-form [formGroup]="editForm" (ngSubmit)="save()">
+                        <form nz-form [formGroup]="editForm" (ngSubmit)="save()">
+                            <div nz-row>
+                                <div nz-col class="gutter-row" [nzXs]="24" [nzLg]="12">
+                                    <nz-form-control [nzOffset]="8" [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                                        <nz-upload class="avatar-uploader" [nzAction]="blobUrl + 'upload'"
+                                            nzListType="picture-card" [nzShowUploadList]="false"
+                                            [nzBeforeUpload]="beforeUpload" (nzChange)="handleChange($event)">
+                                            <ng-container *ngIf="!profilePhoto">
+                                                <i class="upload-icon" nz-icon
+                                                    [nzType]="loading ? 'loading' : 'plus'"></i>
+                                                <div class="ant-upload-text">Upload</div>
+                                            </ng-container>
+                                            <img *ngIf="profilePhoto" [src]="blobUrl + profilePhoto + '/thumbnail'"
+                                                style="width: 100%" />
+                                        </nz-upload>
+                                    </nz-form-control>
+
                                     <nz-form-item>
                                         <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="id">ID</nz-form-label>
                                         <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
@@ -68,10 +82,18 @@
                                         </nz-form-label>
                                         <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
                                             <nz-select name="gender" formControlName="gender">
-                                                <option value="MALE">MALE</option>
-                                                <option value="FEMALE">FEMALE</option>
-                                                <option value="OTHER">OTHER</option>
+                                                <nz-option nzValue="MALE" nzLabel="MALE"></nz-option>
+                                                <nz-option nzValue="FEMALE" nzLabel="FEMALE"></nz-option>
+                                                <nz-option nzValue="OTHER" nzLabel="OTHER"></nz-option>
                                             </nz-select>
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="userId">Account Id
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                                            <input nz-input formControlName="userId" id="userId" />
                                         </nz-form-control>
                                     </nz-form-item>
 
@@ -83,6 +105,44 @@
                                             <nz-date-picker [nzFormat]="'dd-MM-yyyy'" formControlName="dateOfBirth"
                                                 id="dateOfBirth">
                                             </nz-date-picker>
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="validFrom">Valid From
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                                            <nz-date-picker [nzFormat]="'dd-MM-yyyy'" formControlName="validFrom"
+                                                id="validFrom">
+                                            </nz-date-picker>
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="validTo">Valid To
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                                            <nz-date-picker [nzFormat]="'dd-MM-yyyy'" formControlName="validTo"
+                                                id="validTo">
+                                            </nz-date-picker>
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                </div>
+                                <div nz-col class="gutter-row" [nzXs]="24" [nzLg]="12">
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="supplier">Supplier
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                                            <nz-select [nzMaxTagCount]="3" [nzMaxTagPlaceholder]="tagPlaceHolder"
+                                                nzMode="multiple" nzPlaceHolder="Please select"
+                                                formControlName="suppliers" id="supplier">
+                                                <nz-option *ngFor="let suppliersOption of suppliers; trackBy: trackById"
+                                                    [nzLabel]="suppliersOption.name"
+                                                    [nzValue]="getSelected(editForm.get('suppliers')!.value, suppliersOption)">
+                                                </nz-option>
+                                            </nz-select>
+                                            <ng-template #tagPlaceHolder let-selectedList> and {{ selectedList.length }}
+                                                more selected </ng-template>
                                         </nz-form-control>
                                     </nz-form-item>
 
@@ -132,152 +192,98 @@
                                     </nz-form-item>
 
                                     <nz-form-item>
-                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="userId">User Id
-                                        </nz-form-label>
-                                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
-                                            <input nz-input formControlName="userId" id="userId" />
-                                        </nz-form-control>
-                                    </nz-form-item>
-
-                                    <!-- <nz-form-item>
-                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="supplier">Supplier
-                                        </nz-form-label>
-                                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
-                                            <nz-select name="supplier" formControlName="supplier">
-                                                <option [ngValue]="null"></option>
-                                                <option [ngValue]="suppliersOption.id"
-                                                    *ngFor="let suppliersOption of suppliers; trackBy: trackById">
-                                                    {{ suppliersOption.name }}</option>
-                                            </nz-select>
-                                        </nz-form-control>
-                                    </nz-form-item> -->
-
-                                    <nz-form-item>
-                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="validFrom">Valid From
-                                        </nz-form-label>
-                                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
-                                            <nz-date-picker [nzFormat]="'dd-MM-yyyy'" formControlName="validFrom"
-                                                id="validFrom">
-                                            </nz-date-picker>
-                                        </nz-form-control>
-                                    </nz-form-item>
-
-                                    <nz-form-item>
-                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="validTo">Valid To
-                                        </nz-form-label>
-                                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
-                                            <nz-date-picker [nzFormat]="'dd-MM-yyyy'" formControlName="validTo"
-                                                id="validTo">
-                                            </nz-date-picker>
-                                        </nz-form-control>
-                                    </nz-form-item>
-
-                                    <nz-form-item>
-                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="isPermittedToLogon">Is
+                                        <nz-form-label [nzSm]="8" [nzXs]="8" nzRequired nzFor="isPermittedToLogon">Is
                                             Permitted
                                             To Logon
                                         </nz-form-label>
-                                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                                        <nz-form-control [nzSm]="14" [nzXs]="14" nzHasFeedback>
                                             <label nz-checkbox formControlName="isPermittedToLogon"
                                                 id="isPermittedToLogon"></label>
                                         </nz-form-control>
                                     </nz-form-item>
 
                                     <nz-form-item>
-                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired
-                                            nzFor="isExternalLogonProvider">Is External Logon Provider
+                                        <nz-form-label [nzSm]="8" [nzXs]="8" nzRequired nzFor="isExternalLogonProvider">
+                                            Is External
+                                            Logon Provider
                                         </nz-form-label>
-                                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                                        <nz-form-control [nzSm]="14" [nzXs]="14" nzHasFeedback>
                                             <label nz-checkbox formControlName="isExternalLogonProvider"
                                                 id="isExternalLogonProvider"></label>
                                         </nz-form-control>
                                     </nz-form-item>
 
                                     <nz-form-item>
-                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="isSystemUser">Is System
+                                        <nz-form-label [nzSm]="8" [nzXs]="8" nzRequired nzFor="isSystemUser">Is System
                                             User
                                         </nz-form-label>
-                                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                                        <nz-form-control [nzSm]="14" [nzXs]="14" nzHasFeedback>
                                             <label nz-checkbox formControlName="isSystemUser" id="isSystemUser"></label>
                                         </nz-form-control>
                                     </nz-form-item>
 
                                     <nz-form-item>
-                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="isEmployee">Is Employee
+                                        <nz-form-label [nzSm]="8" [nzXs]="8" nzRequired nzFor="isEmployee">Is Employee
                                         </nz-form-label>
-                                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                                        <nz-form-control [nzSm]="14" [nzXs]="14" nzHasFeedback>
                                             <label nz-checkbox formControlName="isEmployee" id="isEmployee"></label>
                                         </nz-form-control>
                                     </nz-form-item>
 
                                     <nz-form-item>
-                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="isSalesPerson">Is Sales
+                                        <nz-form-label [nzSm]="8" [nzXs]="8" nzRequired nzFor="isSalesPerson">Is Sales
                                             Person
                                         </nz-form-label>
-                                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                                        <nz-form-control [nzSm]="14" [nzXs]="14" nzHasFeedback>
                                             <label nz-checkbox formControlName="isSalesPerson"
                                                 id="isSalesPerson"></label>
                                         </nz-form-control>
                                     </nz-form-item>
 
                                     <nz-form-item>
-                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="isGuestUser">Is Guest
+                                        <nz-form-label [nzSm]="8" [nzXs]="8" nzRequired nzFor="isGuestUser">Is Guest
                                             User
                                         </nz-form-label>
-                                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                                        <nz-form-control [nzSm]="14" [nzXs]="14" nzHasFeedback>
                                             <label nz-checkbox formControlName="isGuestUser" id="isGuestUser"></label>
                                         </nz-form-control>
                                     </nz-form-item>
 
                                     <nz-form-item>
-                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="emailPromotion">Email
+                                        <nz-form-label [nzSm]="8" [nzXs]="8" nzRequired nzFor="emailPromotion">Email
                                             Promotion
                                         </nz-form-label>
-                                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                                        <nz-form-control [nzSm]="14" [nzXs]="14" nzHasFeedback>
                                             <label nz-checkbox formControlName="emailPromotion"
                                                 id="emailPromotion"></label>
                                         </nz-form-control>
                                     </nz-form-item>
-
-                                    <nz-row>
-                                        <nz-col nzOffset="8" [nzSm]="14" [nzXs]="24">
-                                            <nz-space>
-                                                <nz-space-item>
-                                                    <button nz-button nzType="primary" type="submit" id="save-entity"
-                                                        [disabled]="editForm.invalid || isSaving">
-                                                        <span>Save</span>
-                                                    </button>
-                                                </nz-space-item>
-
-                                                <nz-space-item>
-                                                    <button nz-button nzType="default" type="button" id="cancel-save"
-                                                        (click)="previousState()">
-                                                        <span>Cancel</span>
-                                                    </button>
-                                                </nz-space-item>
-                                            </nz-space>
-                                        </nz-col>
-                                    </nz-row>
-                                </form>
-                            </div>
-                            <div nz-col class="gutter-row" [nzXs]="24" [nzLg]="9">
-                                <div class="inner-box">
-                                    <nz-upload class="avatar-uploader" [nzAction]="blobUrl + 'upload'"
-                                        nzListType="picture-card" [nzShowUploadList]="false"
-                                        [nzBeforeUpload]="beforeUpload" (nzChange)="handleChange($event)">
-                                        <ng-container *ngIf="!profilePhoto">
-                                            <i class="upload-icon" nz-icon [nzType]="loading ? 'loading' : 'plus'"></i>
-                                            <div class="ant-upload-text">Upload</div>
-                                        </ng-container>
-                                        <img *ngIf="profilePhoto" [src]="blobUrl + profilePhoto + '/thumbnail'"
-                                            style="width: 100%" />
-                                    </nz-upload>
                                 </div>
                             </div>
-                        </div>
+
+                            <nz-row>
+                                <nz-col nzOffset="4" [nzSm]="10" [nzXs]="24">
+                                    <nz-space>
+                                        <nz-space-item>
+                                            <button nz-button nzType="primary" type="submit" id="save-entity"
+                                                [disabled]="editForm.invalid || isSaving">
+                                                <span>Save</span>
+                                            </button>
+                                        </nz-space-item>
+
+                                        <nz-space-item>
+                                            <button nz-button nzType="default" type="button" id="cancel-save"
+                                                (click)="previousState()">
+                                                <span>Cancel</span>
+                                            </button>
+                                        </nz-space-item>
+                                    </nz-space>
+                                </nz-col>
+                            </nz-row>
+                        </form>
                     </div>
                 </nz-tab>
-                <nz-tab [nzTitle]="'Suppliers Group'">
+                <!-- <nz-tab [nzTitle]="'Suppliers Group'">
                     <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 16, lg: 16 }">
                         <div nz-col class="gutter-row" [nzXs]="24" [nzLg]="12">
                             <vs-panel [title]="'Supplier Membership'">
@@ -340,13 +346,19 @@
                                     </div>
 
                                     <div class="panel-content-wrapper">
-
+                                        <ul class="supplier-list">
+                                            <li [class.active]="selectedSupplier?.id === suppliersOption?.id"
+                                                *ngFor="let suppliersOption of suppliers; trackBy: trackById"
+                                                (click)="selectedSupplier = suppliersOption">
+                                                <span>{{suppliersOption.name}}</span>
+                                            </li>
+                                        </ul>
                                     </div>
                                 </div>
                             </vs-panel>
                         </div>
                     </div>
-                </nz-tab>
+                </nz-tab> -->
             </nz-tabset>
         </div>
     </div>

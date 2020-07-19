@@ -166,7 +166,7 @@ export const navigation: VsNavigation[] = [
         id: 'order-overview',
         title: 'Order Overview',
         type: 'item',
-        url: '/finance/order-overview',
+        url: '/main/finance/order-overview',
         exactMatch: true,
         open: false,
         selected: false,

@@ -1,73 +1,79 @@
-import { IStockItems, IProductDocument, IProductTags } from '@vertical/models';
-import * as _ from 'lodash';
-import { RootUtils } from '@vertical/utils';
 import { Moment } from 'moment';
+import { IStockItems } from './stock-items.model';
+import { RootUtils } from '@vertical/utils';
+import { IProductDocument } from './product-document.model';
 
 export interface IProducts {
   id?: number;
   name?: string;
+  cultureDetails?: any;
   handle?: string;
-  productNumber?: string;
   searchDetails?: string;
+  productNumber?: string;
   sellCount?: number;
-  stockItemString?: any;
+  productDetails?: any;
   totalWishlist?: number;
-  totalStars?: number;
-  discountedPercentage?: number;
+  overallRating?: number;
   preferredInd?: boolean;
-  availableDeliveryInd?: boolean;
-  activeInd?: boolean;
-  lastEditedBy?: string;
-  lastEditedWhen?: Moment;
+  freeShippingInd?: boolean;
+  madeInMyanmarInd?: boolean;
+  questionsAboutProductInd?: boolean;
   releaseDate?: Moment;
   availableDate?: Moment;
+  activeFlag?: boolean;
+  lastEditedBy?: string;
+  lastEditedWhen?: Moment;
+  validFrom?: Moment;
+  validTo?: Moment;
   productDocumentId?: number;
-  productDocument?: IProductDocument;
   stockItemLists?: IStockItems[];
-  productTagList?: string[];
   supplierName?: string;
   supplierId?: number;
   productCategoryName?: string;
   productCategoryId?: number;
   productBrandName?: string;
   productBrandId?: number;
+  productDocument?: IProductDocument;
 }
 
 export class Products implements IProducts {
   constructor(
     public id?: number,
     public name?: string,
+    public cultureDetails?: any,
     public handle?: string,
-    public productNumber?: string,
     public searchDetails?: string,
+    public productNumber?: string,
     public sellCount?: number,
-    public stockItemString?: any,
+    public productDetails?: any,
     public totalWishlist?: number,
-    public totalStars?: number,
-    public discountedPercentage?: number,
+    public overallRating?: number,
     public preferredInd?: boolean,
-    public availableDeliveryInd?: boolean,
-    public activeInd?: boolean,
-    public lastEditedBy?: string,
-    public lastEditedWhen?: Moment,
+    public freeShippingInd?: boolean,
+    public madeInMyanmarInd?: boolean,
+    public questionsAboutProductInd?: boolean,
     public releaseDate?: Moment,
     public availableDate?: Moment,
+    public activeFlag?: boolean,
+    public lastEditedBy?: string,
+    public lastEditedWhen?: Moment,
+    public validFrom?: Moment,
+    public validTo?: Moment,
     public productDocumentId?: number,
-    public productDocument?: IProductDocument,
     public stockItemLists?: IStockItems[],
-    public productTagList?: string[],
     public supplierName?: string,
     public supplierId?: number,
     public productCategoryName?: string,
     public productCategoryId?: number,
     public productBrandName?: string,
-    public productBrandId?: number
+    public productBrandId?: number,
+    public productDocument?: IProductDocument
   ) {
     this.preferredInd = this.preferredInd || false;
-    this.availableDeliveryInd = this.availableDeliveryInd || false;
-    this.activeInd = this.activeInd || false;
-    this.stockItemLists = this.stockItemLists || [];
-    this.productTagList = this.productTagList || [];
+    this.freeShippingInd = this.freeShippingInd || false;
+    this.madeInMyanmarInd = this.madeInMyanmarInd || false;
+    this.questionsAboutProductInd = this.questionsAboutProductInd || false;
+    this.activeFlag = this.activeFlag || false;
     if (this.name) {
       this.handle = this.handle || RootUtils.handleize(this.name);
     }

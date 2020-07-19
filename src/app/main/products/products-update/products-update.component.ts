@@ -73,8 +73,8 @@ export class ProductsUpdateComponent implements OnInit, OnDestroy {
     protected productDocumentService: ProductDocumentService,
     protected stockItemsService: StockItemsService
   ) {
-    this.supplier$ = this.storeAuth.pipe(select(fromAuth.getSupplierFetched));
-    this.supplier$.pipe(takeUntil(this.unsubscribe$)).subscribe(supplier => (this.supplier = supplier));
+    // this.supplier$ = this.storeAuth.pipe(select(fromAuth.getSupplierFetched));
+    // this.supplier$.pipe(takeUntil(this.unsubscribe$)).subscribe(supplier => (this.supplier = supplier));
     this.stockItems$ = this.store.pipe(select(fromProducts.getFetchStockItems));
     this.supplier$.pipe(takeUntil(this.unsubscribe$)).subscribe(supplier => (this.supplier = supplier));
     this.productDocument$ = this.store.pipe(select(fromProducts.getFetchProductDocument));
@@ -181,14 +181,14 @@ export class ProductsUpdateComponent implements OnInit, OnDestroy {
     console.log('formdata', product);
     this.productDocumentService.importProductDocument(product.productDocument).subscribe(productDocumentRes => {
       product.productDocumentId = productDocumentRes.id;
-      this.productsService.importProduct(product).subscribe(productResource => {
-        product.stockItemLists.map(stockItem => {
-          stockItem.productId = productResource.id;
-          this.stockItemsService.importStockItem(stockItem).subscribe(() => {
-            this.showImportCompleted = true;
-          });
-        });
-      });
+      // this.productsService.importProduct(product).subscribe(productResource => {
+      //   product.stockItemLists.map(stockItem => {
+      //     stockItem.productId = productResource.id;
+      //     this.stockItemsService.importStockItem(stockItem).subscribe(() => {
+      //       this.showImportCompleted = true;
+      //     });
+      //   });
+      // });
     });
   }
 

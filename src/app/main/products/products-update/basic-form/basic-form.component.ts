@@ -37,7 +37,7 @@ export class BasicFormComponent implements OnInit, OnDestroy {
   categories: any[];
   productBrands$: Observable<IProductBrand[]>;
 
-  supplier$: Observable<ISuppliers>;
+  // supplier$: Observable<ISuppliers>;
   selectedNode: any;
   selectedText: string;
 
@@ -53,19 +53,19 @@ export class BasicFormComponent implements OnInit, OnDestroy {
   ) {
     // this.productModels$ = store.pipe(select(fromProducts.getFetchModels));
     this.productBrands$ = store.pipe(select(fromProducts.getFetchBrands));
-    this.supplier$ = this.authStore.pipe(select(fromAuth.getSupplierFetched));
+    // this.supplier$ = this.authStore.pipe(select(fromAuth.getSupplierFetched));
     this.categories$ = store.pipe(select(fromProducts.getFetchCategoriesTree));
     // this.productModels$.subscribe(models => (this.productModelsFiltered = models.slice()));
   }
 
   ngOnInit(): void {
-    this.supplier$.pipe(takeUntil(this.unsubscribe$)).subscribe(supplier => {
-      console.log('supplier', supplier);
-      if (supplier) {
-        this.store.dispatch(FetchActions.fetchBrands({ id: supplier.id }));
-        this.store.dispatch(FetchActions.fetchWarrantyType());
-      }
-    });
+    // this.supplier$.pipe(takeUntil(this.unsubscribe$)).subscribe(supplier => {
+    //   console.log('supplier', supplier);
+    //   if (supplier) {
+    //     this.store.dispatch(FetchActions.fetchBrands({ id: supplier.id }));
+    //     this.store.dispatch(FetchActions.fetchWarrantyType());
+    //   }
+    // });
     this.translationLoaderService.loadTranslations(english, myanmar);
     this.categories$.pipe(takeUntil(this.unsubscribe$)).subscribe(data => {
       console.log(this.categories);

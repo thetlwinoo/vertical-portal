@@ -22,8 +22,9 @@
                             <span>{{ menu.title }}</span>
                         </ng-template>
                     </li>
-                    <li *ngIf="menu.children" nz-submenu [nzPaddingLeft]="menu.level * 24" [nzOpen]="rla.isActive"
-                        [nzTitle]="menu.title" [nzIcon]="menu.icon" [nzDisabled]="menu.disabled">
+                    <li *ngIf="menu.children" nz-submenu [nzPaddingLeft]="menu.level * 24"
+                        [nzOpen]="rla.isActive || false" [nzTitle]="menu.title" [nzIcon]="menu.icon"
+                        [nzDisabled]="menu.disabled">
                         <a hidden [routerLink]="[menu.url]" routerLinkActive #rla="routerLinkActive"></a>
                         <ul>
                             <ng-container *ngTemplateOutlet="menuTpl; context: { $implicit: menu.children }">
@@ -40,6 +41,11 @@
                 <div class="header__lh">
                 </div>
                 <div class="header__rh">
+                    <nz-select [ngModel]="selectedSupplier" (ngModelChange)="onChangeSupplier($event)">
+                        <nz-option [nzValue]="supplierOption" [nzLabel]="supplierOption.name"
+                            *ngFor="let supplierOption of suppliers; trackBy: trackById"></nz-option>
+                    </nz-select>
+
                     <a nz-dropdown [nzDropdownMenu]="menu" [nzPlacement]="'bottomRight'">
                         {{(account?.firstName + ' ' + account?.lastName)  | titlecase}}
                         <i nz-icon nzType="down"></i>

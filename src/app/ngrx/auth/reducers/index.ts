@@ -27,7 +27,9 @@ export const getSupplierState = createSelector(getAuthState, (state: AuthState) 
 
 export const getSupplierError = createSelector(getSupplierState, fromSupplier.getError);
 
-export const getSupplierFetched = createSelector(getSupplierState, fromSupplier.getSupplier);
+export const getSuppliersFetched = createSelector(getSupplierState, fromSupplier.getSuppliers);
+
+export const getSupplierSelected = createSelector(getSupplierState, fromSupplier.getSelected);
 
 export const getSupplierLoading = createSelector(getSupplierState, fromSupplier.getLoading);
 

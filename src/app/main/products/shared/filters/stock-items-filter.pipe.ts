@@ -11,10 +11,10 @@ export class StockItemsFilterPipe implements PipeTransform {
         return items;
         break;
       case 1:
-        return items.filter(i => i.activeInd === true);
+        return items.filter(i => i.activeFlag === true);
         break;
       case 4:
-        return items.filter(i => i.activeInd === false);
+        return items.filter(i => i.activeFlag === false);
         break;
     }
   }
