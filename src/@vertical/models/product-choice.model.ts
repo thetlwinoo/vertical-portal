@@ -3,9 +3,9 @@ export interface IProductChoice {
     isMultiply?: boolean;
     productCategoryName?: string;
     productCategoryId?: number;
-    productAttributeSetProductAttributeSetName?: string;
+    productAttributeSetName?: string;
     productAttributeSetId?: number;
-    productOptionSetProductOptionSetValue?: string;
+    productOptionSetValue?: string;
     productOptionSetId?: number;
 }
 
@@ -15,11 +15,16 @@ export class ProductChoice implements IProductChoice {
         public isMultiply?: boolean,
         public productCategoryName?: string,
         public productCategoryId?: number,
-        public productAttributeSetProductAttributeSetName?: string,
+        public productAttributeSetName?: string,
         public productAttributeSetId?: number,
-        public productOptionSetProductOptionSetValue?: string,
+        public productOptionSetValue?: string,
         public productOptionSetId?: number
     ) {
         this.isMultiply = this.isMultiply || false;
     }
+}
+
+export interface ProductChoiceProp {
+    id?: number;
+    supplierId?: number;
 }

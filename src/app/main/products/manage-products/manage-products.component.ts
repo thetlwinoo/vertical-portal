@@ -37,7 +37,7 @@ export class ManageProductsComponent implements OnInit, OnDestroy {
   previousPage: any;
   reverse: any;
   selectedMode = 0;
-  loading = true;
+  loading = false;
   statistics: any;
 
   filterType = 0;
@@ -93,13 +93,12 @@ export class ManageProductsComponent implements OnInit, OnDestroy {
     const options = {
       page: this.page - 1,
       size: this.itemsPerPage,
-      sort: this.sort(),
-      supplierId: this.selectedSupplier?.id
+      sort: this.sort()
     };
 
     if (this.filterType === 1) {
       Object.assign(options, {
-        'activeInd.equals': true,
+        'activeFlag.equals': true,
       });
     }
 
@@ -111,11 +110,17 @@ export class ManageProductsComponent implements OnInit, OnDestroy {
 
     if (this.filterType === 3) {
       Object.assign(options, {
-        'activeInd.equals': false,
+        'activeFlag.equals': false,
       });
     }
 
-    console.log('options', options);
+    if (this.selectedSupplier) {
+      Object.assign(options, {
+        'supplierId.equals': this.selectedSupplier.id,
+      });
+    }
+
+    console.log('options', options)
     this.stockItemsService.findAll(options).subscribe(
       (res: any) => {
         this.statistics = JSON.parse(res.headers.get('Extra'));
@@ -170,7 +175,7 @@ export class ManageProductsComponent implements OnInit, OnDestroy {
 
   onUpdateStockItemActiveSuccess(res): void {
     this.activeLoading = false;
-    this.msg.success(res.body.name + ' has been sucessfully ' + (res.body.activeInd ? 'active' : 'inactive'));
+    this.msg.success(res.body.name + ' has been sucessfully ' + (res.body.activeFlag ? 'active' : 'inactive'));
   }
 
   onUpdateStockItemActiveError(res): void {
@@ -198,7 +203,6 @@ export class ManageProductsComponent implements OnInit, OnDestroy {
   }
 
   onQueryParamsChange(params: NzTableQueryParams): void {
-    console.log(params);
     const { pageSize, pageIndex, sort, filter } = params;
     const currentSort = sort.find(item => item.value !== null);
     const sortField = (currentSort && currentSort.key) || null;

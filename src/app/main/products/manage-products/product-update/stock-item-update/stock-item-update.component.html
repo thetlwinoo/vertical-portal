@@ -1,0 +1,488 @@
+<form nz-form [formGroup]="stockItemForm">
+    <!-- <div nz-row [nzGutter]="16">
+        <div nz-col nzSpan="12">
+            <nz-form-item>
+                <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="name">Name
+                </nz-form-label>
+                <nz-form-control [nzSm]="16" [nzXs]="24" nzHasFeedback>
+                    <input nz-input formControlName="name" id="name" />
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="vendorCode">Vendor Code
+                </nz-form-label>
+                <nz-form-control [nzSm]="16" [nzXs]="24">
+                    <input nz-input formControlName="vendorCode" id="vendorCode" />
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="vendorSKU">Vendor SKU
+                </nz-form-label>
+                <nz-form-control [nzSm]="16" [nzXs]="24">
+                    <input nz-input formControlName="vendorSKU" id="vendorSKU" />
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="barcode">Bercode
+                </nz-form-label>
+                <nz-form-control [nzSm]="16" [nzXs]="24">
+                    <input nz-input formControlName="barcode" id="barcode" />
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="unitPrice" nzRequired>Unit Price
+                </nz-form-label>
+                <nz-form-control [nzSm]="16" [nzXs]="24" nzHasFeedback>
+                    <input nz-input formControlName="unitPrice" id="unitPrice" />
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="recommendedRetailPrice">Retail Price
+                </nz-form-label>
+                <nz-form-control [nzSm]="16" [nzXs]="24">
+                    <input nz-input formControlName="recommendedRetailPrice" id="recommendedRetailPrice" />
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="lastCostPrice">Last Cost Price
+                </nz-form-label>
+                <nz-form-control [nzSm]="16" [nzXs]="24">
+                    <input nz-input formControlName="lastCostPrice" id="lastCostPrice" />
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="quantityOnHand" nzRequired>Quantity On Hand
+                </nz-form-label>
+                <nz-form-control [nzSm]="16" [nzXs]="24" nzHasFeedback>
+                    <input nz-input formControlName="quantityOnHand" id="quantityOnHand" />
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="productAttribute">
+                    {{attributeSetName}}
+                </nz-form-label>
+                <nz-form-control [nzSm]="16" [nzXs]="24" nzHasFeedback>
+                    <nz-select id="productAttribute" formControlName="productAttributeId">
+                        <nz-option [nzValue]="productAttributeOption.id" [nzLabel]="productAttributeOption.value"
+                            *ngFor="let productAttributeOption of (productAttributeList$ | async); trackBy: trackById">
+                        </nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="productOption">
+                    {{optionSetName}}
+                </nz-form-label>
+                <nz-form-control [nzSm]="16" [nzXs]="24" nzHasFeedback>
+                    <nz-select id="productOption" formControlName="productOptionId">
+                        <nz-option [nzValue]="productOptionOption.id" [nzLabel]="productOptionOption.value"
+                            *ngFor="let productOptionOption of (productOptionList$ | async); trackBy: trackById">
+                        </nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="material">
+                    Material
+                </nz-form-label>
+                <nz-form-control [nzSm]="16" [nzXs]="24" nzHasFeedback>
+                    <nz-select id="material" formControlName="materialId">
+                        <nz-option [nzValue]="materialsOption.id" [nzLabel]="materialsOption.name"
+                            *ngFor="let materialsOption of materials; trackBy: trackById">
+                        </nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="currency">
+                    Currency
+                </nz-form-label>
+                <nz-form-control [nzSm]="16" [nzXs]="24" nzHasFeedback>
+                    <nz-select id="currency" formControlName="currencyId">
+                        <nz-option [nzValue]="currencyOption.id" [nzLabel]="currencyOption.name"
+                            *ngFor="let currencyOption of currencies; trackBy: trackById">
+                        </nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div nz-col nzSpan="12">
+            <nz-form-item>
+                <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="itemLength">Item Length
+                </nz-form-label>
+                <nz-form-control [nzSm]="16" [nzXs]="24">
+                    <input nz-input formControlName="itemLength" id="itemLength" />
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="itemWidth">Item Width
+                </nz-form-label>
+                <nz-form-control [nzSm]="16" [nzXs]="24">
+                    <input nz-input formControlName="itemWidth" id="itemWidth" />
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="itemHeight">Item Height
+                </nz-form-label>
+                <nz-form-control [nzSm]="16" [nzXs]="24">
+                    <input nz-input formControlName="itemHeight" id="itemHeight" />
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="itemWeight">Item Weight
+                </nz-form-label>
+                <nz-form-control [nzSm]="16" [nzXs]="24">
+                    <input nz-input formControlName="itemWeight" id="itemWeight" />
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="itemPackageLength">Item Package Length
+                </nz-form-label>
+                <nz-form-control [nzSm]="16" [nzXs]="24">
+                    <input nz-input formControlName="itemPackageLength" id="itemPackageLength" />
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="itemPackageWidth">Item Package Width
+                </nz-form-label>
+                <nz-form-control [nzSm]="16" [nzXs]="24">
+                    <input nz-input formControlName="itemPackageWidth" id="itemPackageWidth" />
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="itemPackageHeight">Item Package Height
+                </nz-form-label>
+                <nz-form-control [nzSm]="16" [nzXs]="24">
+                    <input nz-input formControlName="itemPackageHeight" id="itemPackageHeight" />
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="itemPackageWeight">Item Package Weight
+                </nz-form-label>
+                <nz-form-control [nzSm]="16" [nzXs]="24">
+                    <input nz-input formControlName="itemPackageWeight" id="itemPackageWeight" />
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="typicalWeightPerUnit">Typical Weight Per Unit
+                </nz-form-label>
+                <nz-form-control [nzSm]="16" [nzXs]="24">
+                    <input nz-input formControlName="typicalWeightPerUnit" id="typicalWeightPerUnit" />
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="reorderLevel">Reorder Level
+                </nz-form-label>
+                <nz-form-control [nzSm]="16" [nzXs]="24">
+                    <input nz-input formControlName="reorderLevel" id="reorderLevel" />
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="cashOnDeliveryInd">Cash On Delivery</nz-form-label>
+                <nz-form-control [nzSm]="16" [nzXs]="24">
+                    <label nz-checkbox formControlName="cashOnDeliveryInd" id="cashOnDeliveryInd"></label>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="barcodeType">
+                    Barcode Type
+                </nz-form-label>
+                <nz-form-control [nzSm]="16" [nzXs]="24" nzHasFeedback>
+                    <nz-select id="barcodeType" formControlName="barcodeTypeId">
+                        <nz-option [nzValue]="barcodeTypesOption.id" [nzLabel]="barcodeTypesOption.name"
+                            *ngFor="let barcodeTypesOption of barcodetypes; trackBy: trackById">
+                        </nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+    </div> -->
+
+    <div nz-row [nzGutter]="16">
+        <div nz-col nzSpan="24">
+            <nz-descriptions nzBordered [nzSize]="'small'">
+                <nz-descriptions-item nzTitle="Name">
+                    <nz-form-item>
+                        <nz-form-control nzHasFeedback>
+                            <input nz-input formControlName="name" id="name" />
+                        </nz-form-control>
+                    </nz-form-item>
+                </nz-descriptions-item>
+            </nz-descriptions>
+        </div>
+        <div nz-col nzSpan="24">
+            <nz-descriptions nzBordered [nzSize]="'small'" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 2, sm: 2, xs: 1 }">
+                <nz-descriptions-item [nzTitle]="attributeSet">
+                    <ng-template #attributeSet>
+                        <nz-form-item class="description-title">
+                            <nz-form-control>
+                                <nz-select id="attributeSet" formControlName="productAttributeSetId"
+                                    (ngModelChange)="onChangedAttributeSet($event)">
+                                    <nz-option [nzValue]="productChoiceOption.productAttributeSetId"
+                                        [nzLabel]="productChoiceOption.productAttributeSetName"
+                                        *ngFor="let productChoiceOption of (productChoice$ | async); trackBy: trackById">
+                                    </nz-option>
+                                </nz-select>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </ng-template>
+                    <nz-form-item>
+                        <nz-form-control nzHasFeedback>
+                            <nz-select id="productAttribute" formControlName="productAttributeId">
+                                <nz-option [nzValue]="productAttributeOption.id"
+                                    [nzLabel]="productAttributeOption.value"
+                                    *ngFor="let productAttributeOption of (productAttributeList$ | async); trackBy: trackById">
+                                </nz-option>
+                            </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+                </nz-descriptions-item>
+
+                <nz-descriptions-item [nzTitle]="optionSet">
+                    <ng-template #optionSet>
+                        <nz-form-item class="description-title">
+                            <nz-form-control>
+                                <nz-select id="optionSet" formControlName="productOptionSetId"
+                                    (ngModelChange)="onChangedOptionSet($event)">
+                                    <nz-option [nzValue]="productChoiceOption.productOptionSetId"
+                                        [nzLabel]="productChoiceOption.productOptionSetValue"
+                                        *ngFor="let productChoiceOption of (productChoice$ | async); trackBy: trackById">
+                                    </nz-option>
+                                </nz-select>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </ng-template>
+                    <nz-form-item>
+                        <nz-form-control nzHasFeedback>
+                            <nz-select id="productOption" formControlName="productOptionId">
+                                <nz-option [nzValue]="productOptionOption.id" [nzLabel]="productOptionOption.value"
+                                    *ngFor="let productOptionOption of (productOptionList$ | async); trackBy: trackById">
+                                </nz-option>
+                            </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+                </nz-descriptions-item>
+
+                <nz-descriptions-item nzTitle="Material">
+                    <nz-form-item>
+                        <nz-form-control>
+                            <nz-select id="material" formControlName="materialId">
+                                <nz-option [nzValue]="materialsOption.id" [nzLabel]="materialsOption.name"
+                                    *ngFor="let materialsOption of materials; trackBy: trackById">
+                                </nz-option>
+                            </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+                </nz-descriptions-item>
+
+                <nz-descriptions-item nzTitle="Currency">
+                    <nz-form-item>
+                        <nz-form-control>
+                            <nz-select id="currency" formControlName="currencyId">
+                                <nz-option [nzValue]="currencyOption.id" [nzLabel]="currencyOption.name"
+                                    *ngFor="let currencyOption of currencies; trackBy: trackById">
+                                </nz-option>
+                            </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+                </nz-descriptions-item>
+
+                <nz-descriptions-item nzTitle="Barcode Type">
+                    <nz-form-item>
+                        <nz-form-control>
+                            <nz-select id="barcodeType" formControlName="barcodeTypeId">
+                                <nz-option [nzValue]="barcodeTypesOption.id" [nzLabel]="barcodeTypesOption.name"
+                                    *ngFor="let barcodeTypesOption of barcodetypes; trackBy: trackById">
+                                </nz-option>
+                            </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+                </nz-descriptions-item>
+
+                <nz-descriptions-item nzTitle="Cash On Delivery">
+                    <nz-form-item>
+                        <nz-form-control>
+                            <label nz-checkbox formControlName="cashOnDeliveryInd" id="cashOnDeliveryInd"></label>
+                        </nz-form-control>
+                    </nz-form-item>
+                </nz-descriptions-item>
+
+                <nz-descriptions-item nzTitle="Vendor Code">
+                    <nz-form-item>
+                        <nz-form-control>
+                            <input nz-input formControlName="vendorCode" id="vendorCode" />
+                        </nz-form-control>
+                    </nz-form-item>
+                </nz-descriptions-item>
+
+                <nz-descriptions-item nzTitle="Vendor SKU">
+                    <nz-form-item>
+                        <nz-form-control>
+                            <input nz-input formControlName="vendorSKU" id="vendorSKU" />
+                        </nz-form-control>
+                    </nz-form-item>
+                </nz-descriptions-item>
+
+                <nz-descriptions-item nzTitle="Barcode">
+                    <nz-form-item>
+                        <nz-form-control>
+                            <input nz-input formControlName="barcode" id="barcode" />
+                        </nz-form-control>
+                    </nz-form-item>
+                </nz-descriptions-item>
+
+                <nz-descriptions-item nzTitle="Unit Price">
+                    <nz-form-item>
+                        <nz-form-control>
+                            <input nz-input formControlName="unitPrice" id="unitPrice" />
+                        </nz-form-control>
+                    </nz-form-item>
+                </nz-descriptions-item>
+
+                <nz-descriptions-item nzTitle="Retail Price">
+                    <nz-form-item>
+                        <nz-form-control>
+                            <input nz-input formControlName="recommendedRetailPrice" id="recommendedRetailPrice" />
+                        </nz-form-control>
+                    </nz-form-item>
+                </nz-descriptions-item>
+
+                <nz-descriptions-item nzTitle="Last Cost Price">
+                    <nz-form-item>
+                        <nz-form-control>
+                            <input nz-input formControlName="lastCostPrice" id="lastCostPrice" />
+                        </nz-form-control>
+                    </nz-form-item>
+                </nz-descriptions-item>
+
+                <nz-descriptions-item nzTitle="Quantity On Hand">
+                    <nz-form-item>
+                        <nz-form-control>
+                            <input nz-input formControlName="quantityOnHand" id="quantityOnHand" />
+                        </nz-form-control>
+                    </nz-form-item>
+                </nz-descriptions-item>
+
+                <nz-descriptions-item nzTitle="Typical Weight Per Unit">
+                    <nz-form-item>
+                        <nz-form-control>
+                            <input nz-input formControlName="typicalWeightPerUnit" id="typicalWeightPerUnit" />
+                        </nz-form-control>
+                    </nz-form-item>
+                </nz-descriptions-item>
+
+                <nz-descriptions-item nzTitle="Reorder Level">
+                    <nz-form-item>
+                        <nz-form-control>
+                            <input nz-input formControlName="reorderLevel" id="reorderLevel" />
+                        </nz-form-control>
+                    </nz-form-item>
+                </nz-descriptions-item>
+
+                <nz-descriptions-item nzTitle="Quantity Per Outer">
+                    <nz-form-item>
+                        <nz-form-control>
+                            <input nz-input formControlName="quantityPerOuter" id="quantityPerOuter" />
+                        </nz-form-control>
+                    </nz-form-item>
+                </nz-descriptions-item>
+            </nz-descriptions>
+        </div>
+        <!-- <div nz-col nzSpan="24">
+            <nz-descriptions nzBordered [nzSize]="'small'" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 2, sm: 2, xs: 1 }">
+                
+            </nz-descriptions>
+        </div> -->
+
+        <div nz-col nzSpan="24">
+            <nz-descriptions nzBordered [nzSize]="'small'" [nzColumn]="{ xxl: 4, xl: 4, lg: 4, md: 4, sm: 2, xs: 1 }">
+                <nz-descriptions-item nzTitle="Item Length">
+                    <nz-form-item>
+                        <nz-form-control nzHasFeedback>
+                            <input nz-input formControlName="itemLength" id="itemLength" />
+                        </nz-form-control>
+                    </nz-form-item>
+                </nz-descriptions-item>
+
+                <nz-descriptions-item nzTitle="Item Width">
+                    <nz-form-item>
+                        <nz-form-control nzHasFeedback>
+                            <input nz-input formControlName="itemWidth" id="itemWidth" />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                </nz-descriptions-item>
+
+                <nz-descriptions-item nzTitle="Item Height">
+                    <nz-form-item>
+                        <nz-form-control nzHasFeedback>
+                            <input nz-input formControlName="itemHeight" id="itemHeight" />
+                        </nz-form-control>
+                    </nz-form-item>
+                </nz-descriptions-item>
+
+                <nz-descriptions-item nzTitle="Item Weight">
+                    <nz-form-item>
+                        <nz-form-control nzHasFeedback>
+                            <input nz-input formControlName="itemWeight" id="itemWeight" />
+                        </nz-form-control>
+                    </nz-form-item>
+                </nz-descriptions-item>
+
+                <nz-descriptions-item nzTitle="Package Length">
+                    <nz-form-item>
+                        <nz-form-control>
+                            <input nz-input formControlName="itemPackageLength" id="itemPackageLength" />
+                        </nz-form-control>
+                    </nz-form-item>
+                </nz-descriptions-item>
+
+                <nz-descriptions-item nzTitle="Package Width">
+                    <nz-form-item>
+                        <nz-form-control>
+                            <input nz-input formControlName="itemPackageWidth" id="itemPackageWidth" />
+                        </nz-form-control>
+                    </nz-form-item>
+                </nz-descriptions-item>
+
+                <nz-descriptions-item nzTitle="Package Height">
+                    <nz-form-item>
+                        <nz-form-control>
+                            <input nz-input formControlName="itemPackageHeight" id="itemPackageHeight" />
+                        </nz-form-control>
+                    </nz-form-item>
+                </nz-descriptions-item>
+
+                <nz-descriptions-item nzTitle="Package Weight">
+                    <nz-form-item>
+                        <nz-form-control>
+                            <input nz-input formControlName="itemPackageWeight" id="itemPackageWeight" />
+                        </nz-form-control>
+                    </nz-form-item>
+                </nz-descriptions-item>
+            </nz-descriptions>
+        </div>
+    </div>
+</form>

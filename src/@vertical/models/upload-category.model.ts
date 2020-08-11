@@ -1,19 +1,19 @@
 export class UploadCategory {
-    rootName?: string;
-    rootNameMyanmar?: string;
-    parentName?: string;
-    parentNameMyanmar?: string;
-    name?: string;
-    nameMyanmar?: string;
+    mainCategoryEnglish?: string;
+    subCategoryEnglish?: string;
+    categoryEnglish?: string;
+    mainCategoryMyanmar?: string;
+    subCategoryMyanmar?: string;
+    categoryMyanmar?: string;
 
     constructor(data) {
         {
-            this.rootName = data['Root Name'] || '';
-            this.rootNameMyanmar = data['Root Name Myanmar'] || '';
-            this.parentName = data['Parent Name'] || '';
-            this.parentNameMyanmar = data['Parent Name Myanmar'] || '';
-            this.name = data.Name || '';
-            this.nameMyanmar = data['Name Myanmar'] || '';
+            this.mainCategoryEnglish = data.MainCategoryEnglish.trim() || '';
+            this.subCategoryEnglish = data.SubCategoryEnglish.trim() || '';
+            this.categoryEnglish = data.CategoryEnglish.trim() || '';
+            this.mainCategoryMyanmar = data.MainCategoryMyanmar.trim() || '';
+            this.subCategoryMyanmar = data.SubCategoryMyanmar.trim() || '';
+            this.categoryMyanmar = data.CategoryMyanmar.trim() || '';
         }
     }
 }

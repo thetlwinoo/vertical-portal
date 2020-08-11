@@ -27,7 +27,6 @@ export class AppComponent {
       if (account) {
         this.store.dispatch(SupplierActions.fetchSuppliers({ query: null }));
       }
-
     });
 
 

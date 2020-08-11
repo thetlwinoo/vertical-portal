@@ -1,0 +1,110 @@
+<div nz-row [nzGutter]="16">
+    <div nz-col class="gutter-row" [nzXs]="24" [nzLg]="12">
+        <vs-panel [title]="'Option Set'">
+            <div extra>
+                <button nz-button nzType="default" [nzSize]="'small'" (click)="addOptionSetRow()">Add</button>
+            </div>
+            <div body>
+                <div class="panel-body-wrapper">
+                    <nz-table #optionSetTable [nzData]="productOptionSets" nzSize="small" [nzFrontPagination]="true"
+                        [nzHideOnSinglePage]="true" nzTableLayout="fixed">
+                        <thead>
+                            <tr>
+                                <th>Value</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let data of optionSetTable.data" [ngSwitch]="editOptionSetCache[data.id]?.mode"
+                                (click)="selectedOptionSetRow(data)" [class.active]="selectedOptionSet?.id === data.id">
+                                <ng-template [ngSwitchCase]="mode.view" *ngIf="data.value !== 'NoOptionSet'">
+                                    <td>{{ data.value }}</td>
+                                    <td>
+                                        <a (click)="startOptionSetEdit(data.id)">Edit</a>
+                                        <nz-divider nzType="vertical"></nz-divider>
+                                        <a nz-popconfirm nzTitle="Sure to delete?"
+                                            (nzOnConfirm)="deleteOptionSet(data.id)">Delete</a>
+                                    </td>
+                                </ng-template>
+
+                                <ng-template [ngSwitchCase]="mode.edit">
+                                    <td><input type="text" nz-input
+                                            [(ngModel)]="editOptionSetCache[data.id].data.value" />
+                                    </td>
+                                    <td>
+                                        <a (click)="saveOptionSetEdit(data.id)" class="save">Save</a>
+                                        <a (click)="cancelOptionSetEdit(data.id)">Cancel</a>
+                                    </td>
+                                </ng-template>
+
+                                <ng-template [ngSwitchCase]="mode.add">
+                                    <td><input type="text" nz-input
+                                            [(ngModel)]="editOptionSetCache[data.id].data.value" />
+                                    </td>
+                                    <td>
+                                        <a (click)="saveOptionSetEdit(data.id)" class="save">Save</a>
+                                        <a (click)="cancelOptionSetEdit(data.id)">Cancel</a>
+                                    </td>
+                                </ng-template>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </div>
+            </div>
+        </vs-panel>
+    </div>
+
+    <div nz-col class="gutter-row" [nzXs]="24" [nzLg]="12">
+        <vs-panel [title]="'Options'">
+            <div extra>
+                <button nz-button nzType="default" [nzSize]="'small'" (click)="addOptionRow()"
+                    [disabled]="!selectedOptionSet?.id">Add</button>
+            </div>
+            <div body>
+                <div class="panel-body-wrapper">
+                    <nz-table #optionTable [nzData]="productOptions" nzSize="small" [nzFrontPagination]="true"
+                        [nzHideOnSinglePage]="true" nzTableLayout="fixed">
+                        <thead>
+                            <tr>
+                                <th>Value</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let data of optionTable.data" [ngSwitch]="editOptionCache[data.id]?.mode"
+                                (click)="selectedOptionRow(data)" [class.active]="selectedOption?.id === data.id">
+                                <ng-template [ngSwitchCase]="mode.view">
+                                    <td>{{ data.value }}</td>
+                                    <td>
+                                        <a (click)="startOptionEdit(data.id)">Edit</a>
+                                        <nz-divider nzType="vertical"></nz-divider>
+                                        <a nz-popconfirm nzTitle="Sure to delete?"
+                                            (nzOnConfirm)="deleteOption(data.id)">Delete</a>
+                                    </td>
+                                </ng-template>
+
+                                <ng-template [ngSwitchCase]="mode.edit">
+                                    <td><input type="text" nz-input [(ngModel)]="editOptionCache[data.id].data.value" />
+                                    </td>
+                                    <td>
+                                        <a (click)="saveOptionEdit(data.id)" class="save">Save</a>
+                                        <a (click)="cancelOptionEdit(data.id)">Cancel</a>
+                                    </td>
+                                </ng-template>
+
+                                <ng-template [ngSwitchCase]="mode.add">
+                                    <td><input type="text" nz-input [(ngModel)]="editOptionCache[data.id].data.value" />
+                                    </td>
+                                    <td>
+                                        <a (click)="saveOptionEdit(data.id)" class="save">Save</a>
+                                        <a (click)="cancelOptionEdit(data.id)">Cancel</a>
+                                    </td>
+                                </ng-template>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </div>
+            </div>
+        </vs-panel>
+    </div>
+</div>

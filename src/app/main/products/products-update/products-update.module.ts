@@ -9,6 +9,7 @@ import { Observable, of, Subject } from 'rxjs';
 import { filter, map, takeUntil } from 'rxjs/operators';
 import { select, Store } from '@ngrx/store';
 import * as fromProducts from 'app/ngrx/products/reducers';
+import * as fromAuth from 'app/ngrx/auth/reducers';
 import { CategoryActions, FetchActions } from 'app/ngrx/products/actions';
 import { IStockItems, StockItems, IProducts, Products } from '@vertical/models';
 import { ProductsService, DocumentProcessService, StockItemsService } from '@vertical/services';
@@ -32,12 +33,15 @@ const COMPONENTS = [
 export class ProductsResolve implements Resolve<IProducts> {
     categoryId$: Observable<number>;
 
-    constructor(private service: ProductsService, private store: Store<fromProducts.State>) {
+    constructor(private service: ProductsService, private store: Store<fromProducts.State>, private authStore: Store<fromAuth.State>) {
         this.categoryId$ = this.store.pipe(select(fromProducts.getSelectedCategoryId));
 
-        this.categoryId$.subscribe(categoryId => {
-            this.store.dispatch(FetchActions.fetchProductChoice({ id: categoryId }));
+        this.authStore.pipe(select(fromAuth.getSupplierSelected)).subscribe(supplier => {
+            this.categoryId$.subscribe(categoryId => {
+                this.store.dispatch(FetchActions.fetchProductChoice({ prop: { id: categoryId, supplierId: supplier.id } }));
+            });
         });
+
     }
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IProducts> {

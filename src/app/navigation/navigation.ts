@@ -52,6 +52,16 @@ export const navigation: VsNavigation[] = [
         open: false,
         selected: false,
       },
+      {
+        level: 2,
+        id: 'procut-choice',
+        title: 'Product Choice',
+        type: 'item',
+        url: '/main/products/product-choice',
+        exactMatch: false,
+        open: false,
+        selected: false,
+      },
     ],
   },
   {
@@ -194,6 +204,16 @@ export const navigation: VsNavigation[] = [
     selected: false,
     url: '/main/store',
     children: [
+      {
+        level: 2,
+        id: 'product-brands',
+        title: 'Product Brands',
+        type: 'item',
+        url: '/main/store/product-brands',
+        exactMatch: true,
+        open: false,
+        selected: false,
+      },
       {
         level: 2,
         id: 'addresses',

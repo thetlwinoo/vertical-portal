@@ -1,0 +1,119 @@
+<div *ngIf="editForm">
+    <vs-panel [title]="'Basic Information'">
+        <div body class="content-wrapper">
+            <form nz-form [formGroup]="editForm">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="4" [nzXs]="24" nzRequired nzFor="name">Product Name
+                    </nz-form-label>
+                    <nz-form-control [nzSm]="15" [nzXs]="24" nzHasFeedback>
+                        <input nz-input formControlName="name" id="name" />
+                    </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                    <nz-form-label [nzSm]="4" [nzXs]="24" nzRequired nzFor="searchDetails">Search
+                        Details
+                    </nz-form-label>
+                    <nz-form-control [nzSm]="15" [nzXs]="24" nzHasFeedback>
+                        <input nz-input formControlName="searchDetails" id="searchDetails" />
+                    </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                    <nz-form-label [nzSm]="4" [nzXs]="24" nzRequired nzFor="productNumber">Product
+                        Number
+                    </nz-form-label>
+                    <nz-form-control [nzSm]="15" [nzXs]="24" nzHasFeedback>
+                        <input nz-input formControlName="productNumber" id="productNumber" />
+                    </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                    <nz-form-label [nzSm]="4" [nzXs]="24" nzRequired nzFor="productCategory">
+                        Product Category
+                    </nz-form-label>
+                    <nz-form-control [nzSm]="15" [nzXs]="24" nzHasFeedback>
+                        <nz-cascader [nzOptions]="categories" [nzLabelProperty]="'name'" [nzValueProperty]="'id'"
+                            [nzShowSearch]="true" formControlName="productCategoryCascade"
+                            (nzSelectionChange)="onSelectionChange($event)">
+                        </nz-cascader>
+                    </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                    <nz-form-label [nzSm]="4" [nzXs]="24" nzRequired nzFor="productBrand">
+                        Product Brand
+                    </nz-form-label>
+                    <nz-form-control [nzSm]="15" [nzXs]="24" nzHasFeedback>
+                        <nz-select id="productBrand" formControlName="productBrandId">
+                            <nz-option [nzValue]="productBrandOption.id" [nzLabel]="productBrandOption.name"
+                                *ngFor="let productBrandOption of productbrands; trackBy: trackById">
+                            </nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                    <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="preferredInd">Preferred</nz-form-label>
+                    <nz-form-control [nzSm]="15" [nzXs]="24">
+                        <label nz-checkbox formControlName="preferredInd" id="preferredInd"></label>
+                    </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                    <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="freeShippingInd">Free Shipping
+                    </nz-form-label>
+                    <nz-form-control [nzSm]="15" [nzXs]="24">
+                        <label nz-checkbox formControlName="freeShippingInd" id="freeShippingInd"></label>
+                    </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                    <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="madeInMyanmarInd">Made In Myanmar
+                    </nz-form-label>
+                    <nz-form-control [nzSm]="15" [nzXs]="24">
+                        <label nz-checkbox formControlName="madeInMyanmarInd" id="madeInMyanmarInd"></label>
+                    </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                    <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="questionsAboutProductInd">Questions
+                        About
+                    </nz-form-label>
+                    <nz-form-control [nzSm]="15" [nzXs]="24">
+                        <label nz-checkbox formControlName="questionsAboutProductInd"
+                            id="questionsAboutProductInd"></label>
+                    </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                    <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="activeFlag">Active
+                    </nz-form-label>
+                    <nz-form-control [nzSm]="15" [nzXs]="24">
+                        <label nz-checkbox formControlName="activeFlag" id="activeFlag"></label>
+                    </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                    <nz-form-label [nzSm]="4" [nzXs]="24" nzRequired nzFor="releaseDate">Release Date
+                    </nz-form-label>
+                    <nz-form-control [nzSm]="15" [nzXs]="24" nzHasFeedback>
+                        <nz-date-picker [nzFormat]="'dd-MM-yyyy'" formControlName="releaseDate" id="releaseDate">
+                        </nz-date-picker>
+                    </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                    <nz-form-label [nzSm]="4" [nzXs]="24" nzRequired nzFor="availableDate">Available
+                        Date
+                    </nz-form-label>
+                    <nz-form-control [nzSm]="15" [nzXs]="24" nzHasFeedback>
+                        <nz-date-picker [nzFormat]="'dd-MM-yyyy'" formControlName="availableDate" id="availableDate">
+                        </nz-date-picker>
+                    </nz-form-control>
+                </nz-form-item>
+            </form>
+        </div>
+    </vs-panel>
+
+</div>

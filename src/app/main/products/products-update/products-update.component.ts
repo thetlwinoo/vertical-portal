@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { TranslationLoaderService, ProductsService, ProductDocumentService, StockItemsService } from '@vertical/services';
+import { TranslationLoaderService, ProductsService, ProductDocumentsService, StockItemsService } from '@vertical/services';
 
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Location } from '@angular/common';
@@ -12,7 +12,7 @@ import {
   ISuppliers,
   Products,
   IProductCategory,
-  IProductDocument,
+  IProductDocuments,
   IStockItems,
   IProductAttribute,
   IProductOption,
@@ -47,8 +47,8 @@ export class ProductsUpdateComponent implements OnInit, OnDestroy {
   supplier: ISuppliers;
   stockItems$: Observable<IStockItems[]>;
   stockItems: IStockItems[];
-  productDocument$: Observable<IProductDocument>;
-  productDocument: IProductDocument;
+  productDocument$: Observable<IProductDocuments>;
+  productDocument: IProductDocuments;
   selectedCategory$: Observable<IProductCategory>;
   selectedCategory: IProductCategory;
 
@@ -70,7 +70,7 @@ export class ProductsUpdateComponent implements OnInit, OnDestroy {
     private translationLoaderService: TranslationLoaderService,
     protected activatedRoute: ActivatedRoute,
     protected productsService: ProductsService,
-    protected productDocumentService: ProductDocumentService,
+    protected productDocumentsService: ProductDocumentsService,
     protected stockItemsService: StockItemsService
   ) {
     // this.supplier$ = this.storeAuth.pipe(select(fromAuth.getSupplierFetched));
@@ -179,7 +179,7 @@ export class ProductsUpdateComponent implements OnInit, OnDestroy {
   saveProduct(): void {
     const product = this.productsForm.getRawValue();
     console.log('formdata', product);
-    this.productDocumentService.importProductDocument(product.productDocument).subscribe(productDocumentRes => {
+    this.productDocumentsService.importProductDocument(product.productDocument).subscribe(productDocumentRes => {
       product.productDocumentId = productDocumentRes.id;
       // this.productsService.importProduct(product).subscribe(productResource => {
       //   product.stockItemLists.map(stockItem => {

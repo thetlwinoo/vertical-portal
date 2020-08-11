@@ -1,0 +1,78 @@
+<div *ngIf="editForm">
+    <vs-panel [title]="'Product Information'">
+        <div body class="content-wrapper">
+            <form nz-form [formGroup]="productInformationForm">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="4" [nzXs]="24" nzRequired nzFor="warrantyType">
+                        Warranty Type
+                    </nz-form-label>
+                    <nz-form-control [nzSm]="15" [nzXs]="24" nzHasFeedback>
+                        <nz-select name="warrantyType" formControlName="warrantyTypeId">
+                            <nz-option [nzValue]="warrantyTypesOption.id" [nzLabel]="warrantyTypesOption.name"
+                                *ngFor="let warrantyTypesOption of warrantytypes; trackBy: trackById">
+                            </nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                    <nz-form-label [nzSm]="4" [nzXs]="24" nzRequired nzFor="warrantyPeriod">Warranty Period
+                    </nz-form-label>
+                    <nz-form-control [nzSm]="15" [nzXs]="24" nzHasFeedback>
+                        <input nz-input formControlName="warrantyPeriod" id="warrantyPeriod" />
+                    </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                    <nz-form-label [nzSm]="4" [nzXs]="24" nzRequired nzFor="warrantyPolicy">Warranty Policy
+                    </nz-form-label>
+                    <nz-form-control [nzSm]="15" [nzXs]="24" nzHasFeedback>
+                        <input nz-input formControlName="warrantyPolicy" id="warrantyPolicy" />
+                    </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                    <nz-form-label [nzSm]="4" [nzXs]="24" nzRequired nzFor="modelName">Model Name
+                    </nz-form-label>
+                    <nz-form-control [nzSm]="15" [nzXs]="24" nzHasFeedback>
+                        <input nz-input formControlName="modelName" id="modelName" />
+                    </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                    <nz-form-label [nzSm]="4" [nzXs]="24" nzRequired nzFor="modelNumber">Model Number
+                    </nz-form-label>
+                    <nz-form-control [nzSm]="15" [nzXs]="24" nzHasFeedback>
+                        <input nz-input formControlName="modelNumber" id="modelNumber" />
+                    </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                    <nz-form-label [nzSm]="4" [nzXs]="24" nzRequired nzFor="countryOfOrigin">Country Of Origin
+                    </nz-form-label>
+                    <nz-form-control [nzSm]="15" [nzXs]="24" nzHasFeedback>
+                        <input nz-input formControlName="countryOfOrigin" id="countryOfOrigin" />
+                    </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                    <nz-form-label [nzSm]="4" [nzXs]="24" nzRequired nzFor="dangerousGoods">Dangerous Goods
+                    </nz-form-label>
+                    <nz-form-control [nzSm]="15" [nzXs]="24" nzHasFeedback>
+                        <nz-checkbox-group formControlName="dangerousGoods"
+                            (ngModelChange)="updateSingleChecked($event)"></nz-checkbox-group>
+                    </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                    <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="videoUrl">Video Url
+                    </nz-form-label>
+                    <nz-form-control [nzSm]="15" [nzXs]="24">
+                        <input nz-input formControlName="videoUrl" id="videoUrl" />
+                    </nz-form-control>
+                </nz-form-item>
+            </form>
+        </div>
+    </vs-panel>
+
+</div>

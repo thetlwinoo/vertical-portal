@@ -9,7 +9,7 @@ import {
   IProductOption,
   IWarrantyTypes,
   IBarcodeTypes,
-  IProductDocument,
+  IProductDocuments,
   IStockItems,
 } from '@vertical/models';
 
@@ -21,7 +21,7 @@ export interface State {
   stockItems: IStockItems[];
   productAttributeIds: number[];
   productOptionIds: number[];
-  productDocument: IProductDocument;
+  productDocument: IProductDocuments;
   brands: IProductBrand[];
   productChoice: IProductChoice[];
   productAttributeList: IProductAttribute[];

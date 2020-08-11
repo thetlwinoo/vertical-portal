@@ -1,0 +1,71 @@
+<vs-pagebar [title]="'Product Choice'"></vs-pagebar>
+<div class="pagebar-content-wrapper">
+    <div class="card-container">
+        <nz-tabset [nzTabPosition]="'top'" [nzType]="'card'">
+            <nz-tab [nzTitle]="'Look Up'">
+                <div class="control-bar">
+                    <nz-space>
+                        <nz-space-item>
+                            <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
+                                <input type="text" nz-input placeholder="Search..." />
+                            </nz-input-group>
+                            <ng-template #suffixIconButton>
+                                <button nz-button nzType="default" nzSearch><i nz-icon nzType="search"></i></button>
+                            </ng-template>
+                        </nz-space-item>
+
+                        <nz-space-item>
+                            <button nz-button nzType="default" (click)="loadAll()">View all product choice</button>
+                        </nz-space-item>
+                    </nz-space>
+
+                    <nz-space>
+                        <nz-space-item>
+                            <button nz-button nzType="default"
+                                [routerLink]="['/main/products/product-choice/create']">Add
+                                choice</button>
+                        </nz-space-item>
+                    </nz-space>
+                </div>
+
+                <div class="record-list">
+                    <nz-table #basicTable [nzData]="productChoices" nzSize="small" [nzFrontPagination]="true"
+                        [nzHideOnSinglePage]="true">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Is Multiply</th>
+                                <th>Category</th>
+                                <th>Attribute Set</th>
+                                <th>Option Set</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let data of basicTable.data" class="editable-row">
+                                <td [nzLeft]="false">
+                                    <a [routerLink]="['/main/products/product-choice', data.id, 'view']">{{data.id}}</a>
+                                </td>
+                                <td><label nz-checkbox [(ngModel)]="data.isMultiply" nzDisabled></label></td>
+                                <td>{{data.productCategoryName}}</td>
+                                <td>{{data.productAttributeSetName}}</td>
+                                <td>{{data.productOptionSetValue}}</td>
+                                <td>
+                                    <a [routerLink]="['/main/products/product-choice', data.id, 'edit']">Edit</a>
+                                    <nz-divider nzType="vertical"></nz-divider>
+                                    <a (click)="delete(data)">Delete</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </div>
+            </nz-tab>
+            <nz-tab [nzTitle]="'Product Attributes'">
+                <app-product-attributes></app-product-attributes>
+            </nz-tab>
+            <nz-tab [nzTitle]="'Product Options'">
+                <app-product-options></app-product-options>
+            </nz-tab>
+        </nz-tabset>
+    </div>
+</div>

@@ -42,6 +42,8 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
 import { NzAlertModule } from 'ng-zorro-antd/alert';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
+import { NzCascaderModule } from 'ng-zorro-antd/cascader';
+import { NzAnchorModule } from 'ng-zorro-antd/anchor';
 
 import {
   UserOutline,
@@ -82,6 +84,9 @@ import {
   EditOutline,
   FileTwoTone,
   DownloadOutline,
+  ExpandOutline,
+  NodeExpandOutline,
+  NodeCollapseOutline
 } from '@ant-design/icons-angular/icons';
 
 const icons: IconDefinition[] = [
@@ -123,6 +128,9 @@ const icons: IconDefinition[] = [
   EditOutline,
   FileTwoTone,
   DownloadOutline,
+  ExpandOutline,
+  NodeExpandOutline,
+  NodeCollapseOutline
 ];
 
 @NgModule({
@@ -167,7 +175,9 @@ const icons: IconDefinition[] = [
     NzModalModule,
     NzPageHeaderModule,
     NzAlertModule,
-    NzDescriptionsModule
+    NzDescriptionsModule,
+    NzCascaderModule,
+    NzAnchorModule
   ],
   providers: [
     // { provide: NZ_ICONS, useValue: icons },

@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
-import { AccountService, AuthService } from '@vertical/core';
+import { AccountService, AuthService, StateStorageService } from '@vertical/core';
 // import { Router, ActivatedRouteSnapshot, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { Account } from '@vertical/core/user/account.model';
 import { navigation } from 'app/navigation/navigation';
@@ -37,6 +37,7 @@ export class Layout1Component implements OnInit, OnDestroy {
     private accountService: AccountService,
     private authService: AuthService,
     private store: Store<fromAuth.State>,
+    private stateStorageService: StateStorageService
   ) {
     this.suppliers$ = this.store.pipe(select(fromAuth.getSuppliersFetched));
     this.selectedSupplier$ = this.store.pipe(select(fromAuth.getSupplierSelected));
@@ -44,6 +45,8 @@ export class Layout1Component implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.navigation = navigation;
+
+
     this.accountService.identity().subscribe(account => (this.account = account));
 
     this.vsConfigService.config.pipe(takeUntil(this.unsubscribe$)).subscribe(config => {
@@ -51,7 +54,12 @@ export class Layout1Component implements OnInit, OnDestroy {
       console.log('layout config', this.vsConfig);
     });
 
-    this.suppliers$.subscribe(suppliers => this.suppliers = suppliers);
+    this.suppliers$.subscribe(suppliers => {
+      this.suppliers = suppliers;
+      const storeSupplierId = this.stateStorageService.getSupplier();
+      const storeSupplier = suppliers.find(x => x.id === storeSupplierId);
+      this.store.dispatch(SupplierActions.selectSupplier({ supplier: storeSupplier }));
+    });
     this.selectedSupplier$.subscribe(selectedSupplier => (this.selectedSupplier = selectedSupplier));
   }
 
@@ -68,6 +76,7 @@ export class Layout1Component implements OnInit, OnDestroy {
   }
 
   onChangeSupplier(event): void {
+    this.stateStorageService.storeSupplier(event.id);
     this.store.dispatch(SupplierActions.selectSupplier({ supplier: event }));
   }
 

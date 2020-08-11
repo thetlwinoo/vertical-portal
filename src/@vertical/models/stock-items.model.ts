@@ -5,11 +5,13 @@ import { IProductAttribute } from './product-attribute.model';
 import { IProductOption } from './product-option.model';
 import { IBarcodeTypes } from './barcode-types.model';
 import { IStockItemHoldings } from './stock-item-holdings.model';
+import { IStockItemsLocalize } from './stock-items-localize.model';
 
 export interface IStockItems {
   guid?: string;
   id?: number;
   name?: string;
+  handle?: string;
   cultureDetails?: any;
   vendorCode?: string;
   vendorSKU?: string;
@@ -54,6 +56,7 @@ export interface IStockItems {
   lastEditedBy?: string;
   lastEditedWhen?: Moment;
   activeFlag?: boolean;
+  localization?: any;
   validFrom?: Moment;
   validTo?: Moment;
   specialDealLists?: ISpecialDeals[];
@@ -83,6 +86,10 @@ export interface IStockItems {
   barcodeTypeName?: string;
   barcodeTypeId?: number;
   productId?: number;
+  supplierId?: number;
+  stockItemLocalizeList?: IStockItemsLocalize[];
+  productAttributeSetId?: number;
+  productOptionSetId?: number;
 }
 
 export class StockItems implements IStockItems {
@@ -90,6 +97,7 @@ export class StockItems implements IStockItems {
     public guid?: string,
     public id?: number,
     public name?: string,
+    public handle?: string,
     public cultureDetails?: any,
     public vendorCode?: string,
     public vendorSKU?: string,
@@ -134,6 +142,7 @@ export class StockItems implements IStockItems {
     public lastEditedBy?: string,
     public lastEditedWhen?: Moment,
     public activeFlag?: boolean,
+    public localization?: any,
     public validFrom?: Moment,
     public validTo?: Moment,
     public specialDealLists?: ISpecialDeals[],
@@ -162,7 +171,11 @@ export class StockItems implements IStockItems {
     public currencyId?: number,
     public barcodeTypeName?: string,
     public barcodeTypeId?: number,
-    public productId?: number
+    public productId?: number,
+    public supplierId?: number,
+    public stockItemLocalizeList?: IStockItemsLocalize[],
+    public productAttributeSetId?: number,
+    public productOptionSetId?: number
   ) {
     this.isChillerStock = this.isChillerStock || false;
     this.liveInd = this.liveInd || false;

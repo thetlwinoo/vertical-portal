@@ -107,6 +107,10 @@ export class ProductsService {
       );
   }
 
+  updateProductDetails(productId: number): Observable<HttpResponse<{}>> {
+    return this.http.post<IProducts>(`${this.extendUrl}${'/details-update/'}${productId}`, null, { observe: 'response' });
+  }
+
   updateStockItemActive(stockItemId, isActive): Observable<EntityResponseType> {
     let params = new HttpParams();
     params = params.append('stockItemId', stockItemId);

@@ -1,4 +1,6 @@
-export interface IProductDocument {
+import { Moment } from 'moment';
+
+export interface IProductDocuments {
   id?: number;
   videoUrl?: string;
   highlights?: any;
@@ -18,15 +20,15 @@ export interface IProductDocument {
   safetyWarnning?: any;
   warrantyPeriod?: string;
   warrantyPolicy?: string;
+  dangerousGoods?: string;
+  lastEditedBy?: string;
+  lastEditedWhen?: Moment;
   warrantyTypeName?: string;
   warrantyTypeId?: number;
-  cultureName?: string;
-  cultureId?: number;
   productId?: number;
-  dangerousGoods?: string;
 }
 
-export class ProductDocument implements IProductDocument {
+export class ProductDocuments implements IProductDocuments {
   constructor(
     public id?: number,
     public videoUrl?: string,
@@ -47,12 +49,12 @@ export class ProductDocument implements IProductDocument {
     public safetyWarnning?: any,
     public warrantyPeriod?: string,
     public warrantyPolicy?: string,
+    public dangerousGoods?: string,
+    public lastEditedBy?: string,
+    public lastEditedWhen?: Moment,
     public warrantyTypeName?: string,
     public warrantyTypeId?: number,
-    public cultureName?: string,
-    public cultureId?: number,
-    public productId?: number,
-    public dangerousGoods?: string
+    public productId?: number
   ) {
     this.genuineAndLegal = this.genuineAndLegal || false;
   }

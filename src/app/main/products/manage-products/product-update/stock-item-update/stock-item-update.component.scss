@@ -1,0 +1,16 @@
+:host ::ng-deep nz-descriptions .ant-form-item {
+  margin: 0;
+}
+
+:host ::ng-deep nz-descriptions {
+  margin-bottom: 0.5em;
+}
+
+:host ::ng-deep nz-form-item.description-title {
+  padding: 8px 16px;
+  background-color: #fafafa;
+  border-right: 1px solid #f0f0f0;
+  color: rgba(0, 0, 0, 0.85);
+  font-weight: normal;
+  font-size: 14px;
+}

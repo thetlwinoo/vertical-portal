@@ -4,6 +4,10 @@ app-manage-orders {
   }
 
   .manage-orders-filter {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
     padding-bottom: 1em;
     .ant-input {
       width: 150px;

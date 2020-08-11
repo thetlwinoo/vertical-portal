@@ -8,9 +8,12 @@ import {
   IProductAttribute,
   IProductOption,
   IWarrantyTypes,
-  IProductDocument,
+  IProductDocuments,
   IProductCategory,
   IStockItems,
+  ProductAttributeProp,
+  ProductOptionProp,
+  ProductChoiceProp,
 } from '@vertical/models';
 
 export const fetchCategories = createAction('[Products/API] Fetch Categories');
@@ -32,18 +35,18 @@ export const fetchWarrantyTypeSuccess = createAction(
   props<{ warrantyTypes: IWarrantyTypes[] }>()
 );
 
-export const fetchProductChoice = createAction('[Products/API] Fetch Product Choice', props<{ id: number }>());
+export const fetchProductChoice = createAction('[Products/API] Fetch Product Choice', props<{ prop: ProductChoiceProp }>());
 
 export const fetchProductChoiceSuccess = createAction('[Products/API] Fetch Product Choice Success', props<{ choice: IProductChoice[] }>());
 
-export const fetchProductAttribute = createAction('[Products/API] Fetch Product Attribute', props<{ id: number }>());
+export const fetchProductAttribute = createAction('[Products/API] Fetch Product Attribute', props<{ prop: ProductAttributeProp }>());
 
 export const fetchProductAttributeSuccess = createAction(
   '[Products/API] Fetch Product Attribute Success',
   props<{ productAttributeList: IProductAttribute[] }>()
 );
 
-export const fetchProductOption = createAction('[Products/API] Fetch Product Option', props<{ id: number }>());
+export const fetchProductOption = createAction('[Products/API] Fetch Product Option', props<{ prop: ProductOptionProp }>());
 
 export const fetchProductOptionSuccess = createAction(
   '[Products/API] Fetch Product Option Success',
@@ -61,7 +64,7 @@ export const fetchProductDocument = createAction('[Products/API] Fetch Product D
 
 export const fetchProductDocumentSuccess = createAction(
   '[Products/API] Fetch Product Document Success',
-  props<{ productDocument: IProductDocument }>()
+  props<{ productDocument: IProductDocuments }>()
 );
 
 export const fetchStockItems = createAction('[Products/API] Fetch Stock Items', props<{ productId: number }>());

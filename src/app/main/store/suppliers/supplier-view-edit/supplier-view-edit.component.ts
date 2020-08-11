@@ -146,7 +146,7 @@ export class SupplierViewEditComponent implements OnInit {
         this.loadDocumentList();
         this.loadBannerList();
 
-        this.addressesService.query({ 'supplierAddressId.equals': suppliers.id }).subscribe((res: HttpResponse<IAddresses[]>) => (this.addresses = res.body || []));
+        this.addressesService.query({ 'supplierId.equals': suppliers.id }).subscribe((res: HttpResponse<IAddresses[]>) => (this.addresses = res.body || []));
       }
 
       this.supplierCategoriesService

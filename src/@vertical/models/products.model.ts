@@ -1,7 +1,7 @@
 import { Moment } from 'moment';
 import { IStockItems } from './stock-items.model';
 import { RootUtils } from '@vertical/utils';
-import { IProductDocument } from './product-document.model';
+import { IProductDocuments } from './product-documents.model';
 
 export interface IProducts {
   id?: number;
@@ -33,7 +33,7 @@ export interface IProducts {
   productCategoryId?: number;
   productBrandName?: string;
   productBrandId?: number;
-  productDocument?: IProductDocument;
+  productDocument?: IProductDocuments;
 }
 
 export class Products implements IProducts {
@@ -67,7 +67,7 @@ export class Products implements IProducts {
     public productCategoryId?: number,
     public productBrandName?: string,
     public productBrandId?: number,
-    public productDocument?: IProductDocument
+    public productDocument?: IProductDocuments
   ) {
     this.preferredInd = this.preferredInd || false;
     this.freeShippingInd = this.freeShippingInd || false;

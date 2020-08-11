@@ -89,8 +89,8 @@ export class SkuFormComponent implements OnInit, OnDestroy {
       console.log('product choice', data);
       this.productChoice = data.length ? data[0] : null;
       if (this.productChoice) {
-        const attributeSetName = this.productChoice.productAttributeSetProductAttributeSetName;
-        const optionSetName = this.productChoice.productOptionSetProductOptionSetValue;
+        const attributeSetName = this.productChoice.productAttributeSetName;
+        const optionSetName = this.productChoice.productOptionSetValue;
         if (attributeSetName === 'NoAttributeSet' && optionSetName === 'NoOptionSet') {
           this.noChoiceInd = true;
           this.attributeInd = false;

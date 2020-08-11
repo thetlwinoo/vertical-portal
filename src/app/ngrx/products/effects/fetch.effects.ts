@@ -12,7 +12,7 @@ import {
   IProductOption,
   IWarrantyTypes,
   IBarcodeTypes,
-  IProductDocument,
+  IProductDocuments,
   IStockItems,
 } from '@vertical/models';
 import { FetchActions } from '../actions';
@@ -25,7 +25,7 @@ import {
   ProductOptionService,
   WarrantyTypesService,
   BarcodeTypesService,
-  ProductDocumentService,
+  ProductDocumentsService,
   StockItemsService,
 } from '@vertical/services';
 import { select, Store } from '@ngrx/store';
@@ -38,8 +38,8 @@ export class FetchEffects {
       ofType(FetchActions.fetchCategories),
       switchMap(() =>
         this.productCategoryService.fetchCategoriesTree().pipe(
-          filter((res: HttpResponse<any[]>) => res.ok),
-          map((res: HttpResponse<any[]>) => FetchActions.fetchCategoriesSuccess({ categories: res.body })),
+          filter((res: HttpResponse<IProductCategory[]>) => res.ok),
+          map((res: HttpResponse<IProductCategory[]>) => FetchActions.fetchCategoriesSuccess({ categories: res.body })),
           catchError(err => of(FetchActions.fetchFailure({ errorMsg: err.message })))
         )
       )
@@ -84,13 +84,13 @@ export class FetchEffects {
     this.actions$.pipe(
       ofType(FetchActions.fetchProductDocument),
       mergeMap(({ id }) =>
-        this.productDocumentService
+        this.productDocumentsService
           .query({
             'productId.equals': id,
           })
           .pipe(
-            filter((res: HttpResponse<IProductDocument[]>) => res.ok),
-            map((res: HttpResponse<IProductDocument[]>) => FetchActions.fetchProductDocumentSuccess({ productDocument: res.body[0] })),
+            filter((res: HttpResponse<IProductDocuments[]>) => res.ok),
+            map((res: HttpResponse<IProductDocuments[]>) => FetchActions.fetchProductDocumentSuccess({ productDocument: res.body[0] })),
             catchError(err => of(FetchActions.fetchFailure({ errorMsg: err.message })))
           )
       )
@@ -117,18 +117,27 @@ export class FetchEffects {
   fetchProductChoice$ = createEffect(() =>
     this.actions$.pipe(
       ofType(FetchActions.fetchProductChoice),
-      mergeMap(({ id }) =>
+      mergeMap(({ prop }) =>
         this.productChoiceService
           .query({
-            'productCategoryId.equals': id,
+            'productCategoryId.equals': prop.id,
           })
           .pipe(
             filter((res: HttpResponse<IProductChoice[]>) => res.ok),
             switchMap((res: HttpResponse<IProductChoice[]>) => {
               console.log('product choice res', res);
               return [
-                FetchActions.fetchProductAttribute({ id: res.body.length ? res.body[0].productAttributeSetId : null }),
-                FetchActions.fetchProductOption({ id: res.body.length ? res.body[0].productOptionSetId : null }),
+                FetchActions.fetchProductAttribute(
+                  {
+                    prop:
+                    {
+                      productAttributeSetId: res.body.length ? res.body[0].productAttributeSetId : null, supplierId: prop.supplierId
+                    }
+                  }
+                ),
+                FetchActions.fetchProductOption({
+                  prop: { productOptionSetId: res.body.length ? res.body[0].productOptionSetId : null, supplierId: prop.supplierId }
+                }),
                 FetchActions.fetchProductChoiceSuccess({ choice: res.body }),
               ];
             }),
@@ -141,10 +150,11 @@ export class FetchEffects {
   fetchProductAttribute$ = createEffect(() =>
     this.actions$.pipe(
       ofType(FetchActions.fetchProductAttribute),
-      mergeMap(({ id }) =>
+      mergeMap(({ prop }) =>
         this.productAttributeService
           .query({
-            'productAttributeSetId.equals': id,
+            'productAttributeSetId.equals': prop.productAttributeSetId,
+            'supplierId.equals': prop.supplierId
           })
           .pipe(
             filter((res: HttpResponse<IProductAttribute[]>) => res.ok),
@@ -158,10 +168,11 @@ export class FetchEffects {
   fetchProductOption$ = createEffect(() =>
     this.actions$.pipe(
       ofType(FetchActions.fetchProductOption),
-      mergeMap(({ id }) =>
+      mergeMap(({ prop }) =>
         this.productOptionService
           .query({
-            'productOptionSetId.equals': id,
+            'productOptionSetId.equals': prop.productOptionSetId,
+            'supplierId.equals': prop.supplierId
           })
           .pipe(
             filter((res: HttpResponse<IProductOption[]>) => res.ok),
@@ -209,7 +220,7 @@ export class FetchEffects {
     private productOptionService: ProductOptionService,
     private warrantyTypesService: WarrantyTypesService,
     private barcodeTypesService: BarcodeTypesService,
-    private productDocumentService: ProductDocumentService,
+    private productDocumentsService: ProductDocumentsService,
     private stockItemsService: StockItemsService
   ) { }
 }

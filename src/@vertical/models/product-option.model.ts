@@ -15,5 +15,10 @@ export class ProductOption implements IProductOption {
     public productOptionSetId?: number,
     public supplierName?: string,
     public supplierId?: number
-  ) {}
+  ) { }
+}
+
+export interface ProductOptionProp {
+  productOptionSetId?: number;
+  supplierId?: number;
 }

@@ -3,11 +3,13 @@ import { RouterModule } from '@angular/router';
 import { SuppliersModule } from './suppliers/suppliers.module';
 import { UsersModule } from './users/users.module';
 import { AddressesModule } from './addresses/addresses.module';
+import { ProductBrandsModule } from './product-brands/product-brands.module';
 
 const MODULES = [
   SuppliersModule,
   UsersModule,
-  AddressesModule
+  AddressesModule,
+  ProductBrandsModule
 ];
 
 const ROUTES = [
@@ -23,6 +25,10 @@ const ROUTES = [
   {
     path: 'addresses',
     loadChildren: () => import('./addresses/addresses.module').then(m => m.AddressesModule)
+  },
+  {
+    path: 'product-brands',
+    loadChildren: () => import('./product-brands/product-brands.module').then(m => m.ProductBrandsModule)
   },
   { path: '**', redirectTo: 'suppliers' },
 ];

@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewEncapsulation, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { map, debounceTime, tap } from 'rxjs/operators';
+import { map, debounceTime, tap, takeUntil } from 'rxjs/operators';
 import { JhiParseLinks, JhiDataUtils, JhiAlertService } from 'ng-jhipster';
 import * as _ from 'lodash';
 import { RootUtils } from '@vertical/utils';
@@ -13,14 +13,34 @@ import { Router } from '@angular/router';
 import { Account } from '@vertical/core/user/account.model';
 import { AccountService } from '@vertical/core';
 
-import { UploadExcel, Products, StockItems, ProductDocument, ProductTags, IAlerts, Alerts, StockItemHoldings, ISuppliers } from '@vertical/models';
+import {
+  UploadExcel,
+  Products,
+  StockItems,
+  ProductDocuments,
+  IAlerts,
+  Alerts,
+  ISuppliers,
+  IStockItemsLocalize,
+  StockItemsLocalize,
+  ICulture,
+  IProductBrand,
+  ProductBrand,
+  IProductBrandLocalize,
+  ProductBrandLocalize
+} from '@vertical/models';
+
 import {
   StockItemsService,
   ProductsService,
   DocumentProcessService,
-  ProductDocumentService,
+  ProductDocumentsService,
   ProductTagsService,
-  StockItemHoldingsService
+  StockItemHoldingsService,
+  CultureService,
+  StockItemsLocalizeService,
+  ProductBrandService,
+  ProductBrandLocalizeService
 } from '@vertical/services';
 
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -51,6 +71,8 @@ export class BatchUploadComponent implements OnInit, OnDestroy {
   importTotalCount = 0;
   importPercentage = 0.0;
   // showImportCompleted = false;
+  cultures: ICulture[];
+  productBrandList: IProductBrand[] = [];
 
   filterType = 0;
   uploadExcelArray: string[];
@@ -71,7 +93,7 @@ export class BatchUploadComponent implements OnInit, OnDestroy {
   constructor(
     protected router: Router,
     protected productsService: ProductsService,
-    protected productDocumentService: ProductDocumentService,
+    protected productDocumentsService: ProductDocumentsService,
     protected parseLinks: JhiParseLinks,
     protected dataUtils: JhiDataUtils,
     protected jhiAlertService: JhiAlertService,
@@ -83,6 +105,10 @@ export class BatchUploadComponent implements OnInit, OnDestroy {
     private store: Store<fromProducts.State>,
     private authStore: Store<fromAuth.State>,
     private msg: NzMessageService,
+    private cultureService: CultureService,
+    private stockItemLocalizeService: StockItemsLocalizeService,
+    private productBrandService: ProductBrandService,
+    private productBrandLocalizeService: ProductBrandLocalizeService
   ) {
     this.selectedSupplier$ = this.authStore.pipe(select(fromAuth.getSupplierSelected));
   }
@@ -98,6 +124,8 @@ export class BatchUploadComponent implements OnInit, OnDestroy {
       this.account = account;
     });
 
+    this.cultureService.query().pipe(takeUntil(this.unsubscribe$)).subscribe(res => this.cultures = res.body);
+
     this.selectedSupplier$.subscribe(selectedSupplier => {
       this.selectedSupplier = selectedSupplier;
     });
@@ -106,6 +134,7 @@ export class BatchUploadComponent implements OnInit, OnDestroy {
       console.log('upload data', data);
 
       // this.tagList = [];
+      this.productBrandList = [];
       this.importTotalCount = data.length;
       this.uploadData = data;
 
@@ -117,16 +146,16 @@ export class BatchUploadComponent implements OnInit, OnDestroy {
         const product: Products = new Products();
         product.name = key;
         product.handle = RootUtils.handleize(key);
-        product.productCategoryName = values[0].productSubCategory;
-        product.productBrandName = values[0].brandName;
+        product.productCategoryName = values[0].productCategory;
+        product.productBrandName = values[0].brandName.trim();
         product.releaseDate = values[0].releaseDate;
         product.availableDate = values[0].availableDate;
         product.lastEditedBy = this.account.id;
         product.lastEditedWhen = moment();
         product.validFrom = moment();
-
+        this.createProductBrand(values[0].brandName.trim(), values[0].brandMyanmarName.trim());
         product.stockItemLists = [];
-        const productDocument: ProductDocument = new ProductDocument();
+        const productDocument: ProductDocuments = new ProductDocuments();
         productDocument.videoUrl = values[0].videoUrl || '';
         productDocument.highlights = values[0].highlights || '';
         productDocument.longDescription = values[0].longDescription || '';
@@ -203,12 +232,27 @@ export class BatchUploadComponent implements OnInit, OnDestroy {
           //     this.tagList.push(keyword);
           //   }
           // });
+          const englishLocalize: IStockItemsLocalize = new StockItemsLocalize();
+          englishLocalize.cultureId = this.getEnglishCulture()?.id;
+          englishLocalize.name = item.itemName;
+
+          const myanmarLocalize: IStockItemsLocalize = new StockItemsLocalize();
+          myanmarLocalize.cultureId = this.getMyanmarCulture()?.id;
+          myanmarLocalize.name = item.itemMyanmarName;
+
+          stockItem.stockItemLocalizeList = [];
+          stockItem.stockItemLocalizeList.push(englishLocalize);
+          stockItem.stockItemLocalizeList.push(myanmarLocalize);
         });
 
         product.searchDetails = [...new Set(searchDetails.split(';'))].join(';').slice(0, -1);
 
         this.productList.push(product);
       });
+
+      if (data.length > 0) {
+        this.saveProductBrand();
+      }
     });
   }
 
@@ -245,34 +289,66 @@ export class BatchUploadComponent implements OnInit, OnDestroy {
   onImportToSystem(event: any): void {
     this.importCount = 0;
     this.productList.map(product => {
-      console.log('product.productDocument', product.productDocument);
-      this.productDocumentService.importProductDocument(product.productDocument).subscribe(productDocumentRes => {
-        product.productDocumentId = productDocumentRes.id;
-        product.supplierId = this.selectedSupplier.id;
-        this.productsService.importProduct(product).subscribe(productResource => {
-          product.stockItemLists.map(stockItem => {
-            stockItem.productId = productResource.id;
-            this.stockItemsService.importStockItem(stockItem).subscribe(() => {
-              this.importCount++;
-              this.importPercentage = Math.floor((this.importCount * 100) / this.importTotalCount);
-              if (this.importPercentage >= 100) {
-                // this.showImportCompleted = true;
-                this.msg.success(`Total ${this.importCount} imported`);
-                this.router.navigate(['/main/products/manage-products']);
-              }
+      product.supplierId = this.selectedSupplier.id;
+      this.productsService.importProduct(product).subscribe(productResource => {
+        product.productDocument.productId = productResource.id;
+        this.productDocumentsService.importProductDocument(product.productDocument).subscribe();
+
+        product.stockItemLists.map(stockItem => {
+          stockItem.productId = productResource.id;
+          stockItem.supplierId = this.selectedSupplier.id;
+          this.stockItemsService.importStockItem(stockItem).subscribe((stockItemRes) => {
+            stockItem.stockItemLocalizeList.map((stockItemsLocalize) => {
+              stockItemsLocalize.stockItemId = stockItemRes.id;
+              this.stockItemLocalizeService.create(stockItemsLocalize).subscribe();
             });
+
+            this.importCount++;
+            this.importPercentage = Math.floor((this.importCount * 100) / this.importTotalCount);
+            if (this.importPercentage >= 100) {
+              this.msg.success(`Total ${this.importCount} imported`);
+              this.router.navigate(['/main/products/manage-products']);
+            }
           });
         });
       });
     });
+  }
 
-    // this.tagList.map(tag => {
-    //   if (tag.length > 0) {
-    //     const productTag: ProductTags = new ProductTags();
-    //     productTag.name = tag;
-    //     this.productTagsService.create(productTag).subscribe();
-    //   }
-    // });
+  createProductBrand(brandName: string, brandMyanmarName: string) {
+    const productBrandFilter = this.productBrandList.find(x => x.name === brandName);
+
+    if (!productBrandFilter) {
+      const productBrand: IProductBrand = new ProductBrand();
+      productBrand.name = brandName;
+      productBrand.myanmarName = brandMyanmarName;
+      productBrand.handle = RootUtils.handleize(brandName);
+      productBrand.validFrom = moment();
+      productBrand.activeFlag = true;
+      this.productBrandList.push(productBrand);
+    }
+  }
+
+  saveProductBrand() {
+    this.productBrandList.map(item => {
+      const englishBrandLocalize: IProductBrandLocalize = new ProductBrandLocalize();
+      englishBrandLocalize.name = item.name;
+      englishBrandLocalize.cultureId = this.getEnglishCulture()?.id;
+
+      const myanmarBrandLocalize: IProductBrandLocalize = new ProductBrandLocalize();
+      myanmarBrandLocalize.name = item.myanmarName;
+      myanmarBrandLocalize.cultureId = this.getMyanmarCulture()?.id;
+
+      this.productBrandService.saveExtend(item).subscribe(res => {
+        const newBrand = res.body;
+        englishBrandLocalize.productBrandId = newBrand.id;
+        myanmarBrandLocalize.productBrandId = newBrand.id;
+
+        this.productBrandLocalizeService.create(englishBrandLocalize).subscribe();
+        this.productBrandLocalizeService.create(myanmarBrandLocalize).subscribe();
+
+      });
+    });
   }
 
   openFile(contentType, field): any {
@@ -286,6 +362,14 @@ export class BatchUploadComponent implements OnInit, OnDestroy {
 
   selectedChanged(event) {
     console.log(event);
+  }
+
+  getEnglishCulture(): ICulture {
+    return this.cultures?.find(x => x.code === 'en');
+  }
+
+  getMyanmarCulture(): ICulture {
+    return this.cultures?.find(x => x.code === 'my');
   }
 
   ngOnDestroy(): void {

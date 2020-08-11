@@ -1,0 +1,15 @@
+:host {
+  .save {
+    margin-right: 8px;
+  }
+
+  nz-table {
+    tbody {
+      tr {
+        &.active {
+          background-color: #aaddff;
+        }
+      }
+    }
+  }
+}

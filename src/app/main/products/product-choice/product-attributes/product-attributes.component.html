@@ -1,0 +1,114 @@
+<div nz-row [nzGutter]="16">
+    <div nz-col class="gutter-row" [nzXs]="24" [nzLg]="12">
+        <vs-panel [title]="'Attribute Set'">
+            <div extra>
+                <button nz-button nzType="default" [nzSize]="'small'" (click)="addAttributeSetRow()">Add</button>
+            </div>
+            <div body>
+                <div class="panel-body-wrapper">
+                    <nz-table #attributeSetTable [nzData]="productAttributeSets" nzSize="small"
+                        [nzFrontPagination]="true" [nzHideOnSinglePage]="true" nzTableLayout="fixed">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let data of attributeSetTable.data"
+                                [ngSwitch]="editAttributeSetCache[data.id]?.mode"
+                                (click)="selectedAttributeSetRow(data)"
+                                [class.active]="selectedAttributeSet?.id === data.id">
+                                <ng-template [ngSwitchCase]="mode.view" *ngIf="data.name !== 'NoAttributeSet'">
+                                    <td>{{ data.name }}</td>
+                                    <td>
+                                        <a (click)="startAttributeSetEdit(data.id)">Edit</a>
+                                        <nz-divider nzType="vertical"></nz-divider>
+                                        <a nz-popconfirm nzTitle="Sure to delete?"
+                                            (nzOnConfirm)="deleteAttributeSet(data.id)">Delete</a>
+                                    </td>
+                                </ng-template>
+
+                                <ng-template [ngSwitchCase]="mode.edit">
+                                    <td><input type="text" nz-input
+                                            [(ngModel)]="editAttributeSetCache[data.id].data.name" />
+                                    </td>
+                                    <td>
+                                        <a (click)="saveAttributeSetEdit(data.id)" class="save">Save</a>
+                                        <a (click)="cancelAttributeSetEdit(data.id)">Cancel</a>
+                                    </td>
+                                </ng-template>
+
+                                <ng-template [ngSwitchCase]="mode.add">
+                                    <td><input type="text" nz-input
+                                            [(ngModel)]="editAttributeSetCache[data.id].data.name" />
+                                    </td>
+                                    <td>
+                                        <a (click)="saveAttributeSetEdit(data.id)" class="save">Save</a>
+                                        <a (click)="cancelAttributeSetEdit(data.id)">Cancel</a>
+                                    </td>
+                                </ng-template>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </div>
+            </div>
+        </vs-panel>
+    </div>
+
+    <div nz-col class="gutter-row" [nzXs]="24" [nzLg]="12">
+        <vs-panel [title]="'Attributes'">
+            <div extra>
+                <button nz-button nzType="default" [nzSize]="'small'" (click)="addAttributeRow()"
+                    [disabled]="!selectedAttributeSet?.id">Add</button>
+            </div>
+            <div body>
+                <div class="panel-body-wrapper">
+                    <nz-table #attributeTable [nzData]="productAttributes" nzSize="small" [nzFrontPagination]="true"
+                        [nzHideOnSinglePage]="true" nzTableLayout="fixed">
+                        <thead>
+                            <tr>
+                                <th>Value</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let data of attributeTable.data" [ngSwitch]="editAttributeCache[data.id]?.mode"
+                                (click)="selectedAttributeRow(data)" [class.active]="selectedAttribute?.id === data.id">
+                                <ng-template [ngSwitchCase]="mode.view">
+                                    <td>{{ data.value }}</td>
+                                    <td>
+                                        <a (click)="startAttributeEdit(data.id)">Edit</a>
+                                        <nz-divider nzType="vertical"></nz-divider>
+                                        <a nz-popconfirm nzTitle="Sure to delete?"
+                                            (nzOnConfirm)="deleteAttribute(data.id)">Delete</a>
+                                    </td>
+                                </ng-template>
+
+                                <ng-template [ngSwitchCase]="mode.edit">
+                                    <td><input type="text" nz-input
+                                            [(ngModel)]="editAttributeCache[data.id].data.value" />
+                                    </td>
+                                    <td>
+                                        <a (click)="saveAttributeEdit(data.id)" class="save">Save</a>
+                                        <a (click)="cancelAttributeEdit(data.id)">Cancel</a>
+                                    </td>
+                                </ng-template>
+
+                                <ng-template [ngSwitchCase]="mode.add">
+                                    <td><input type="text" nz-input
+                                            [(ngModel)]="editAttributeCache[data.id].data.value" />
+                                    </td>
+                                    <td>
+                                        <a (click)="saveAttributeEdit(data.id)" class="save">Save</a>
+                                        <a (click)="cancelAttributeEdit(data.id)">Cancel</a>
+                                    </td>
+                                </ng-template>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </div>
+            </div>
+        </vs-panel>
+    </div>
+</div>

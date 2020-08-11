@@ -15,5 +15,10 @@ export class ProductAttribute implements IProductAttribute {
     public productAttributeSetId?: number,
     public supplierName?: string,
     public supplierId?: number
-  ) {}
+  ) { }
+}
+
+export interface ProductAttributeProp {
+  productAttributeSetId?: number;
+  supplierId?: number;
 }

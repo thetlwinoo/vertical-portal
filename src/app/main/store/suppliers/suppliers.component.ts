@@ -8,6 +8,7 @@ import { HttpResponse, HttpHeaders } from '@angular/common/http';
 import { ITEMS_PER_PAGE } from '@vertical/constants';
 import { ParamMap, ActivatedRoute, Router } from '@angular/router';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
+import { DATE_TIME_FORMAT, SERVER_API_URL } from '@vertical/constants';
 
 @Component({
   selector: 'app-suppliers',
@@ -25,6 +26,8 @@ export class SuppliersComponent implements OnInit, OnDestroy {
   predicate!: string;
   ascending!: boolean;
   nzPaginationPage = 1;
+
+  public blobUrl = SERVER_API_URL + 'services/cloudblob/api/images-extend/';
 
   private unsubscribe$: Subject<any> = new Subject();
 

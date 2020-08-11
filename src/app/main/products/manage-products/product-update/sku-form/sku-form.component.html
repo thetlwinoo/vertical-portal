@@ -1,0 +1,81 @@
+<vs-panel [title]="'SKU Information'" id="sku-information" *ngIf="editForm">
+    <div extra>
+        <nz-space>
+            <nz-space-item>
+                <button nz-button nzType="default" [nzSize]="'small'" (click)="createStockItemModal()">Add New</button>
+            </nz-space-item>
+        </nz-space>
+    </div>
+    <div body class="content-wrapper" *ngIf="stockItemListsForm?.controls.length > 0">
+        <form id="stock-items-form" name="stock-items-form" [formGroup]="editForm">
+            <p-table formArrayName="stockItemLists" [value]="stockItemListsForm.controls" styleClass="p-datatable-sm">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Name</th>
+                        <th>Vendor Code</th>
+                        <th>Vendor SKU</th>
+                        <th>Barcode</th>
+                        <th>Unit Price</th>
+                        <th>Retail Price</th>
+                        <th>Actions</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-product let-i="rowIndex">
+                    <tr>
+                        <td>{{ product.value.name }}</td>
+                        <td>{{ product.value.vendorCode }}</td>
+                        <td>{{ product.value.vendorSKU }}</td>
+                        <td>{{ product.value.barcode }}</td>
+                        <td>{{ product.value.unitPrice }}</td>
+                        <td>{{ product.value.recommendedRetailPrice }}</td>
+                        <td>
+                            <a (click)="updateStockItemModal(product)">Edit</a>
+                            <nz-divider nzType="vertical"></nz-divider>
+                            <a (click)="deleteConfirm(product.value, i)">Delete</a>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+            <!-- <nz-table #nzTable formArrayName="stockItemLists" [nzData]="stockItemListsForm.controls"
+                nzTableLayout="fixed" [nzHideOnSinglePage]="true">
+                <thead>
+                    <tr>
+                        <th nzWidth="60px"></th>
+                        <th>Name</th>
+                        <th>Vendor Code</th>
+                        <th>Vendor SKU</th>
+                        <th>Barcode</th>
+                        <th>Unit Price</th>
+                        <th>Retail Price</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ng-container *ngFor="let data of nzTable.data; let i = index;" [formGroupName]="i">
+                        <tr>
+                            <td [nzExpand]="expandSet.has(data.value.id)"
+                                (nzExpandChange)="onExpandChange(data.value.id, $event)">
+                            </td>
+                            <td>{{ data.value.name }}</td>
+                            <td>{{ data.value.vendorCode }}</td>
+                            <td>{{ data.value.vendorSKU }}</td>
+                            <td>{{ data.value.barcode }}</td>
+                            <td>{{ data.value.unitPrice }}</td>
+                            <td>{{ data.value.recommendedRetailPrice }}</td>
+                            <td>
+                                <a (click)="updateStockItem(data)">Edit</a>
+                                <nz-divider nzType="vertical"></nz-divider>
+                                <a (click)="deleteConfirm(data.value)">Delete</a>
+                            </td>
+                        </tr>
+                        <tr [nzExpand]="expandSet.has(data.value.id)">
+                            <span>photos</span>
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </nz-table> -->
+        </form>
+
+    </div>
+</vs-panel>

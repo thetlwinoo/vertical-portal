@@ -1,9 +1,9 @@
 /* tslint:disable */
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { AddressesService, RegionsService, AddressTypesService, CustomersService, SuppliersService, CountriesService, CitiesService, TownshipsService, TownsService } from '@vertical/services';
+import { AddressesService, RegionsService, AddressTypesService, CustomersService, SuppliersService, CountriesService, CitiesService, TownshipsService } from '@vertical/services';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IAddresses, Addresses, ISuppliers, IRegions, IAddressTypes, ICustomers, ICountries, ICities, ITownships, ITowns } from '@vertical/models';
+import { IAddresses, Addresses, ISuppliers, IRegions, IAddressTypes, ICustomers, ICountries, ICities, ITownships } from '@vertical/models';
 import * as moment from 'moment';
 import { DATE_TIME_FORMAT, SERVER_API_URL } from '@vertical/constants';
 import { HttpResponse } from '@angular/common/http';
@@ -11,6 +11,8 @@ import { Observable, Observer, Subject, of } from 'rxjs';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import * as _ from 'lodash';
 import { map, takeUntil, filter } from 'rxjs/operators';
+import { Store, select } from '@ngrx/store';
+import * as fromAuth from 'app/ngrx/auth/reducers';
 
 type SelectableEntity = IRegions | IAddressTypes | ICustomers | ISuppliers;
 
@@ -28,7 +30,9 @@ export class AddressAddComponent implements OnInit, OnDestroy {
   countries: ICountries[] = [];
   cities: ICities[] = [];
   townships: ITownships[] = [];
-  towns: ITowns[] = [];
+
+  // selectedSupplier$: Observable<ISuppliers>;
+  // selectedSupplier: ISuppliers;
 
   get cityId(): number {
     return this.editForm.get('cityId')?.value || null;
@@ -54,10 +58,6 @@ export class AddressAddComponent implements OnInit, OnDestroy {
     return this.townships.find(x => x.id === this.editForm.get('townshipId')?.value) || null;
   }
 
-  get town(): ITownships {
-    return this.towns.find(x => x.id === this.editForm.get('townId')?.value) || null;
-  }
-
   editForm = this.fb.group({
     id: [],
     contactPerson: [],
@@ -72,10 +72,9 @@ export class AddressAddComponent implements OnInit, OnDestroy {
     regionId: [],
     cityId: [],
     townshipId: [],
-    townId: [],
     addressTypeId: [],
-    customerAddressId: [],
-    supplierAddressId: [],
+    customerId: [],
+    supplierId: [],
   });
 
   public blobUrl = SERVER_API_URL + 'services/cloudblob/api/images-extend/';
@@ -91,21 +90,23 @@ export class AddressAddComponent implements OnInit, OnDestroy {
     protected countriesService: CountriesService,
     protected citiesService: CitiesService,
     protected townshipsService: TownshipsService,
-    protected townsService: TownsService,
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
     private msg: NzMessageService,
     private router: Router,
     private route: ActivatedRoute,
+    // private authStore: Store<fromAuth.State>,
   ) {
 
     this.route.queryParams
       .pipe(
         takeUntil(this.unsubscribe$),
         filter(params => params.supplierId),
-        map(params => (this.editForm.patchValue({ supplierAddressId: params.supplierId })))
+        map(params => (this.editForm.patchValue({ supplierId: params.supplierId })))
       )
-      .subscribe();      
+      .subscribe();
+
+    // this.selectedSupplier$ = this.authStore.pipe(select(fromAuth.getSupplierSelected));
   }
 
   ngOnInit(): void {
@@ -124,6 +125,11 @@ export class AddressAddComponent implements OnInit, OnDestroy {
 
       this.suppliersService.query().subscribe((res: HttpResponse<ISuppliers[]>) => (this.suppliers = res.body || []));
     });
+
+    // this.selectedSupplier$.subscribe(selectedSupplier => {
+    //   this.selectedSupplier = selectedSupplier;
+    //   this.editForm.patchValue({ supplierId: selectedSupplier.id })
+    // });
   }
 
   selectCity(cityId: number): void {
@@ -132,14 +138,6 @@ export class AddressAddComponent implements OnInit, OnDestroy {
 
   selectRegion(regionId: number): void {
     this.citiesService.query({ 'regionId.equals': regionId }).subscribe((res: HttpResponse<ICities[]>) => (this.cities = res.body || []));
-  }
-
-  selectTownship(townshipId: number): void {
-    this.townsService.query({ 'townshipId.equals': townshipId }).subscribe((res: HttpResponse<ITowns[]>) => (this.towns = res.body || []));
-  }
-
-  selectTown(town: ITowns) {
-    console.log('Town', town);
   }
 
   previousState(): void {
@@ -169,10 +167,9 @@ export class AddressAddComponent implements OnInit, OnDestroy {
       regionId: this.editForm.get(['regionId'])!.value,
       cityId: this.editForm.get(['cityId'])!.value,
       townshipId: this.editForm.get(['townshipId'])!.value,
-      townId: this.editForm.get(['townId'])!.value,
       addressTypeId: this.editForm.get(['addressTypeId'])!.value,
-      customerAddressId: this.editForm.get(['customerAddressId'])!.value,
-      supplierAddressId: this.editForm.get(['supplierAddressId'])!.value,
+      customerId: this.editForm.get(['customerId'])!.value,
+      supplierId: this.editForm.get(['supplierId'])!.value,
     };
   }
 

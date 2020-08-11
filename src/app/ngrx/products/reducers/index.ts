@@ -67,51 +67,7 @@ export const getFetchError = createSelector(getFetchState, fromFetch.getError);
 export const getFetchLoading = createSelector(getFetchState, fromFetch.getLoading);
 export const getFetchCategories = createSelector(getFetchState, fromFetch.getCategories);
 export const getFetchCategoriesTree = createSelector(getFetchCategories, entities => {
-  const treeModel = [];
-  console.log('entities', entities)
-  entities.map(category => {
-    const cagClone = _.assign({ ...category }, {
-      key: category.id,
-      title: category.name,
-      expanded: false,
-      sortOrder: category.sortOrder ? category.sortOrder : entities.indexOf(category),
-      children: []
-    });
-    // const _category: any = {
-    //   label: category.name,
-    //   data: category,
-    //   expandedIcon: 'folder-open',
-    //   collapsedIcon: 'folder',
-    //   childIcon: 'file',
-    //   expanded: false,
-    //   type: 'category',
-    //   children: [],
-    // };
-
-    category.children.map(subCategory => {
-      const subCagClone = _.assign({ ...subCategory }, {
-        key: subCategory.id,
-        title: subCategory.name,
-        expanded: false,
-        sortOrder: subCategory.sortOrder ? subCategory.sortOrder : category.children.indexOf(subCategory),
-        isLeaf: true
-      });
-      // const _subCategory = {
-      //   label: subCategory.name,
-      //   data: subCategory,
-      //   expandedIcon: 'folder-open',
-      //   collapsedIcon: 'folder',
-      //   childIcon: 'file',
-      //   active: false,
-      //   type: 'sub-category',
-      // };
-      cagClone.children.push(subCagClone);
-    });
-
-    treeModel.push(cagClone);
-  });
-
-  return treeModel;
+  return JSON.parse(JSON.stringify(entities));
 });
 // export const getFetchModels = createSelector(getFetchState, fromFetch.getModels);
 export const getFetchStockItems = createSelector(getFetchState, fromFetch.getStockItems);

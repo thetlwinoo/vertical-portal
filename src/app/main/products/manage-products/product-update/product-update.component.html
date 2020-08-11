@@ -1,0 +1,59 @@
+<div class="pagebar-content-wrapper">
+    <div class="page-header">
+        <nz-breadcrumb nzSeparator=">">
+            <nz-breadcrumb-item>
+                <a href="javascript:void(0)" [routerLink]="['../']">Manage Products</a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                <span *ngIf="products.id">Update Product</span>
+                <span *ngIf="!products.id">Create Product</span>
+            </nz-breadcrumb-item>
+        </nz-breadcrumb>
+
+        <nz-space>
+            <nz-space-item>
+                <button nz-button nzType="primary" (click)="save()"
+                    [disabled]="stockItemListsForm.controls.length <= 0 || editForm.invalid || productDocumentForm.invalid">Publish</button>
+            </nz-space-item>
+
+            <nz-space-item>
+                <button nz-button nzType="default" (click)="previousState()">Cancel</button>
+            </nz-space-item>
+        </nz-space>
+    </div>
+
+    <div class="page-body">
+        <div nz-row>
+            <div nz-col [nzSm]="4" [nzXs]="24">
+                <nz-anchor [nzAffix]="true">
+                    <nz-link nzHref="#basic-information" nzTitle="Basic Information"></nz-link>
+                    <nz-link nzHref="#sku-information" nzTitle="SKU Information"></nz-link>
+                    <nz-link nzHref="#product-information" nzTitle="Product Information"></nz-link>
+                    <nz-link nzHref="#product-decoration" nzTitle="Product Decoration"></nz-link>
+                </nz-anchor>
+            </div>
+
+            <div nz-col [nzSm]="20" [nzXs]="24">
+                <form nz-form [formGroup]="editForm">
+                    <section id="basic-information">
+                        <app-basic-form [editForm]="editForm" [categories]="categories"></app-basic-form>
+                    </section>
+
+                    <section id="sku-information">
+                        <app-sku-form [editForm]="editForm" [supplier]="selectedSupplier"></app-sku-form>
+                    </section>
+
+                    <section id="product-information">
+                        <app-information-form [editForm]="editForm">
+                        </app-information-form>
+                    </section>
+
+                    <section id="product-decoration">
+                        <app-decoration-form [editForm]="editForm" [specialFeatures]="specialFeatures">
+                        </app-decoration-form>
+                    </section>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

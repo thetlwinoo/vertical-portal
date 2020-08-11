@@ -5,13 +5,13 @@
                 <a href="javascript:void(0)" [routerLink]="['../']">Addresses</a>
             </nz-breadcrumb-item>
             <nz-breadcrumb-item>
-                <span>Name</span>
+                <span>Details</span>
             </nz-breadcrumb-item>
         </nz-breadcrumb>
     </div>
 
     <div class="page-sub-header">
-        <span class="page-sub-header__title">Name</span>
+        <span class="page-sub-header__title">View / Edit</span>
         <a><i nz-icon nzType="delete" nzTheme="fill"></i></a>
     </div>
 
@@ -90,7 +90,7 @@
                                         </nz-form-label>
                                         <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
                                             <nz-select name="township" formControlName="townshipId"
-                                                (ngModelChange)="selectTownship(townshipId)" [nzDisabled]="!cityId">
+                                                [nzDisabled]="!cityId">
                                                 <nz-option [nzValue]="townshipsOption.id"
                                                     [nzLabel]="townshipsOption.name"
                                                     *ngFor="let townshipsOption of townships; trackBy: trackById">
@@ -100,6 +100,14 @@
                                     </nz-form-item>
 
                                     <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="postalCode">Postal Code
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                                            <input nz-input formControlName="postalCode" id="postalCode" />
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <!-- <nz-form-item>
                                         <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="town">Town
                                         </nz-form-label>
                                         <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
@@ -110,7 +118,7 @@
                                                 </nz-option>
                                             </nz-select>
                                         </nz-form-control>
-                                    </nz-form-item>
+                                    </nz-form-item> -->
 
                                     <nz-form-item>
                                         <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="addressLine1">Address

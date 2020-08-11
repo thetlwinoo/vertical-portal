@@ -15,6 +15,7 @@
         </nz-space>
     </div>
 </vs-pagebar>
+<nz-progress *ngIf="uploadPercentage > 0" [nzPercent]="uploadPercentage"></nz-progress>
 <div class="pagebar-content-wrapper">
     <div class="manage-categories-wrapper">
         <vs-alert *ngIf="showAlertInd" [alert]="alert"></vs-alert>
@@ -23,17 +24,34 @@
             <div nz-col [nzXs]="24" [nzLg]="12">
                 <vs-panel [title]="'Look up'">
                     <div extra>
-                        <nz-input-group [nzSuffix]="suffixIcon">
-                            <input type="text" nz-input placeholder="Search" [(ngModel)]="searchValue" />
-                        </nz-input-group>
-                        <ng-template #suffixIcon>
-                            <i nz-icon nzType="search"></i>
-                        </ng-template>
+                        <nz-space>
+                            <nz-space-item>
+                                <button nz-button nzType="default" [nzSize]="'medium'" (click)="nodeExpand(true)">
+                                    <i nz-icon nzType="node-expand" nzTheme="outline"></i>
+                                    Expand
+                                </button>
+                            </nz-space-item>
+                            <nz-space-item>
+                                <button nz-button nzType="default" [nzSize]="'medium'" (click)="nodeExpand(false)">
+                                    <i nz-icon nzType="node-collapse" nzTheme="outline"></i>
+                                    Collapse
+                                </button>
+                            </nz-space-item>
+                            <nz-space-item>
+                                <nz-input-group [nzSuffix]="suffixIcon">
+                                    <input type="text" nz-input placeholder="Search" [(ngModel)]="searchValue" />
+                                </nz-input-group>
+                                <ng-template #suffixIcon>
+                                    <i nz-icon nzType="search"></i>
+                                </ng-template>
+                            </nz-space-item>
+                        </nz-space>
                     </div>
 
                     <div body class="content-wrapper">
                         <nz-tree [nzData]="(categories$ | async) | orderBy:'id'" [nzSearchValue]="searchValue"
-                            nzDraggable (nzClick)="nzClick($event)" (nzOnDrop)="nzEvent($event)"> </nz-tree>
+                            nzDraggable (nzClick)="nzClick($event)" (nzOnDrop)="nzEvent($event)"
+                            [nzExpandAll]="nodeExpandInd"> </nz-tree>
                     </div>
                 </vs-panel>
             </div>
@@ -64,6 +82,13 @@
                                     <span>{{selectedCategory.name}}</span>
                                 </ng-template>
                             </nz-descriptions-item>
+                            <nz-descriptions-item nzTitle="Myanmar Name">
+                                <input nz-input placeholder="Myanmar Name" [(ngModel)]="selectedCategory.myanmarName"
+                                    *ngIf="editMode;else viewMyanmarName" />
+                                <ng-template #viewMyanmarName>
+                                    <span>{{selectedCategory.myanmarName}}</span>
+                                </ng-template>
+                            </nz-descriptions-item>
                             <nz-descriptions-item nzTitle="Parent Name">
                                 <span>{{selectedCategory.parentName}}</span>
                             </nz-descriptions-item>
@@ -73,34 +98,34 @@
                                         nzListType="picture-card" [nzShowUploadList]="false"
                                         [nzBeforeUpload]="beforeUpload"
                                         (nzChange)="handleChange($event, selectedCategory)">
-                                        <ng-container *ngIf="!selectedCategory.iconThumbnailUrl">
+                                        <ng-container *ngIf="!selectedCategory.iconPhoto">
                                             <i class="upload-icon" nz-icon [nzType]="loading ? 'loading' : 'plus'"></i>
                                             <div class="ant-upload-text">Upload</div>
                                         </ng-container>
-                                        <img *ngIf="selectedCategory.iconThumbnailUrl"
-                                            [src]="blobUrl + selectedCategory.iconThumbnailUrl" style="width: 100%" />
+                                        <img *ngIf="selectedCategory.iconPhoto"
+                                            [src]="blobUrl + selectedCategory.iconPhoto + '/thumbnail'"
+                                            style="width: 100%" />
                                     </nz-upload>
                                 </div>
                                 <ng-template #viewThumbnailUrl>
-                                    <img width="100" *ngIf="selectedCategory.iconThumbnailUrl"
-                                        [src]="blobUrl + selectedCategory.iconThumbnailUrl" />
+                                    <img width="100" *ngIf="selectedCategory.iconPhoto"
+                                        [src]="blobUrl + selectedCategory.iconPhoto + '/thumbnail'" />
                                 </ng-template>
                             </nz-descriptions-item>
                             <nz-descriptions-item nzTitle="Icon Font">
                                 <input nz-input placeholder="Icon Font" [(ngModel)]="selectedCategory.iconFont"
                                     *ngIf="editMode;else viewIconFont" />
                                 <ng-template #viewIconFont>
-                                    <span>{{selectedCategory.iconFont}}</span>
+                                    <!-- <span>{{selectedCategory.iconFont}}</span> -->
+                                    <span *ngIf="selectedCategory.iconFont">
+                                        <i class="iconfont icon-{{selectedCategory.iconFont}}"></i>
+                                    </span>
                                 </ng-template>
                             </nz-descriptions-item>
                             <nz-descriptions-item nzTitle="Just For You">
                                 <nz-switch [(ngModel)]="selectedCategory.justForYouInd"
-                                    [nzDisabled]="!editMode || !selectedCategory.parentId">
+                                    [nzDisabled]="!editMode || !selectedCategory.isLeaf">
                                 </nz-switch>
-                            </nz-descriptions-item>
-                            <nz-descriptions-item nzTitle="Show In Nav">
-                                <nz-switch [(ngModel)]="selectedCategory.showInNavInd"
-                                    [nzDisabled]="!editMode || selectedCategory.parentId"></nz-switch>
                             </nz-descriptions-item>
                             <nz-descriptions-item nzTitle="Sort Order">
                                 <span>{{selectedCategory.sortOrder}}</span>

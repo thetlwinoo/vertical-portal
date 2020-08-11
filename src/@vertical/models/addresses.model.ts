@@ -17,14 +17,12 @@ export interface IAddresses {
     cityId?: number;
     townshipName?: string;
     townshipId?: number;
-    townName?: string;
-    townId?: number;
     addressTypeName?: string;
     addressTypeId?: number;
-    customerAddressName?: string;
-    customerAddressId?: number;
-    supplierAddressName?: string;
-    supplierAddressId?: number;
+    customerName?: string;
+    customerId?: number;
+    supplierName?: string;
+    supplierId?: number;
 }
 
 export class Addresses implements IAddresses {
@@ -45,13 +43,11 @@ export class Addresses implements IAddresses {
         public cityId?: number,
         public townshipName?: string,
         public townshipId?: number,
-        public townName?: string,
-        public townId?: number,
         public addressTypeName?: string,
         public addressTypeId?: number,
-        public customerAddressName?: string,
-        public customerAddressId?: number,
-        public supplierAddressName?: string,
-        public supplierAddressId?: number
+        public customerName?: string,
+        public customerId?: number,
+        public supplierName?: string,
+        public supplierId?: number
     ) { }
 }

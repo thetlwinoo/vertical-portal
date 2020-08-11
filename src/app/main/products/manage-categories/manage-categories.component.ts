@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { vsAnimations } from '@vertical/animations';
 import { SERVER_API_URL } from '@vertical/constants';
-import { AlertType, IAlerts, Alerts, IProductCategory, IPhotos, Photos, UploadCategory } from '@vertical/models';
+import { AlertType, IAlerts, Alerts, IProductCategory, IPhotos, Photos, UploadCategory, ProductCategory, ICulture, ProductCategoryLocalize } from '@vertical/models';
 import { Subscription, Observer } from 'rxjs';
 import { JhiEventManager } from 'ng-jhipster';
 import { NzFormatEmitEvent } from 'ng-zorro-antd/tree';
@@ -15,8 +15,10 @@ import { ErrorHandler } from '@vertical/utils/error.handler';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { UploadFile } from 'ng-zorro-antd/upload/interface';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { PhotosService, ImagesService, ProductCategoryService, DocumentProcessService } from '@vertical/services';
+import { PhotosService, ImagesService, ProductCategoryService, DocumentProcessService, CultureService, ProductCategoryLocalizeService } from '@vertical/services';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { RootUtils } from '@vertical/utils';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-manage-categories',
@@ -38,11 +40,13 @@ export class ManageCategoriesComponent implements OnInit, OnDestroy {
   selectedCategory: any;
   editMode = false;
   loading = false;
-
   uploadedFiles: any[] = [];
   uploadData$: Observable<UploadCategory[]>;
   uploadData: UploadCategory[];
   loadingUploadExcel = false;
+  cultures: ICulture[];
+  uploadPercentage = 0;
+  nodeExpandInd = false;
 
   private unsubscribe$: Subject<any> = new Subject();
 
@@ -53,6 +57,8 @@ export class ManageCategoriesComponent implements OnInit, OnDestroy {
     private photosService: PhotosService,
     private imagesService: ImagesService,
     private productCategoryService: ProductCategoryService,
+    private cultureService: CultureService,
+    private productCategoryLocalizeService: ProductCategoryLocalizeService,
     protected documentProcessService: DocumentProcessService,
     private modal: NzModalService
   ) {
@@ -62,15 +68,109 @@ export class ManageCategoriesComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.store.dispatch(FetchActions.fetchCategories());
 
-    this.categories$.subscribe(data => this.categories = data);
+    this.categories$.pipe(takeUntil(this.unsubscribe$)).subscribe(data => this.categories = data);
 
     this.uploadData$ = this.documentProcessService.data$.pipe(
+      takeUntil(this.unsubscribe$),
       debounceTime(0),
       map(data => data.map(item => new UploadCategory(item))),
       tap((data: UploadCategory[]) => data)
     );
 
-    this.uploadData$.subscribe(res => console.log('upload success', res));
+    this.cultureService.query().pipe(takeUntil(this.unsubscribe$)).subscribe(res => this.cultures = res.body);
+
+    this.uploadData$.pipe(takeUntil(this.unsubscribe$)).subscribe(data => {
+      let uploadCount = 0;
+
+      if (data && this.cultures?.length > 0) {
+        const categories = _.groupBy(data, (item) => {
+          return item.mainCategoryEnglish;
+        });
+
+        _.forEach(categories, (value, key) => {
+          categories[key] = _.groupBy(categories[key], (item) => {
+            return item.subCategoryEnglish;
+          });
+        });
+
+        const englishCultureId = this.getEnglishCulture()?.id;
+        const myanmarCultureId = this.getMyanmarCulture()?.id;
+
+        _.forEach(categories, (mainValue, mainKey) => {
+          const productMainCategory = new ProductCategory();
+          productMainCategory.name = mainKey;
+          productMainCategory.handle = RootUtils.handleize(mainKey);
+          productMainCategory.validFrom = moment();
+
+          const mainData = data.find(x => x.mainCategoryEnglish === mainKey);
+
+          this.productCategoryService.create(productMainCategory).pipe(takeUntil(this.unsubscribe$)).subscribe((mainCategoryRes) => {
+            const mainCategory = mainCategoryRes.body;
+            this.saveLocalize(null, englishCultureId, mainCategory.id, mainData.mainCategoryEnglish);
+            this.saveLocalize(null, myanmarCultureId, mainCategory.id, mainData.mainCategoryMyanmar);
+
+            _.forEach(mainValue, (subValue, subKey) => {
+              const productSubCategory = new ProductCategory();
+              productSubCategory.name = subKey;
+              productSubCategory.handle = RootUtils.handleize(subKey);
+              productSubCategory.validFrom = moment();
+              productSubCategory.parentId = mainCategory.id;
+              productSubCategory.parentName = mainCategory.name;
+
+              const subData = data.find(x => x.subCategoryEnglish === subKey);
+
+              this.productCategoryService.create(productSubCategory).pipe(takeUntil(this.unsubscribe$)).subscribe((subCategoryRes) => {
+                const category = subCategoryRes.body;
+                category.parentCascade = mainCategory.id + ',' + category.id;
+                this.productCategoryService.update(category).subscribe();
+
+                this.saveLocalize(null, englishCultureId, category.id, subData.subCategoryEnglish);
+                this.saveLocalize(null, myanmarCultureId, category.id, subData.subCategoryMyanmar);
+
+
+                _.forEach(subValue, (cagValue, cagKey) => {
+                  const productCategory = new ProductCategory();
+                  productCategory.name = cagValue.categoryEnglish;
+                  productCategory.handle = RootUtils.handleize(cagValue.categoryEnglish);
+                  productCategory.validFrom = moment();
+                  productCategory.sortOrder = cagKey;
+                  productCategory.parentId = category.id;
+                  productCategory.parentName = category.name;
+
+                  this.productCategoryService.create(productCategory).pipe(takeUntil(this.unsubscribe$)).subscribe((res) => {
+                    uploadCount++;
+                    this.uploadPercentage = Math.floor((uploadCount * 100) / data.length);
+                    const leafCategory = res.body;
+                    leafCategory.parentCascade = mainCategory.id + ',' + category.id + ',' + leafCategory.id;
+                    this.productCategoryService.update(leafCategory).subscribe();
+                    this.saveLocalize(null, englishCultureId, leafCategory.id, cagValue.categoryEnglish);
+                    this.saveLocalize(null, myanmarCultureId, leafCategory.id, cagValue.categoryMyanmar);
+
+                    if (this.uploadPercentage >= 100) {
+                      this.msg.success('You have sucessfully uploaded');
+                      this.store.dispatch(FetchActions.fetchCategories());
+                    }
+                  });
+                });
+              });
+            });
+          });
+        });
+      }
+    });
+  }
+
+  private saveLocalize(localizeId: number, cultureId: number, categoryId: number, name: string): void {
+    const productCategoryLocalize = new ProductCategoryLocalize();
+    productCategoryLocalize.id = localizeId;
+    productCategoryLocalize.cultureId = cultureId;
+    productCategoryLocalize.productCategoryId = categoryId;
+    productCategoryLocalize.name = name;
+    if (localizeId) {
+      this.productCategoryLocalizeService.update(productCategoryLocalize).subscribe();
+    } else {
+      this.productCategoryLocalizeService.create(productCategoryLocalize).subscribe();
+    }
   }
 
   onUpload(event: any): void {
@@ -81,6 +181,14 @@ export class ManageCategoriesComponent implements OnInit, OnDestroy {
 
     this.documentProcessService.parseExcelFile(this.uploadedFiles[0]);
     this.loadingUploadExcel = false;
+  }
+
+  getEnglishCulture(): ICulture {
+    return this.cultures?.find(x => x.code === 'en');
+  }
+
+  getMyanmarCulture(): ICulture {
+    return this.cultures?.find(x => x.code === 'my');
   }
 
   onEditMode(item) {
@@ -95,11 +203,23 @@ export class ManageCategoriesComponent implements OnInit, OnDestroy {
   }
 
   onSaveItem(item) {
+    const englishCultureId = this.getEnglishCulture()?.id;
+    const myanmarCultureId = this.getMyanmarCulture()?.id;
+
+    if (item) {
+      item.validFrom = item.validFrom ? moment(item.validFrom) : undefined;
+      item.validTo = item.validTo ? moment(item.validTo) : undefined;
+    }
+
+    console.log('item', item)
     this.editMode = false;
     this.productCategoryService.update(item)
       .subscribe(
         res => {
-          console.log('save success', res);
+          this.saveLocalize(item.englishId, englishCultureId, item.id, item.name);
+          this.saveLocalize(item.myanmarId, myanmarCultureId, item.id, item.myanmarName);
+
+          console.log('save success', res, item);
         },
         err => console.log('error', err)
       );
@@ -190,38 +310,24 @@ export class ManageCategoriesComponent implements OnInit, OnDestroy {
   //   }
   // }
 
-  handleChange(info: { file: UploadFile }, entity): void {
+  handleChange(info: { file: UploadFile }, entity: IProductCategory): void {
     switch (info.file.status) {
       case 'uploading':
         this.loading = true;
         break;
       case 'done':
-        // Get this url from response in real world.
-        const photos: IPhotos = new Photos();
-        photos.thumbUrl = info.file.response.thumbUrl;
-        photos.url = info.file.response.url;
-        photos.blobId = info.file.response.id;
-        this.photosService
-          .create(photos)
-          .pipe(
-            takeUntil(this.unsubscribe$),
-            filter((res: HttpResponse<IPhotos>) => res.ok),
-            map((res: HttpResponse<IPhotos>) => res.body)
-          )
-          .subscribe(res => {
-            entity.iconId = res.id;
-            entity.iconThumbnailUrl = res.thumbUrl;
-            this.loading = false;
-          }, err => {
-            this.loading = false;
-            console.log('error', err);
-          });
+        entity.iconPhoto = info.file.response.id;
+        this.loading = false;
         break;
       case 'error':
         this.msg.error('Network error');
         this.loading = false;
         break;
     }
+  }
+
+  nodeExpand(expand): void {
+    this.nodeExpandInd = expand;
   }
 
   ngOnDestroy(): void {

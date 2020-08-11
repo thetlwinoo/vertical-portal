@@ -10,7 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription, Observable, Observer, of } from 'rxjs';
 import { filter, map, catchError } from 'rxjs/operators';
 import { JhiEventManager, JhiParseLinks, JhiAlertService, JhiDataUtils } from 'ng-jhipster';
-import { IStockItems, IPhotos, Photos, AlertType, IAlerts, Alerts } from '@vertical/models';
+import { IStockItems, IPhotos, Photos, AlertType, IAlerts, Alerts, ISuppliers } from '@vertical/models';
 import { StockItemsService, PhotosService } from '@vertical/services';
 import { AccountService } from '@vertical/core';
 import { ImageUtils } from '@vertical/services';
@@ -20,6 +20,9 @@ import { UploadFile } from 'ng-zorro-antd/upload';
 import { SERVER_API_URL } from '@vertical/constants';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import * as moment from 'moment';
+import { Store, select } from '@ngrx/store';
+import * as fromAuth from 'app/ngrx/auth/reducers';
 
 @Component({
   selector: 'app-manage-images',
@@ -56,6 +59,8 @@ export class ManageImagesComponent implements OnInit, OnDestroy {
   showAlertInd = false;
   alert: IAlerts = new Alerts();
   fileTypes = 'image/png,image/jpeg';
+  selectedSupplier$: Observable<ISuppliers>;
+  selectedSupplier: ISuppliers;
 
   constructor(
     private translationLoaderService: TranslationLoaderService,
@@ -73,6 +78,7 @@ export class ManageImagesComponent implements OnInit, OnDestroy {
     private msg: NzMessageService,
     private photosService: PhotosService,
     private imagesService: ImagesService,
+    private store: Store<fromAuth.State>,
   ) {
     this.itemsPerPage = 10;
     this.routeData = this.activatedRoute.data.subscribe(data => {
@@ -81,10 +87,11 @@ export class ManageImagesComponent implements OnInit, OnDestroy {
       this.reverse = data.pagingParams.ascending;
       this.predicate = data.pagingParams.predicate;
     });
+
+    this.selectedSupplier$ = this.store.pipe(select(fromAuth.getSupplierSelected));
   }
 
   ngOnInit(): void {
-    this.loadAll();
     this.accountService.identity().pipe(
       map(account => {
         this.currentAccount = account;
@@ -93,6 +100,14 @@ export class ManageImagesComponent implements OnInit, OnDestroy {
 
     this.registerChanged();
     this.translationLoaderService.loadTranslations(english, myanmar);
+
+    this.selectedSupplier$.subscribe(selectedSupplier => {
+      this.selectedSupplier = selectedSupplier;
+
+      if (this.selectedSupplier && this.selectedSupplier.id) {
+        this.loadAll();
+      }
+    });
   }
 
   save(photos: IPhotos): void {
@@ -104,12 +119,20 @@ export class ManageImagesComponent implements OnInit, OnDestroy {
   }
 
   loadAll(): void {
+    const options = {
+      page: this.page - 1,
+      size: this.itemsPerPage,
+      sort: this.sort(),
+    };
+
+    if (this.selectedSupplier) {
+      Object.assign(options, {
+        'supplierId.equals': this.selectedSupplier.id,
+      });
+    }
+
     this.stockItemsService
-      .query({
-        page: this.page - 1,
-        size: this.itemsPerPage,
-        sort: this.sort(),
-      })
+      .query(options)
       .subscribe(
         (res: HttpResponse<IStockItems[]>) => this.paginateStockItems(res.body, res.headers),
         (res: HttpErrorResponse) => this.onError(res)
@@ -196,10 +219,21 @@ export class ManageImagesComponent implements OnInit, OnDestroy {
       case 'done':
         // Get this url from response in real world.
         const photos: IPhotos = new Photos();
-        photos.thumbUrl = info.file.response.thumbUrl;
-        photos.url = info.file.response.url;
+        photos.thumbUrl = `${this.blobUrl}${info.file.response.thumbUrl}`;
+        photos.url = `${this.blobUrl}${info.file.response.url}`;
+        photos.type = info.file.type;
+        photos.uid = info.file.response.id;
+        photos.size = info.file.size;
+        photos.name = info.file.name;
+        photos.fileName = info.file.name;
+        photos.status = info.file.status;
+        photos.percent = info.file.percent;
+        photos.activeFlag = true;
+        photos.lastModified = info.file.lastModified;
+        photos.lastModifiedDate = moment(info.file.lastModifiedDate);
         photos.blobId = info.file.response.id;
         photos.stockItemId = entity.id;
+
         this.save(photos);
         break;
       case 'error':

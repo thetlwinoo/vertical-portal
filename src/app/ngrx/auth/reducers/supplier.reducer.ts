@@ -31,7 +31,6 @@ export const reducer = createReducer(
     loaded: true,
     loading: false,
     suppliers,
-    selected: suppliers[0],
     error: '',
   })),
   on(SupplierActions.selectSupplier, (state, { supplier }) => ({

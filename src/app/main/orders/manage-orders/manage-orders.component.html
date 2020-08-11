@@ -12,22 +12,20 @@
     </nz-tabset>
 
     <div class="manage-orders-filter">
-        <div nz-row>
-            <div nz-col [nzXs]="24" [nzLg]="22">
-                <input nz-input placeholder="Order Number" nzSize="default" />
+        <div class="filter-wrapper">
+            <input nz-input placeholder="Order Number" nzSize="default" />
 
-                <input nz-input placeholder="Customer" nzSize="default" />
+            <input nz-input placeholder="Customer" nzSize="default" />
 
-                <input nz-input placeholder="Product" nzSize="default" />
+            <input nz-input placeholder="Product" nzSize="default" />
 
-                <input nz-input placeholder="Seller SKU" nzSize="default" />
+            <input nz-input placeholder="Seller SKU" nzSize="default" />
 
-                <input nz-input placeholder="Payment" nzSize="default" />
+            <input nz-input placeholder="Payment" nzSize="default" />
 
-                <nz-range-picker [(ngModel)]="dateRange" (ngModelChange)="onChange($event)"></nz-range-picker>
-            </div>
-            <div nz-col [nzXs]="24" [nzLg]="2"><button nz-button nzType="default">Search</button></div>
+            <nz-range-picker [(ngModel)]="dateRange" (ngModelChange)="onChange($event)"></nz-range-picker>
         </div>
+        <div class="search-button"><button nz-button nzType="default">Search</button></div>
     </div>
 
     <nz-table #smallTable nzSize="small" nzTableLayout="auto" [nzData]="orders" [nzFrontPagination]="false"

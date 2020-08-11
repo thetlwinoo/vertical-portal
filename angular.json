@@ -32,8 +32,13 @@
                 "output": "/assets/"
               }
             ],
-            "styles": ["src/theme.less", "src/styles.scss"],
-            "scripts": []
+            "styles": [
+              "src/theme.less",
+              "src/styles.scss",
+              "./node_modules/quill/dist/quill.core.css",
+              "./node_modules/quill/dist/quill.snow.css"
+            ],
+            "scripts": ["./node_modules/quill/dist/quill.js"]
           },
           "configurations": {
             "production": {

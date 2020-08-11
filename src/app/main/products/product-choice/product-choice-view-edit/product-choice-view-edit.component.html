@@ -1,0 +1,114 @@
+<div class="pagebar-content-wrapper">
+    <div class="page-header">
+        <nz-breadcrumb nzSeparator=">">
+            <nz-breadcrumb-item>
+                <a href="javascript:void(0)" [routerLink]="['../']">Product Choice</a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                <span>Details</span>
+            </nz-breadcrumb-item>
+        </nz-breadcrumb>
+    </div>
+
+    <div class="page-sub-header">
+        <span class="page-sub-header__title">View / Edit</span>
+        <a><i nz-icon nzType="delete" nzTheme="fill"></i></a>
+    </div>
+
+    <div class="page-body">
+        <div class="card-container">
+            <nz-tabset [nzTabPosition]="'top'" [nzType]="'card'">
+                <nz-tab [nzTitle]="'Details'">
+                    <div class="record-details">
+                        <div nz-row>
+                            <div nz-col class="gutter-row" [nzXs]="24" [nzLg]="15">
+                                <form nz-form [formGroup]="editForm" (ngSubmit)="save()">
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="isMultiply">Is Multiply
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                                            <label nz-checkbox formControlName="isMultiply" id="isMultiply"></label>
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="productCategory">Product
+                                            Category
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                                            <!-- <nz-select name="productCategory" formControlName="productCategoryId">
+                                                <nz-option [nzValue]="productCategoryOption.id"
+                                                    [nzLabel]="productCategoryOption.name"
+                                                    *ngFor="let productCategoryOption of productcategories; trackBy: trackById">
+                                                </nz-option>
+                                            </nz-select> -->
+                                            <nz-cascader [nzOptions]="categories" [nzLabelProperty]="'name'"
+                                                [nzValueProperty]="'id'" [nzShowSearch]="true"
+                                                formControlName="productCategoryCascade"
+                                                (nzSelectionChange)="onSelectionChange($event)">
+                                            </nz-cascader>
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="productAttributeSet">
+                                            Product Attribute Set
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                                            <nz-select name="productAttributeSet"
+                                                formControlName="productAttributeSetId">
+                                                <nz-option [nzValue]="productAttributeSetOption.id"
+                                                    [nzLabel]="productAttributeSetOption.name"
+                                                    *ngFor="let productAttributeSetOption of productattributesets; trackBy: trackById">
+                                                </nz-option>
+                                            </nz-select>
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="productOptionSet">
+                                            Product Option Set
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                                            <nz-select name="productOptionSet" formControlName="productOptionSetId">
+                                                <nz-option [nzValue]="productOptionSetOption.id"
+                                                    [nzLabel]="productOptionSetOption.value"
+                                                    *ngFor="let productOptionSetOption of productoptionsets; trackBy: trackById">
+                                                </nz-option>
+                                            </nz-select>
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-row>
+                                        <nz-col nzOffset="8" [nzSm]="14" [nzXs]="24">
+                                            <nz-space>
+                                                <nz-space-item>
+                                                    <button nz-button nzType="primary" type="submit" id="save-entity"
+                                                        [disabled]="editForm.invalid || isSaving">
+                                                        <span>Save</span>
+                                                    </button>
+                                                </nz-space-item>
+
+                                                <nz-space-item>
+                                                    <button nz-button nzType="default" type="button" id="cancel-save"
+                                                        (click)="previousState()">
+                                                        <span>Cancel</span>
+                                                    </button>
+                                                </nz-space-item>
+                                            </nz-space>
+                                        </nz-col>
+                                    </nz-row>
+                                </form>
+                            </div>
+                            <div nz-col class="gutter-row" [nzXs]="24" [nzLg]="9">
+
+                            </div>
+                        </div>
+                    </div>
+                </nz-tab>
+            </nz-tabset>
+        </div>
+
+
+    </div>
+</div>
