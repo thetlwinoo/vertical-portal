@@ -101,8 +101,11 @@ export class AddressAddComponent implements OnInit, OnDestroy {
     this.route.queryParams
       .pipe(
         takeUntil(this.unsubscribe$),
-        filter(params => params.supplierId),
-        map(params => (this.editForm.patchValue({ supplierId: params.supplierId })))
+        // filter(params => params.supplierId),
+        map(params => {
+          this.editForm.patchValue({ supplierId: params.supplierId });
+          this.editForm.patchValue({ customerId: params.customerId });
+        })
       )
       .subscribe();
 

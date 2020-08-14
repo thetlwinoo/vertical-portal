@@ -1,0 +1,67 @@
+<vs-pagebar [title]="'Customers'"></vs-pagebar>
+<div class="pagebar-content-wrapper">
+    <div class="card-container">
+        <nz-tabset [nzTabPosition]="'top'" [nzType]="'card'">
+            <nz-tab [nzTitle]="'Look Up'">
+                <div class="control-bar">
+                    <nz-space>
+                        <nz-space-item>
+                            <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
+                                <input type="text" nz-input placeholder="Search..." />
+                            </nz-input-group>
+                            <ng-template #suffixIconButton>
+                                <button nz-button nzType="default" nzSearch><i nz-icon nzType="search"></i></button>
+                            </ng-template>
+                        </nz-space-item>
+
+                        <nz-space-item>
+                            <button nz-button nzType="default" (click)="loadPage()">View all customers</button>
+                        </nz-space-item>
+                    </nz-space>
+
+                    <nz-space>
+                        <nz-space-item>
+                            <button nz-button nzType="default" [routerLink]="['/main/store/customers/create']">Add
+                                customer</button>
+                        </nz-space-item>
+                    </nz-space>
+                </div>
+
+                <div class="record-list">
+                    <nz-table #basicTable [nzData]="customers" nzSize="small" [nzFrontPagination]="false"
+                        [nzPageIndex]="nzPaginationPage" [nzPageSize]="itemsPerPage" [nzTotal]="totalItems"
+                        [nzHideOnSinglePage]="true" (nzQueryParams)="onQueryParamsChange($event)">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Account Number</th>
+                                <th>Delivery Method</th>
+                                <th>Active Flag</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let data of basicTable.data">
+                                <td [nzLeft]="false">
+                                    <a [routerLink]="'/main/store/customers/view/' + data.id">{{data.id}}</a>
+                                </td>
+                                <td>{{data.name}}</td>
+                                <td>{{data.accountNumber}}</td>
+                                <td>{{data.deliveryMethodName}}</td>
+                                <td>
+                                    <label nz-checkbox [(ngModel)]="data.activeFlag" [nzDisabled]="true"></label>
+                                </td>
+                                <td>
+                                    <a [routerLink]="'/main/store/customers/edit/' + data.id">Edit</a>
+                                    <nz-divider nzType="vertical"></nz-divider>
+                                    <a (click)="deleteConfirm(data)">Delete</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </div>
+            </nz-tab>
+        </nz-tabset>
+    </div>
+</div>

@@ -206,6 +206,16 @@ export const navigation: VsNavigation[] = [
     children: [
       {
         level: 2,
+        id: 'shipping_fee_chart',
+        title: 'Shipping Fee Chart',
+        type: 'item',
+        url: '/main/store/shipping-fee-chart',
+        exactMatch: true,
+        open: false,
+        selected: false,
+      },
+      {
+        level: 2,
         id: 'product-brands',
         title: 'Product Brands',
         type: 'item',
@@ -240,6 +250,16 @@ export const navigation: VsNavigation[] = [
         title: 'Suppliers',
         type: 'item',
         url: '/main/store/suppliers',
+        exactMatch: true,
+        open: false,
+        selected: false,
+      },
+      {
+        level: 2,
+        id: 'customers',
+        title: 'Customers',
+        type: 'item',
+        url: '/main/store/customers',
         exactMatch: true,
         open: false,
         selected: false,

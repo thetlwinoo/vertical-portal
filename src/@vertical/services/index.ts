@@ -50,3 +50,4 @@ export * from './web-services/product-option-set.service';
 export * from './web-services/unit-measure.service';
 export * from './web-services/materials.service';
 export * from './web-services/currency.service';
+export * from './web-services/shipping-fee-chart.service';

@@ -1,0 +1,154 @@
+<vs-pagebar [title]="'Shipping Fee Chart'"></vs-pagebar>
+<div class="pagebar-content-wrapper">
+    <div class="card-container">
+        <nz-tabset [nzTabPosition]="'top'" [nzType]="'card'">
+            <nz-tab [nzTitle]="'Look Up'">
+                <div class="control-bar">
+                    <nz-space>
+                        <nz-space-item>
+                            <span>Delivery Method :</span>
+                        </nz-space-item>
+
+                        <nz-space-item>
+                            <nz-select name="deliveryMethod" nzShowSearch nzAllowClear [(ngModel)]="deliveryMethodId">
+                                <nz-option [nzValue]="deliveryMethodsOption.id" [nzLabel]="deliveryMethodsOption.name"
+                                    *ngFor="let deliveryMethodsOption of deliverymethods; trackBy: trackById">
+                                    {{ deliveryMethodsOption.name }}
+                                </nz-option>
+                            </nz-select>
+                        </nz-space-item>
+
+                        <nz-space-item>
+
+                        </nz-space-item>
+                    </nz-space>
+
+                    <nz-space>
+                        <nz-space-item>
+
+                            <button nz-button nzType="default" (click)="loadShippingFeeChart()"
+                                [disabled]="!sourceTownshipId || !destinationTownshipId">Fetch</button>
+                        </nz-space-item>
+                        <nz-space-item>
+                            <button nz-button nzType="default" [disabled]="shippingFeeChartForm.controls.length <= 0"
+                                (click)="save()">Save</button>
+                        </nz-space-item>
+                    </nz-space>
+                </div>
+
+                <div class="filter-bar">
+                    <nz-descriptions nzBordered>
+                        <nz-descriptions-item nzTitle="Source Township">
+                            <nz-space nzDirection="vertical">
+                                <nz-space-item>
+                                    <nz-select name="sourceRegion" nzShowSearch nzAllowClear
+                                        [(ngModel)]="sourceRegionId"
+                                        (ngModelChange)="selectRegion(sourceRegionId,true)">
+                                        <nz-option [nzValue]="regionsOption.id" [nzLabel]="regionsOption.name"
+                                            *ngFor="let regionsOption of regions; trackBy: trackById">
+                                            {{ regionsOption.code }}
+                                        </nz-option>
+                                    </nz-select>
+                                </nz-space-item>
+
+                                <nz-space-item>
+                                    <nz-select name="sourceCity" nzShowSearch nzAllowClear [(ngModel)]="sourceCityId"
+                                        (ngModelChange)="selectCity(sourceCityId,true)" [nzDisabled]="!sourceRegionId">
+                                        <nz-option [nzValue]="citiesOption.id" [nzLabel]="citiesOption.name"
+                                            *ngFor="let citiesOption of sourceCities; trackBy: trackById">
+                                        </nz-option>
+                                    </nz-select>
+                                </nz-space-item>
+
+                                <nz-space-item>
+                                    <nz-select name="sourceTownship" nzShowSearch nzAllowClear
+                                        [(ngModel)]="sourceTownshipId" [nzDisabled]="!sourceCityId">
+                                        <nz-option [nzValue]="townshipsOption.id" [nzLabel]="townshipsOption.name"
+                                            *ngFor="let townshipsOption of sourceTownships; trackBy: trackById">
+                                            {{ townshipsOption.name }}
+                                        </nz-option>
+                                    </nz-select>
+                                </nz-space-item>
+                            </nz-space>
+                        </nz-descriptions-item>
+
+                        <nz-descriptions-item nzTitle="Destination Township">
+                            <nz-space nzDirection="vertical">
+                                <nz-space-item>
+                                    <nz-select name="destinationRegion" nzShowSearch nzAllowClear
+                                        [(ngModel)]="destinationRegionId"
+                                        (ngModelChange)="selectRegion(destinationRegionId,false)">
+                                        <nz-option [nzValue]="regionsOption.id" [nzLabel]="regionsOption.name"
+                                            *ngFor="let regionsOption of regions; trackBy: trackById">
+                                            {{ regionsOption.code }}
+                                        </nz-option>
+                                    </nz-select>
+                                </nz-space-item>
+
+                                <nz-space-item>
+                                    <nz-select name="destinationCity" nzShowSearch nzAllowClear
+                                        [(ngModel)]="destinationCityId"
+                                        (ngModelChange)="selectCity(destinationCityId,false)"
+                                        [nzDisabled]="!destinationRegionId">
+                                        <nz-option [nzValue]="citiesOption.id" [nzLabel]="citiesOption.name"
+                                            *ngFor="let citiesOption of destinationCities; trackBy: trackById">
+                                        </nz-option>
+                                    </nz-select>
+                                </nz-space-item>
+
+                                <nz-space-item>
+                                    <nz-select name="destinationTownship" nzShowSearch nzAllowClear
+                                        [(ngModel)]="destinationTownshipId" [nzDisabled]="!destinationCityId">
+                                        <nz-option [nzValue]="townshipsOption.id" [nzLabel]="townshipsOption.name"
+                                            *ngFor="let townshipsOption of destinationTownships; trackBy: trackById">
+                                            {{ townshipsOption.name }}
+                                        </nz-option>
+                                    </nz-select>
+                                </nz-space-item>
+                            </nz-space>
+                        </nz-descriptions-item>
+                    </nz-descriptions>
+                </div>
+
+                <div class="record-list">
+                    <form id="shipping-fee-chart-form" name="shipping-fee-chart-form" [formGroup]="editForm">
+                        <p-table formArrayName="feeChartList" [value]="shippingFeeChartForm.controls"
+                            styleClass="p-datatable-sm">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>Percel Size</th>
+                                    <th>MinVol Weight</th>
+                                    <th>MaxVol Weight</th>
+                                    <th>MinAct Weight</th>
+                                    <th>MaxAct Weight</th>
+                                    <th>Price</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-chart let-i="rowIndex">
+                                <tr [formGroupName]="i">
+                                    <td>{{ chart.value.sizeOfPercel }}</td>
+                                    <td>
+                                        <input nz-input formControlName="minVolumeWeight" id="minVolumeWeight" />
+                                    </td>
+                                    <td>
+                                        <input nz-input formControlName="maxVolumeWeight" id="maxVolumeWeight" />
+                                    </td>
+                                    <td>
+                                        <input nz-input formControlName="minActualWeight" id="minActualWeight" />
+                                    </td>
+                                    <td>
+                                        <input nz-input formControlName="maxActualWeight" id="maxActualWeight" />
+                                    </td>
+                                    <td>
+                                        <input nz-input formControlName="price" id="price" />
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                        <nz-empty *ngIf="shippingFeeChartForm.controls.length <= 0"></nz-empty>
+                    </form>
+                </div>
+            </nz-tab>
+        </nz-tabset>
+    </div>
+</div>

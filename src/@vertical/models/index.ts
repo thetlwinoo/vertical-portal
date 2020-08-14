@@ -59,3 +59,4 @@ export * from './product-attribute-set.model';
 export * from './product-option-set.model';
 export * from './unit-measure.model';
 export * from './special-features.model';
+export * from './shipping-fee-chart.model';

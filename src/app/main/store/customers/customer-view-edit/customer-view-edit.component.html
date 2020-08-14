@@ -1,0 +1,312 @@
+<div class="pagebar-content-wrapper">
+    <div class="page-header">
+        <nz-breadcrumb nzSeparator=">">
+            <nz-breadcrumb-item>
+                <a href="javascript:void(0)" [routerLink]="['../']">Customers</a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                <span>{{name}}</span>
+            </nz-breadcrumb-item>
+        </nz-breadcrumb>
+    </div>
+
+    <div class="page-sub-header">
+        <span class="page-sub-header__title">{{name}}</span>
+        <a><i nz-icon nzType="delete" nzTheme="fill"></i></a>
+    </div>
+
+    <div class="page-body">
+        <div class="card-container">
+            <nz-tabset [nzTabPosition]="'top'" [nzType]="'card'">
+                <nz-tab [nzTitle]="'Details'">
+                    <div class="record-details">
+                        <div nz-row>
+                            <div nz-col class="gutter-row" [nzXs]="24" [nzLg]="15">
+                                <form nz-form [formGroup]="editForm" (ngSubmit)="save()">
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="id">ID
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                                            <input nz-input formControlName="id" id="id" disabled />
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-form-item>
+                                        <nz-form-control [nzOffset]="8" [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                                            <nz-upload class="avatar-uploader" [nzAction]="blobUrl + 'upload'"
+                                                nzListType="picture-card" [nzShowUploadList]="false"
+                                                [nzBeforeUpload]="beforeUpload" (nzChange)="handleChange($event)">
+                                                <ng-container *ngIf="!profilePhoto">
+                                                    <i class="upload-icon" nz-icon
+                                                        [nzType]="loading ? 'loading' : 'plus'"></i>
+                                                    <div class="ant-upload-text">Upload</div>
+                                                </ng-container>
+                                                <img *ngIf="profilePhoto" [src]="blobUrl + profilePhoto + '/thumbnail'"
+                                                    style="width: 100%" nz-popover
+                                                    [nzPopoverContent]="profilePhotoTemplate"
+                                                    nzPopoverPlacement="rightTop" />
+                                            </nz-upload>
+
+                                            <ng-template #profilePhotoTemplate><img width="400"
+                                                    [src]="blobUrl + profilePhoto + '/original'">
+                                            </ng-template>
+
+                                            <a [href]="blobUrl + profilePhoto + '/original'" target="_blank" nz-button
+                                                nzType="link" *ngIf="profilePhoto">
+                                                <span><i nz-icon nzType="download"></i> Download</span>
+                                            </a>
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="name">Name
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                                            <input nz-input formControlName="name" id="name" />
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="accountNumber">Account Number
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                                            <input nz-input formControlName="accountNumber" id="accountNumber" />
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="accountOpenedDate">
+                                            Account Opened Date
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                                            <nz-date-picker [nzFormat]="'dd-MM-yyyy'"
+                                                formControlName="accountOpenedDate" id="accountOpenedDate">
+                                            </nz-date-picker>
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="standardDiscountPercentage">
+                                            Standard Discount Percentage
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                                            <input nz-input formControlName="standardDiscountPercentage"
+                                                id="standardDiscountPercentage" />
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="isStatementSent">Is Statement Sent
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                                            <label nz-checkbox formControlName="isStatementSent"
+                                                id="isStatementSent"></label>
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="isOnCreditHold">Is On Credit Hold
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                                            <label nz-checkbox formControlName="isOnCreditHold"
+                                                id="isOnCreditHold"></label>
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="paymentDays">Payment Days
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                                            <input nz-input formControlName="paymentDays" id="paymentDays" />
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="deliveryRun">Delivery Run
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                                            <input nz-input formControlName="deliveryRun" id="deliveryRun" />
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="runPosition">Run Position
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                                            <input nz-input formControlName="runPosition" id="runPosition" />
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24"
+                                            nzFor="billToAddressSameAsDeliveryAddress">Bill To Address
+                                            Same As Delivery
+                                            Address
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                                            <label nz-checkbox formControlName="billToAddressSameAsDeliveryAddress"
+                                                id="billToAddressSameAsDeliveryAddress"></label>
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="activeFlag">Active Flag
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                                            <label nz-checkbox formControlName="activeFlag" id="activeFlag"></label>
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="deliveryMethod">Delivery
+                                            Method
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                                            <nz-select name="deliveryMethod" nzShowSearch nzAllowClear
+                                                formControlName="deliveryMethodId">
+                                                <nz-option [nzValue]="deliveryMethodsOption.id"
+                                                    [nzLabel]="deliveryMethodsOption.name"
+                                                    *ngFor="let deliveryMethodsOption of deliverymethods; trackBy: trackById">
+                                                    {{ deliveryMethodsOption.name }}
+                                                </nz-option>
+                                            </nz-select>
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="people">People
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                                            <nz-select name="people" nzShowSearch nzAllowClear
+                                                formControlName="peopleId">
+                                                <nz-option [nzValue]="peopleOption.id" [nzLabel]="peopleOption.fullName"
+                                                    *ngFor="let peopleOption of people; trackBy: trackById">
+                                                    {{ peopleOption.fullName }}
+                                                </nz-option>
+                                            </nz-select>
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="validFrom">Valid
+                                            From
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                                            <nz-date-picker [nzFormat]="'dd-MM-yyyy'" formControlName="validFrom"
+                                                id="validFrom">
+                                            </nz-date-picker>
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="validTo">Valid To
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                                            <nz-date-picker [nzFormat]="'dd-MM-yyyy'" formControlName="validTo"
+                                                id="validTo">
+                                            </nz-date-picker>
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-row>
+                                        <nz-col nzOffset="8" [nzSm]="14" [nzXs]="24">
+                                            <nz-space>
+                                                <nz-space-item>
+                                                    <button nz-button nzType="primary" type="submit" id="save-entity"
+                                                        [disabled]="editForm.invalid || isSaving">
+                                                        <span>Save</span>
+                                                    </button>
+                                                </nz-space-item>
+
+                                                <nz-space-item>
+                                                    <button nz-button nzType="default" type="button" id="cancel-save"
+                                                        (click)="previousState()">
+                                                        <span>Cancel</span>
+                                                    </button>
+                                                </nz-space-item>
+                                            </nz-space>
+                                        </nz-col>
+                                    </nz-row>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </nz-tab>
+
+                <nz-tab [nzTitle]="'Addresses'">
+                    <div class="control-bar">
+                        <nz-space>
+                            <nz-space-item>
+                                <!-- <button nz-button nzType="default">View all</button> -->
+                            </nz-space-item>
+                        </nz-space>
+
+                        <nz-space>
+                            <nz-space-item>
+                                <button nz-button nzType="default" [routerLink]="['/main/store/addresses/create']"
+                                    [queryParams]="{customerId: customers.id}">Add Address</button>
+                            </nz-space-item>
+                        </nz-space>
+                    </div>
+
+                    <vs-panel [title]="'Delivery Address'">
+                        <div body>
+                            <div class="address-content-wrapper">
+                                <nz-radio-group [(ngModel)]="deliveryAddressId"
+                                    (ngModelChange)="deliveryAddressChanged($event)">
+                                    <nz-table #deliveryAddressTable nzSize="small" [nzData]="addresses"
+                                        [nzHideOnSinglePage]="true">
+                                        <tbody>
+                                            <tr *ngFor="let data of deliveryAddressTable.data">
+                                                <td><label nz-radio [nzValue]="data.id"></label></td>
+                                                <td>{{data.contactPerson}}</td>
+                                                <td>{{data.contactNumber}}</td>
+                                                <td>{{data.contactEmailAddress}}</td>
+                                                <td>{{data.addressLine1}}, {{data.addressLine2}}</td>
+                                                <td>
+                                                    <a [routerLink]="'/main/store/addresses/edit/' + data.id">Edit</a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </nz-table>
+                                </nz-radio-group>
+                            </div>
+                        </div>
+                    </vs-panel>
+
+                    <vs-panel [title]="'Bill To Address'">
+                        <div body>
+                            <div class="address-content-wrapper">
+                                <nz-radio-group [(ngModel)]="billToAddressId"
+                                    (ngModelChange)="billToAddressChanged($event)">
+                                    <nz-table #billToAddressTable nzSize="small" [nzData]="addresses"
+                                        [nzHideOnSinglePage]="true">
+                                        <tbody>
+                                            <tr *ngFor="let data of billToAddressTable.data">
+                                                <td><label nz-radio [nzValue]="data.id"></label></td>
+                                                <td>{{data.contactPerson}}</td>
+                                                <td>{{data.contactNumber}}</td>
+                                                <td>{{data.contactEmailAddress}}</td>
+                                                <td>{{data.addressLine1}}, {{data.addressLine2}}</td>
+                                                <td>
+                                                    <a [routerLink]="'/main/store/addresses/edit/' + data.id">Edit</a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </nz-table>
+                                </nz-radio-group>
+
+                            </div>
+                        </div>
+                    </vs-panel>
+
+                    <button nz-button nzType="primary" type="button" id="save-address" (click)="saveAddress()">
+                        <span>Save</span>
+                    </button>
+                </nz-tab>
+            </nz-tabset>
+        </div>
+
+
+    </div>
+</div>
