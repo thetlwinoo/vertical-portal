@@ -56,7 +56,7 @@ export class CustomerAddComponent implements OnInit {
     profilePhoto: [],
     billToAddressSameAsDeliveryAddress: [],
     lastEditedBy: ['SYSTEM', [Validators.required]],
-    activeFlag: [null, [Validators.required]],
+    activeFlag: [false, [Validators.required]],
     validFrom: [null, [Validators.required]],
     validTo: [],
     peopleId: [],

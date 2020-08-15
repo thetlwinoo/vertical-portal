@@ -1,0 +1,9 @@
+--------------------------------------
+Docker
+--------------------------------------
+docker build -f Dockerfile . -t vertical-portal
+
+docker image tag vertical-portal thetlwinoo/vertical-portal
+
+docker image push thetlwinoo/vertical-portal
+--------------------------------------
