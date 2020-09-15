@@ -7,3 +7,5 @@ docker image tag vertical-portal thetlwinoo/vertical-portal
 
 docker image push thetlwinoo/vertical-portal
 --------------------------------------
+
+SET NODE_OPTIONS=--max_old_space_size=8048

@@ -219,8 +219,8 @@ export class ManageImagesComponent implements OnInit, OnDestroy {
       case 'done':
         // Get this url from response in real world.
         const photos: IPhotos = new Photos();
-        photos.thumbUrl = `${this.blobUrl}${info.file.response.thumbUrl}`;
-        photos.url = `${this.blobUrl}${info.file.response.url}`;
+        photos.thumbUrl = `${info.file.response.thumbUrl}`;
+        photos.url = `${info.file.response.url}`;
         photos.type = info.file.type;
         photos.uid = info.file.response.id;
         photos.size = info.file.size;
@@ -312,6 +312,10 @@ export class ManageImagesComponent implements OnInit, OnDestroy {
           map((res: HttpResponse<IPhotos[]>) => res.body)
         )
         .subscribe((res: IPhotos[]) => {
+          res.map(item => {
+            item.url = `${this.blobUrl}${item.url}`;
+            item.thumbUrl = `${this.blobUrl}${item.thumbUrl}`;
+          });
           stockItem.photoLists = res;
         });
     });

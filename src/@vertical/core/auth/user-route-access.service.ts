@@ -39,7 +39,7 @@ export class UserRouteAccessService implements CanActivate {
             console.error('User has not any of required authorities: ', authorities);
           }
           // this.router.navigate(['accessdenied']);
-          this.msg.error('Access Denied');
+          this.msg.error('User has not any of required authorities: ' + authorities);
           return false;
         }
 

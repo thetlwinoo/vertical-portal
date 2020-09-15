@@ -8,7 +8,7 @@
     </div>
     <div body class="content-wrapper" *ngIf="stockItemListsForm?.controls.length > 0">
         <form id="stock-items-form" name="stock-items-form" [formGroup]="editForm">
-            <p-table formArrayName="stockItemLists" [value]="stockItemListsForm.controls" styleClass="p-datatable-sm">
+            <!-- <p-table formArrayName="stockItemLists" [value]="stockItemListsForm.controls" styleClass="p-datatable-sm">
                 <ng-template pTemplate="header">
                     <tr>
                         <th>Name</th>
@@ -35,9 +35,9 @@
                         </td>
                     </tr>
                 </ng-template>
-            </p-table>
+            </p-table> -->
 
-            <!-- <nz-table #nzTable formArrayName="stockItemLists" [nzData]="stockItemListsForm.controls"
+            <nz-table #nzTable formArrayName="stockItemLists" [nzData]="stockItemListsForm.controls"
                 nzTableLayout="fixed" [nzHideOnSinglePage]="true">
                 <thead>
                     <tr>
@@ -64,9 +64,9 @@
                             <td>{{ data.value.unitPrice }}</td>
                             <td>{{ data.value.recommendedRetailPrice }}</td>
                             <td>
-                                <a (click)="updateStockItem(data)">Edit</a>
+                                <a (click)="updateStockItemModal(data)">Edit</a>
                                 <nz-divider nzType="vertical"></nz-divider>
-                                <a (click)="deleteConfirm(data.value)">Delete</a>
+                                <a (click)="deleteConfirm(data.value, i)">Delete</a>
                             </td>
                         </tr>
                         <tr [nzExpand]="expandSet.has(data.value.id)">
@@ -74,7 +74,7 @@
                         </tr>
                     </ng-container>
                 </tbody>
-            </nz-table> -->
+            </nz-table>
         </form>
 
     </div>

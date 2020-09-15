@@ -2,8 +2,8 @@
     <nz-sider class="menu-sidebar" nzCollapsible nzBreakpoint="lg" nzWidth="230px" [nzCollapsedWidth]="0"
         [ngSwitch]="isAuthenticated()" *ngIf="!vsConfig.layout.sidenav.hidden">
         <div class="sidebar-logo">
-            <a href="https://ng.ant.design/" target="_blank">
-                <img src="assets/logo/zezawar.svg" alt="logo">
+            <a [routerLink]="['/']" target="_blank">
+                <img src="assets/logo/gardilo.svg" alt="logo">
                 <h1>GARDILO PORTAL</h1>
             </a>
         </div>
@@ -69,66 +69,3 @@
         </nz-content>
     </nz-layout>
 </nz-layout>
-
-<!-- <clr-main-container class="main-container">
-    <ng-container>
-        <ng-container *ngTemplateOutlet="alert"></ng-container>
-    </ng-container>
-
-    <clr-header class="header-6" *ngIf="!rootConfig.layout.header.hidden" [ngSwitch]="isAuthenticated()">
-        <div class="branding">
-            <a href="javascript:void(0)" class="nav-link" [routerLink]="'/dashboard'">
-                <img src="assets/logo/zezawar.svg">
-                <span class="title">Zezawar Seller</span>
-            </a>
-        </div>
-        <div class="header-nav" fxHide fxShow.gt-xs>
-            <a href="javascript:void(0)" class="nav-link active" [routerLink]="'/dashboard'"><span
-                    class="nav-text">Dashboard</span></a>
-        </div>
-
-        <div class="header-actions" *ngSwitchCase="true">
-            <clr-dropdown>
-                <button class="nav-text" clrDropdownTrigger aria-label="open user profile" *ngIf="account">
-                    {{account.login | titlecase}}
-                    <clr-icon shape="caret down"></clr-icon>
-                </button>
-                <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
-                    <a href="javascript:void(0)" clrDropdownItem>About</a>
-                    <a href="javascript:void(0)" clrDropdownItem>Preferences</a>
-                    <a href="javascript:void(0)" clrDropdownItem (click)="logout()">Log out</a>
-                </clr-dropdown-menu>
-            </clr-dropdown>
-        </div>
-    </clr-header>
-
-    <ng-container>
-        <ng-container *ngTemplateOutlet="subnav"></ng-container>
-    </ng-container>
-
-    <div class="content-container">
-        <ng-container *ngIf="rootConfig.layout.sidenav.position === 'left'">
-            <ng-container *ngTemplateOutlet="sidenav"></ng-container>
-        </ng-container>
-        <div class="content-area">
-            <content></content>
-        </div>
-    </div>
-
-    <ng-container>
-        <ng-container *ngTemplateOutlet="footer"></ng-container>
-    </ng-container>
-</clr-main-container>
-
-<ng-template #alert>
-    <app-alert class="alert alert-app-level" *ngIf="!rootConfig.layout.alert.hidden"></app-alert>
-</ng-template>
-
-<ng-template #sidenav>
-    <navbar [variant]="rootConfig.layout.sidenav.variant" class="left-navbar" *ngIf="!rootConfig.layout.sidenav.hidden">
-    </navbar>
-</ng-template>
-
-<ng-template #footer>
-    <footer id="footer" *ngIf="!rootConfig.layout.footer.hidden"></footer>
-</ng-template> -->

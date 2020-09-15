@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { vsAnimations } from '@vertical/animations';
 import { SERVER_API_URL } from '@vertical/constants';
-import { AlertType, IAlerts, Alerts, IProductCategory, IPhotos, Photos, UploadCategory, ProductCategory, ICulture, ProductCategoryLocalize } from '@vertical/models';
+import { AlertType, IAlerts, Alerts, IProductCategory, IPhotos, UploadCategory, ProductCategory, ICulture, ProductCategoryLocalize } from '@vertical/models';
 import { Subscription, Observer } from 'rxjs';
 import { JhiEventManager } from 'ng-jhipster';
 import { NzFormatEmitEvent } from 'ng-zorro-antd/tree';

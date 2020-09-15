@@ -7,14 +7,13 @@ import { VsDirectivesModule } from '@vertical/directives/directives';
 import { VsPipesModule } from '@vertical/pipes';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgPipesModule } from 'ngx-pipes';
-import { NgZorroAntdModule, PrimeNgModule } from '@vertical/modules';
+import { NgZorroAntdModule } from '@vertical/modules';
 
 @NgModule({
     exports: [
         FormsModule,
         ReactiveFormsModule,
         NgZorroAntdModule,
-        PrimeNgModule,
         CommonModule,
         NgJhipsterModule,
         NgxPicaModule,

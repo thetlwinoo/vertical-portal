@@ -112,9 +112,9 @@
 
                 <div class="record-list">
                     <form id="shipping-fee-chart-form" name="shipping-fee-chart-form" [formGroup]="editForm">
-                        <p-table formArrayName="feeChartList" [value]="shippingFeeChartForm.controls"
-                            styleClass="p-datatable-sm">
-                            <ng-template pTemplate="header">
+                        <nz-table #nzTable formArrayName="feeChartList" [nzData]="shippingFeeChartForm.controls"
+                            nzTableLayout="fixed" [nzHideOnSinglePage]="true">
+                            <thead>
                                 <tr>
                                     <th>Percel Size</th>
                                     <th>MinVol Weight</th>
@@ -123,29 +123,30 @@
                                     <th>MaxAct Weight</th>
                                     <th>Price</th>
                                 </tr>
-                            </ng-template>
-                            <ng-template pTemplate="body" let-chart let-i="rowIndex">
-                                <tr [formGroupName]="i">
-                                    <td>{{ chart.value.sizeOfPercel }}</td>
-                                    <td>
-                                        <input nz-input formControlName="minVolumeWeight" id="minVolumeWeight" />
-                                    </td>
-                                    <td>
-                                        <input nz-input formControlName="maxVolumeWeight" id="maxVolumeWeight" />
-                                    </td>
-                                    <td>
-                                        <input nz-input formControlName="minActualWeight" id="minActualWeight" />
-                                    </td>
-                                    <td>
-                                        <input nz-input formControlName="maxActualWeight" id="maxActualWeight" />
-                                    </td>
-                                    <td>
-                                        <input nz-input formControlName="price" id="price" />
-                                    </td>
-                                </tr>
-                            </ng-template>
-                        </p-table>
-                        <nz-empty *ngIf="shippingFeeChartForm.controls.length <= 0"></nz-empty>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let data of nzTable.data; let i = index;" [formGroupName]="i">
+                                    <tr>
+                                        <td>{{ data.value.sizeOfPercel }}</td>
+                                        <td>
+                                            <input nz-input formControlName="minVolumeWeight" id="minVolumeWeight" />
+                                        </td>
+                                        <td>
+                                            <input nz-input formControlName="maxVolumeWeight" id="maxVolumeWeight" />
+                                        </td>
+                                        <td>
+                                            <input nz-input formControlName="minActualWeight" id="minActualWeight" />
+                                        </td>
+                                        <td>
+                                            <input nz-input formControlName="maxActualWeight" id="maxActualWeight" />
+                                        </td>
+                                        <td>
+                                            <input nz-input formControlName="price" id="price" />
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                            </tbody>
+                        </nz-table>
                     </form>
                 </div>
             </nz-tab>
