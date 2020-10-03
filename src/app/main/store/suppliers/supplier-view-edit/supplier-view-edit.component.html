@@ -201,9 +201,9 @@
                                     </nz-form-item>
 
                                     <nz-form-item>
-                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="activeFlag">Active Flag
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="activeFlag" nzRequired>Active Flag
                                         </nz-form-label>
-                                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
                                             <label nz-checkbox formControlName="activeFlag" id="activeFlag"></label>
                                         </nz-form-control>
                                     </nz-form-item>
@@ -218,7 +218,7 @@
                                                 formControlName="deliveryMethods">
                                                 <nz-option
                                                     *ngFor="let deliveryMethodsOption of deliverymethods; trackBy: trackById"
-                                                    [nzLabel]="deliveryMethodsOption.name"
+                                                    [nzLabel]="deliveryMethodsOption.thirdPartyName"
                                                     [nzValue]="getSelected(editForm.get('deliveryMethods')!.value, deliveryMethodsOption)">
                                                 </nz-option>
                                             </nz-select>
@@ -273,7 +273,7 @@
                                 <vs-panel [title]="'Supplier Logo'">
                                     <div body>
                                         <div class="upload-body-wrapper">
-                                            <nz-upload class="avatar-uploader" [nzAction]="blobUrl + 'upload'"
+                                            <nz-upload class="avatar-uploader" [nzAction]="blobUrl + 'upload/' + logo"
                                                 nzListType="picture-card" [nzShowUploadList]="false"
                                                 [nzBeforeUpload]="beforeUpload" (nzChange)="handleLogoChange($event)">
                                                 <ng-container *ngIf="!logo">
@@ -302,7 +302,8 @@
                                     <div body>
                                         <div class="upload-body-wrapper">
                                             <div class="clearfix">
-                                                <nz-upload class="avatar-uploader" [nzAction]="blobUrl + 'upload'"
+                                                <nz-upload class="avatar-uploader"
+                                                    [nzAction]="blobUrl + 'upload/' + nricFrontPhoto"
                                                     nzListType="picture-card" [nzShowUploadList]="false"
                                                     [nzBeforeUpload]="beforeUpload"
                                                     (nzChange)="handleNricFrontChange($event)">
@@ -335,7 +336,8 @@
                                     <div body>
                                         <div class="upload-body-wrapper">
                                             <div class="clearfix">
-                                                <nz-upload class="avatar-uploader" [nzAction]="blobUrl + 'upload'"
+                                                <nz-upload class="avatar-uploader"
+                                                    [nzAction]="blobUrl + 'upload/' + nricBackPhoto"
                                                     nzListType="picture-card" [nzShowUploadList]="false"
                                                     [nzBeforeUpload]="beforeUpload"
                                                     (nzChange)="handleNricBackChange($event)">
@@ -368,7 +370,8 @@
                                     <div body>
                                         <div class="upload-body-wrapper">
                                             <div class="clearfix">
-                                                <nz-upload class="avatar-uploader" [nzAction]="blobUrl + 'upload'"
+                                                <nz-upload class="avatar-uploader"
+                                                    [nzAction]="blobUrl + 'upload/' + bankBookPhoto"
                                                     nzListType="picture-card" [nzShowUploadList]="false"
                                                     [nzBeforeUpload]="beforeUpload"
                                                     (nzChange)="handleBankBookFirstPageChange($event)">
@@ -402,7 +405,8 @@
                                     <div body>
                                         <div class="upload-body-wrapper">
                                             <div class="clearfix">
-                                                <nz-upload class="avatar-uploader" [nzAction]="blobUrl + 'upload'"
+                                                <nz-upload class="avatar-uploader"
+                                                    [nzAction]="blobUrl + 'upload/' + companyRegistrationPhoto"
                                                     nzListType="picture-card" [nzShowUploadList]="false"
                                                     [nzBeforeUpload]="beforeUpload"
                                                     (nzChange)="handleCompanyRegistrationPhotoChange($event)">
@@ -437,7 +441,8 @@
                                     <div body>
                                         <div class="upload-body-wrapper">
                                             <div class="clearfix">
-                                                <nz-upload class="avatar-uploader" [nzAction]="blobUrl + 'upload'"
+                                                <nz-upload class="avatar-uploader"
+                                                    [nzAction]="blobUrl + 'upload/' + distributorCertificatePhoto"
                                                     nzListType="picture-card" [nzShowUploadList]="false"
                                                     [nzBeforeUpload]="beforeUpload"
                                                     (nzChange)="handleDistributorCertificatePhotoChange($event)">
@@ -581,8 +586,108 @@
                     </div>
                 </nz-tab>
 
-                <nz-tab [nzTitle]="'Banner List'">
-                    <div class="upload-body-wrapper">
+                <nz-tab [nzTitle]="'Web Images'">
+                    <div class="control-bar">
+                        <nz-space>
+                            <nz-space-item>
+                                <nz-select class="web-image-type" [(ngModel)]="webImageType">
+                                    <nz-option [nzValue]="webImageTypeOption" [nzLabel]="webImageTypeOption.name"
+                                        *ngFor="let webImageTypeOption of webImageTypes; trackBy: trackById">
+                                    </nz-option>
+                                </nz-select>
+                            </nz-space-item>
+
+                            <nz-space-item>
+                                <span *ngIf="webImageType">{{webImageType.width}}x{{webImageType.height}}</span>
+                            </nz-space-item>
+                        </nz-space>
+
+                        <nz-space>
+                            <nz-space-item>
+                                <nz-upload class="web-image-uploader" [nzAction]="blobUrl + 'upload'"
+                                    [nzShowUploadList]="false" [nzBeforeUpload]="beforeUpload"
+                                    (nzChange)="uploadWebImage($event)">
+                                    <button nz-button type="button"><i nz-icon nzType="upload"></i>Upload</button>
+                                </nz-upload>
+                            </nz-space-item>
+                        </nz-space>
+                    </div>
+
+                    <div class="web-image-list">
+                        <nz-table class="no-hover-row" #dataTable [nzData]="webImages" nzSize="small"
+                            nzTableLayout="fixed" [nzFrontPagination]="true" [nzHideOnSinglePage]="true"
+                            nzTableLayout="fixed">
+                            <thead>
+                                <tr>
+                                    <th>Web Image</th>
+                                    <th>Type</th>
+                                    <th>Priority</th>
+                                    <th nzWidth="100px">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let data of dataTable.data">
+                                    <tr>
+                                        <td>
+                                            <img *ngIf="data.url" [src]="blobUrl + data.url + '/thumbnail'"
+                                                style="max-height: 100px" nz-popover
+                                                [nzPopoverContent]="webImageTemplate" nzPopoverPlacement="rightTop" />
+
+                                            <ng-template #webImageTemplate>
+                                                <img [src]="blobUrl + data.url + '/original'" style="max-width: 90vh">
+                                            </ng-template>
+
+                                            <a [href]="blobUrl + data.url + '/original'" target="_blank" nz-button
+                                                nzType="link" *ngIf="data.url">
+                                                <span><i nz-icon nzType="download"></i> Download</span>
+                                            </a>
+                                        </td>
+                                        <td>{{data.webImageTypeName}}</td>
+                                        <td>{{data.priority}}</td>
+                                        <td>
+                                            <a (click)="onExpandChange(data, true)">Edit</a>
+                                            <nz-divider nzType="vertical"></nz-divider>
+                                            <a (click)="deleteConfirm(data)">Delete</a>
+                                        </td>
+                                    </tr>
+
+                                    <tr [nzExpand]="expandSet.has(data.id)">
+                                        <form nz-form [formGroup]="editWebImageForm">
+                                            <div class="descriptions">
+                                                <nz-descriptions>
+                                                    <nz-descriptions-item nzTitle="Title">
+                                                        <input nz-input formControlName="title" id="title" />
+                                                    </nz-descriptions-item>
+                                                    <nz-descriptions-item nzTitle="Sub Title">
+                                                        <input nz-input formControlName="subTitle" id="subTitle" />
+                                                    </nz-descriptions-item>
+                                                    <nz-descriptions-item nzTitle="Priority">
+                                                        <input nz-input formControlName="priority" id="priority" />
+                                                    </nz-descriptions-item>
+                                                    <nz-descriptions-item nzTitle="Promo StartDate">
+                                                        <nz-date-picker [nzFormat]="'dd-MM-yyyy'"
+                                                            formControlName="promoStartDate" id="promoStartDate">
+                                                        </nz-date-picker>
+                                                    </nz-descriptions-item>
+                                                    <nz-descriptions-item nzTitle="Promo EndDate">
+                                                        <nz-date-picker [nzFormat]="'dd-MM-yyyy'"
+                                                            formControlName="promoEndDate" id="promoEndDate">
+                                                        </nz-date-picker>
+                                                    </nz-descriptions-item>
+                                                </nz-descriptions>
+                                            </div>
+                                            <div class="descriptions-control">
+                                                <a (click)="saveWebImage()">Save</a>
+                                                <nz-divider nzType="vertical"></nz-divider>
+                                                <a (click)="onExpandChange(data, false)">Cancel</a>
+                                            </div>
+                                        </form>
+                                    </tr>
+                                </ng-container>
+                            </tbody>
+                        </nz-table>
+                    </div>
+                    <!-- <div class="upload-body-wrapper">
                         <div class="clearfix">
                             <nz-upload [nzAction]="blobUrl + 'upload'" [nzBeforeUpload]="beforeUpload"
                                 nzListType="picture" [(nzFileList)]="bannerList" [nzPreview]="handlePreview"
@@ -590,7 +695,7 @@
                                 <button nz-button><i nz-icon nzType="upload"></i>Upload Files</button>
                             </nz-upload>
                         </div>
-                    </div>
+                    </div> -->
                 </nz-tab>
 
             </nz-tabset>

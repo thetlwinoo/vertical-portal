@@ -201,9 +201,9 @@ export class ManageImagesComponent implements OnInit, OnDestroy {
         return;
       }
       // tslint:disable-next-line: no-non-null-assertion
-      const isLt2M = file.size! / 1024 / 1024 < 2;
+      const isLt2M = file.size! / 1024 / 1024 < 3;
       if (!isLt2M) {
-        this.msg.error('Image must smaller than 2MB!');
+        this.msg.error('Image must smaller than 3MB!');
         observer.complete();
         return;
       }

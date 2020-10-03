@@ -64,6 +64,7 @@ export class ProductOptionsComponent implements OnInit, OnDestroy {
       .query()
       .subscribe((res: HttpResponse<IProductOptionSet[]>) => {
         this.productOptionSets = res.body || [];
+        console.log('this.productOptionSets', this.productOptionSets)
         this.editOptionSetCache = {};
         this.updateOptionSetEditCache();
       });

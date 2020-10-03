@@ -17,7 +17,7 @@
                         <tbody>
                             <tr *ngFor="let data of optionSetTable.data" [ngSwitch]="editOptionSetCache[data.id]?.mode"
                                 (click)="selectedOptionSetRow(data)" [class.active]="selectedOptionSet?.id === data.id">
-                                <ng-template [ngSwitchCase]="mode.view" *ngIf="data.value !== 'NoOptionSet'">
+                                <ng-template [ngSwitchCase]="mode.view">
                                     <td>{{ data.value }}</td>
                                     <td>
                                         <a (click)="startOptionSetEdit(data.id)">Edit</a>

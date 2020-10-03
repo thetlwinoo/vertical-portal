@@ -153,6 +153,8 @@ export class BatchUploadComponent implements OnInit, OnDestroy {
         product.lastEditedBy = this.account.id;
         product.lastEditedWhen = moment();
         product.validFrom = moment();
+        product.freeShippingInd = values[0].freeDelivery;
+        product.madeInMyanmarInd = values[0].madeInMyanmar;
         this.createProductBrand(values[0].brandName.trim(), values[0].brandMyanmarName.trim());
         product.stockItemLists = [];
         const productDocument: ProductDocuments = new ProductDocuments();
@@ -197,8 +199,8 @@ export class BatchUploadComponent implements OnInit, OnDestroy {
           stockItem.noOfPieces = item.noOfPieces;
           stockItem.noOfItems = item.noOfItem;
           stockItem.manufacture = item.manufacture;
-          stockItem.sellStartDate = moment();
-          stockItem.sellEndDate = moment();
+          stockItem.sellStartDate = item.sellStartDate;
+          stockItem.sellEndDate = item.sellEndDate;
           stockItem.customFields = '';
           stockItem.thumbnailPhoto = '';
           stockItem.activeFlag = false;
@@ -211,7 +213,7 @@ export class BatchUploadComponent implements OnInit, OnDestroy {
           stockItem.itemPackageWeightUnitCode = item.itemPackageWeightUnit || '';
           stockItem.productAttributeValue = item.productAttribute;
           stockItem.productOptionValue = item.productOption;
-          stockItem.materialName = item.productMaterial;
+          stockItem.materials = item.productMaterial;
           stockItem.barcodeTypeName = item.barcodeType;
           stockItem.currencyCode = item.currencyCode;
           stockItem.lastEditedBy = this.account.id;
@@ -223,6 +225,7 @@ export class BatchUploadComponent implements OnInit, OnDestroy {
           stockItem.targetStockLevel = 100;
           stockItem.searchDetails = item.searchKeywords;
           stockItem.isChillerStock = item.isChillerStock;
+          stockItem.cashOnDeliveryInd = item.cashOnDelivery || false;
           stockItem.validFrom = moment();
           product.stockItemLists.push(stockItem);
           searchDetails = searchDetails + item.searchKeywords + ';';

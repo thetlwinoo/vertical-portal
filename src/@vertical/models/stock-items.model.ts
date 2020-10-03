@@ -79,8 +79,7 @@ export interface IStockItems {
   productAttributeId?: number;
   productOptionValue?: string;
   productOptionId?: number;
-  materialName?: string;
-  materialId?: number;
+  materials?: string;
   currencyCode?: string;
   currencyId?: number;
   barcodeTypeName?: string;
@@ -165,8 +164,7 @@ export class StockItems implements IStockItems {
     public productAttributeId?: number,
     public productOptionValue?: string,
     public productOptionId?: number,
-    public materialName?: string,
-    public materialId?: number,
+    public materials?: string,
     public currencyCode?: string,
     public currencyId?: number,
     public barcodeTypeName?: string,

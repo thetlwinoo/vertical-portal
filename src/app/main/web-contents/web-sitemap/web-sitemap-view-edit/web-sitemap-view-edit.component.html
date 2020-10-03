@@ -1,0 +1,338 @@
+<div class="pagebar-content-wrapper">
+    <div class="page-header">
+        <nz-breadcrumb nzSeparator=">">
+            <nz-breadcrumb-item>
+                <a href="javascript:void(0)" [routerLink]="['../../']">Web Sitemaps</a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                <span>{{webSitemap.name}}</span>
+            </nz-breadcrumb-item>
+        </nz-breadcrumb>
+    </div>
+
+    <div class="page-sub-header">
+        <span class="page-sub-header__title">View / Edit</span>
+        <a><i nz-icon nzType="delete" nzTheme="fill"></i></a>
+    </div>
+
+    <div class="page-body">
+        <div class="card-container">
+            <nz-tabset [nzTabPosition]="'top'" [nzType]="'card'">
+                <nz-tab [nzTitle]="'Content'">
+                    <form nz-form [formGroup]="editForm" (ngSubmit)="save()">
+                        <quill-editor #editor formControlName="content" [sanitize]="true" ngDefaultControl>
+                        </quill-editor>
+
+                        <div class="save-content">
+                            <nz-space>
+                                <nz-space-item>
+                                    <button nz-button nzType="primary" type="submit" id="save-entity"
+                                        [disabled]="editForm.invalid || isSaving">
+                                        <span>Save</span>
+                                    </button>
+                                </nz-space-item>
+
+                                <nz-space-item>
+                                    <button nz-button nzType="default" type="button" id="clear-entity" nz-popconfirm
+                                        nzPopconfirmTitle="Are you sure clear this contents?"
+                                        nzPopconfirmPlacement="bottom" (nzOnConfirm)="onClear($event)">
+                                        <span>Clear</span>
+                                    </button>
+                                </nz-space-item>
+                            </nz-space>
+                        </div>
+                    </form>
+                </nz-tab>
+
+                <nz-tab [nzTitle]="'Details'">
+                    <form nz-form [formGroup]="editForm" (ngSubmit)="save()">
+                        <div class="record-details">
+                            <div nz-row>
+                                <div nz-col class="gutter-row" [nzXs]="24" [nzLg]="15">
+
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="id">ID
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                                            <input nz-input formControlName="id" id="id" disabled />
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="name">Name
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                                            <input nz-input formControlName="name" id="name"
+                                                (ngModelChange)="onChangeName($event)" />
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="handle">Handle
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                                            <input nz-input formControlName="handle" id="handle" disabled />
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="shortLabel">Short Label
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                                            <input nz-input formControlName="shortLabel" id="shortLabel" />
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="title">Title
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                                            <input nz-input formControlName="title" id="title" />
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="subTitle">Sub Title
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                                            <input nz-input formControlName="subTitle" id="subTitle" />
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="parentId">Parent Id
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                                            <input nz-input formControlName="parentId" id="parentId" />
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="url">Url
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                                            <input nz-input formControlName="url" id="url" />
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="exactMatch">Exact Match
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                                            <label nz-checkbox formControlName="exactMatch" id="exactMatch"></label>
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="extraQuery">
+                                            Extra Query
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                                            <textarea rows="3" nz-input formControlName="extraQuery"
+                                                id="extraQuery"></textarea>
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="iconFont">Icon Font
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                                            <input nz-input formControlName="iconFont" id="iconFont" />
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="iconPhoto">Icon Photo
+                                        </nz-form-label>
+
+                                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                                            <nz-upload class="avatar-uploader"
+                                                [nzAction]="blobUrl + 'upload/' + iconPhoto" nzListType="picture-card"
+                                                [nzShowUploadList]="false" [nzBeforeUpload]="beforeUpload"
+                                                (nzChange)="handleChange($event)">
+                                                <ng-container *ngIf="!iconPhoto">
+                                                    <i class="upload-icon" nz-icon
+                                                        [nzType]="loading ? 'loading' : 'plus'"></i>
+                                                    <div class="ant-upload-text">Upload</div>
+                                                </ng-container>
+                                                <img *ngIf="iconPhoto" [src]="blobUrl + iconPhoto + '/thumbnail'"
+                                                    style="width: 100%" />
+                                            </nz-upload>
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="priority">Priority
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                                            <input nz-input formControlName="priority" id="priority" />
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="activeFlag">Active Flag
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                                            <label nz-checkbox formControlName="activeFlag" id="activeFlag"></label>
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="validFrom">Valid
+                                            From
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                                            <nz-date-picker [nzFormat]="'dd-MM-yyyy'" formControlName="validFrom"
+                                                id="validFrom">
+                                            </nz-date-picker>
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-form-item>
+                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="validTo">Valid To
+                                        </nz-form-label>
+                                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                                            <nz-date-picker [nzFormat]="'dd-MM-yyyy'" formControlName="validTo"
+                                                id="validTo">
+                                            </nz-date-picker>
+                                        </nz-form-control>
+                                    </nz-form-item>
+
+                                    <nz-row>
+                                        <nz-col nzOffset="5" [nzSm]="10" [nzXs]="24">
+                                            <nz-space>
+                                                <nz-space-item>
+                                                    <button nz-button nzType="primary" type="submit" id="save-entity"
+                                                        [disabled]="editForm.invalid || isSaving">
+                                                        <span>Save</span>
+                                                    </button>
+                                                </nz-space-item>
+
+                                                <!-- <nz-space-item>
+                                                    <button nz-button nzType="default" type="button" id="cancel-save"
+                                                        (click)="previousState()">
+                                                        <span>Cancel</span>
+                                                    </button>
+                                                </nz-space-item> -->
+                                            </nz-space>
+                                        </nz-col>
+                                    </nz-row>
+
+                                </div>
+                                <div nz-col class="gutter-row" [nzXs]="24" [nzLg]="9">
+
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </nz-tab>
+
+                <nz-tab [nzTitle]="'Web Images'">
+                    <div class="control-bar">
+                        <nz-space>
+                            <nz-space-item>
+                                <nz-select class="web-image-type" [(ngModel)]="selectedWebImageType">
+                                    <nz-option [nzValue]="webImageTypeOption" [nzLabel]="webImageTypeOption.name"
+                                        *ngFor="let webImageTypeOption of webImageTypes; trackBy: trackById">
+                                    </nz-option>
+                                </nz-select>
+                            </nz-space-item>
+
+                            <nz-space-item>
+                                <span *ngIf="selectedWebImageType">
+                                    {{selectedWebImageType.width}}x{{selectedWebImageType.height}}
+                                </span>
+                            </nz-space-item>
+                        </nz-space>
+
+                        <nz-space>
+                            <nz-space-item>
+                                <nz-upload class="web-image-uploader" [nzAction]="blobUrl + 'upload'"
+                                    [nzShowUploadList]="false" [nzBeforeUpload]="beforeUpload"
+                                    (nzChange)="uploadWebImage($event)">
+                                    <button nz-button type="button"><i nz-icon nzType="upload"></i>Upload</button>
+                                </nz-upload>
+                            </nz-space-item>
+                        </nz-space>
+                    </div>
+
+                    <div class="web-image-list">
+                        <nz-table class="no-hover-row" #dataTable [nzData]="webImages" nzSize="small"
+                            nzTableLayout="fixed" [nzFrontPagination]="true" [nzHideOnSinglePage]="true"
+                            nzTableLayout="fixed">
+                            <thead>
+                                <tr>
+                                    <th>Web Image</th>
+                                    <th>Type</th>
+                                    <th>Priority</th>
+                                    <th nzWidth="100px">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let data of dataTable.data">
+                                    <tr>
+                                        <td>
+                                            <img *ngIf="data.url" [src]="blobUrl + data.url + '/thumbnail'"
+                                                style="max-height: 100px" nz-popover
+                                                [nzPopoverContent]="webImageTemplate" nzPopoverPlacement="rightTop" />
+
+                                            <ng-template #webImageTemplate>
+                                                <img [src]="blobUrl + data.url + '/original'" style="max-width: 90vh">
+                                            </ng-template>
+
+                                            <a [href]="blobUrl + data.url + '/original'" target="_blank" nz-button
+                                                nzType="link" *ngIf="data.url">
+                                                <span><i nz-icon nzType="download"></i> Download</span>
+                                            </a>
+                                        </td>
+                                        <td>{{data.webImageTypeName}}</td>
+                                        <td>{{data.priority}}</td>
+                                        <td>
+                                            <a (click)="onExpandChange(data, true)">Edit</a>
+                                            <nz-divider nzType="vertical"></nz-divider>
+                                            <a (click)="deleteConfirm(data)">Delete</a>
+                                        </td>
+                                    </tr>
+                                    <tr [nzExpand]="expandSet.has(data.id)">
+                                        <form nz-form [formGroup]="editWebImageForm">
+                                            <div class="descriptions">
+                                                <nz-descriptions>
+                                                    <nz-descriptions-item nzTitle="Title">
+                                                        <input nz-input formControlName="title" id="title" />
+                                                    </nz-descriptions-item>
+                                                    <nz-descriptions-item nzTitle="Sub Title">
+                                                        <input nz-input formControlName="subTitle" id="subTitle" />
+                                                    </nz-descriptions-item>
+                                                    <nz-descriptions-item nzTitle="Priority">
+                                                        <input nz-input formControlName="priority" id="priority" />
+                                                    </nz-descriptions-item>
+                                                    <nz-descriptions-item nzTitle="Promo StartDate">
+                                                        <nz-date-picker [nzFormat]="'dd-MM-yyyy'"
+                                                            formControlName="promoStartDate" id="promoStartDate">
+                                                        </nz-date-picker>
+                                                    </nz-descriptions-item>
+                                                    <nz-descriptions-item nzTitle="Promo EndDate">
+                                                        <nz-date-picker [nzFormat]="'dd-MM-yyyy'"
+                                                            formControlName="promoEndDate" id="promoEndDate">
+                                                        </nz-date-picker>
+                                                    </nz-descriptions-item>
+                                                </nz-descriptions>
+                                            </div>
+                                            <div class="descriptions-control">
+                                                <a (click)="saveWebImage()">Save</a>
+                                                <nz-divider nzType="vertical"></nz-divider>
+                                                <a (click)="onExpandChange(data, false)">Cancel</a>
+                                            </div>
+                                        </form>
+                                    </tr>
+                                </ng-container>
+                            </tbody>
+                        </nz-table>
+                    </div>
+                </nz-tab>
+            </nz-tabset>
+
+
+        </div>
+    </div>
+</div>

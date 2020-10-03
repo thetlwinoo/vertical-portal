@@ -29,8 +29,8 @@
 
                     <nz-form-item>
                         <nz-form-control [nzOffset]="8" [nzSm]="14" [nzXs]="24" nzHasFeedback>
-                            <nz-upload class="avatar-uploader" [nzAction]="blobUrl + 'upload'" nzListType="picture-card"
-                                [nzShowUploadList]="false" [nzBeforeUpload]="beforeUpload"
+                            <nz-upload class="avatar-uploader" [nzAction]="blobUrl + 'upload/' + profilePhoto"
+                                nzListType="picture-card" [nzShowUploadList]="false" [nzBeforeUpload]="beforeUpload"
                                 (nzChange)="handleChange($event)">
                                 <ng-container *ngIf="!profilePhoto">
                                     <i class="upload-icon" nz-icon [nzType]="loading ? 'loading' : 'plus'"></i>

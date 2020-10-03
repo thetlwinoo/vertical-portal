@@ -1,0 +1,43 @@
+<div class="manage-categories-add">
+    <form nz-form [formGroup]="editForm">
+        <nz-descriptions nzBordered [nzColumn]="1">
+            <nz-descriptions-item nzTitle="Name">
+                <input nz-input placeholder="Name" formControlName="name" (ngModelChange)="onChangeName($event)" />
+            </nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Myanmar Name">
+                <input nz-input placeholder="Myanmar Name" formControlName="myanmarName" />
+            </nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Handle">
+                <input nz-input placeholder="Handle" formControlName="handle" disabled />
+            </nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Icon">
+                <nz-upload class="avatar-uploader" [nzAction]="blobUrl + 'upload/' + iconPhoto"
+                    nzListType="picture-card" [nzShowUploadList]="false" [nzBeforeUpload]="beforeUpload"
+                    (nzChange)="uploadIcon($event)">
+                    <ng-container *ngIf="!iconPhoto">
+                        <i class="upload-icon" nz-icon [nzType]="loading ? 'loading' : 'plus'"></i>
+                        <div class="ant-upload-text">Upload</div>
+                    </ng-container>
+                    <img *ngIf="iconPhoto" [src]="blobUrl + iconPhoto + '/thumbnail'" style="width: 100%" />
+                </nz-upload>
+            </nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Icon Font">
+                <input nz-input placeholder="Icon Font" formControlName="iconFont" />
+                <div *ngIf="iconFont">
+                    <i class="iconfont {{category.iconFont}}"></i>
+                </div>
+            </nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Image">
+                <nz-upload class="avatar-uploader" [nzAction]="blobUrl + 'upload/' + image" nzListType="picture-card"
+                    [nzShowUploadList]="false" [nzBeforeUpload]="beforeUpload" (nzChange)="uploadImage($event)">
+                    <ng-container *ngIf="!image">
+                        <i class="upload-icon" nz-icon [nzType]="loading ? 'loading' : 'plus'"></i>
+                        <div class="ant-upload-text">Upload</div>
+                    </ng-container>
+                    <img *ngIf="image" [src]="blobUrl + image + '/thumbnail'" style="width: 100%" />
+                </nz-upload>
+            </nz-descriptions-item>
+        </nz-descriptions>
+    </form>
+
+</div>

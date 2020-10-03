@@ -27,6 +27,13 @@
       display: flex;
     }
   }
+
+  .descriptions-control {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-right: 1em;
+  }
 }
 
 .card-container ::ng-deep .ant-tabs-card .ant-tabs-content {

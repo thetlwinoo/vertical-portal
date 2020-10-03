@@ -1,4 +1,4 @@
-<vs-pagebar [title]="'Manage Products'" [subtitle]="selectedSupplier?.name">
+<vs-pagebar [title]="'Manage Products'" [subtitle]="selectedSupplier?.storeName">
   <div extra>
     <nz-button-group>
       <button nz-button nzType="default" [routerLink]="'/main/products/manage-products/create'">Add New</button>
@@ -52,9 +52,9 @@
         <td nzEllipsis>{{ data.name }}</td>
         <td nzEllipsis>{{ data.productAttributeValue }}</td>
         <td>{{ data.productOptionValue }}</td>
-        <td>{{ data.unitPrice | currency }}</td>
-        <td>{{ data.recommendedRetailPrice | currency }}</td>
-        <td>{{ data.lastEditedWhen | date }}</td>
+        <td>{{ data.unitPrice | currency:'Ks' : 'symbol' : '1.0-0' }}</td>
+        <td>{{ data.recommendedRetailPrice | currency:'Ks' : 'symbol' : '1.0-0' }}</td>
+        <td>{{ data.lastEditedWhen | date:'medium' }}</td>
         <td>
           <nz-switch [(ngModel)]="data.activeFlag" (ngModelChange)="updateStockItemActive(data)"
             [nzLoading]="activeLoading"></nz-switch>

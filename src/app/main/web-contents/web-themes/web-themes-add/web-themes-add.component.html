@@ -1,0 +1,110 @@
+<div class="pagebar-content-wrapper">
+    <div class="page-header">
+        <nz-breadcrumb nzSeparator=">">
+            <nz-breadcrumb-item>
+                <a href="javascript:void(0)" [routerLink]="['../']">Web Themes</a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                <span>Add Web Theme</span>
+            </nz-breadcrumb-item>
+        </nz-breadcrumb>
+    </div>
+
+    <div class="page-sub-header">
+        <span class="page-sub-header__title">Add Web Theme</span>
+    </div>
+
+    <div class="page-body">
+        <form nz-form [formGroup]="editForm" (ngSubmit)="save()">
+            <div nz-row>
+                <div nz-col class="gutter-row" [nzXs]="24" [nzLg]="15">
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="id">ID
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                            <input nz-input formControlName="id" id="id" disabled />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="name">Name
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                            <input nz-input formControlName="name" id="name" />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="fontSize">Font Size
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                            <input nz-input formControlName="fontSize" id="fontSize" />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="fontColor">Font Color
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                            <input nz-input formControlName="fontColor" id="fontColor" />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="fontWeight">Font Weight
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                            <input nz-input formControlName="fontWeight" id="fontWeight" />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="fontFamily">Font Family
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                            <input nz-input formControlName="fontFamily" id="fontFamily" />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="primaryColor">Primary Color
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                            <input nz-input formControlName="primaryColor" id="primaryColor" />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="secondaryColor">Secondary Color
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                            <input nz-input formControlName="secondaryColor" id="secondaryColor" />
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col class="gutter-row" [nzXs]="24" [nzLg]="9">
+
+                </div>
+            </div>
+
+            <nz-row>
+                <nz-col nzOffset="5" [nzSm]="10" [nzXs]="24">
+                    <nz-space>
+                        <nz-space-item>
+                            <button nz-button nzType="primary" type="submit" id="save-entity"
+                                [disabled]="editForm.invalid || isSaving">
+                                <span>Save</span>
+                            </button>
+                        </nz-space-item>
+
+                        <nz-space-item>
+                            <button nz-button nzType="default" type="button" id="cancel-save" (click)="previousState()">
+                                <span>Cancel</span>
+                            </button>
+                        </nz-space-item>
+                    </nz-space>
+                </nz-col>
+            </nz-row>
+        </form>
+    </div>
+</div>

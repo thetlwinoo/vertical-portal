@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 const ROUTES = [
-  { path: '', pathMatch: 'full', redirectTo: '/manage-products' },
+  // { path: '', pathMatch: 'full', redirectTo: 'manage-products' },
   { path: 'manage-products', loadChildren: () => import('./manage-products/manage-products.module').then(m => m.ManageProductsModule) },
   { path: 'manage-images', loadChildren: () => import('./manage-images/manage-images.module').then(m => m.ManageImagesModule) },
   {

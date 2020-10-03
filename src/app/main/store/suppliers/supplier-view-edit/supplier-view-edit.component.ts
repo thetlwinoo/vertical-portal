@@ -1,18 +1,21 @@
 /* tslint:disable */
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { PeopleService, PhotosService, SuppliersService, SupplierCategoriesService, AddressesService, DeliveryMethodsService, ImagesService } from '@vertical/services';
+import { PeopleService, PhotosService, SuppliersService, SupplierCategoriesService, AddressesService, DeliveryMethodsService, ImagesService, WebImageTypesService, WebImagesService } from '@vertical/services';
 import { ActivatedRoute } from '@angular/router';
-import { IPhotos, ISuppliers, Photos, Suppliers, ISupplierCategories, IAddresses, IDeliveryMethods, IPeople } from '@vertical/models';
+import { IPhotos, ISuppliers, Photos, Suppliers, ISupplierCategories, IAddresses, IDeliveryMethods, IPeople, IWebImages, IWebImageTypes, WebImages } from '@vertical/models';
 import * as moment from 'moment';
 import { DATE_TIME_FORMAT, SERVER_API_URL } from '@vertical/constants';
 import { HttpResponse } from '@angular/common/http';
-import { Observable, Observer, Subject, of } from 'rxjs';
+import { Observable, Observer, Subject, of, Subscription } from 'rxjs';
 import { UploadFile } from 'ng-zorro-antd/upload';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import * as _ from 'lodash';
-import { map } from 'rxjs/operators';
-type SelectableEntity = ISupplierCategories | IAddresses | IDeliveryMethods | IPeople;
+import { map, filter } from 'rxjs/operators';
+import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
+import { JhiEventManager } from 'ng-jhipster';
+
+type SelectableEntity = ISupplierCategories | IAddresses | IDeliveryMethods | IPeople | IWebImageTypes;
 
 type SelectableManyToManyEntity = IDeliveryMethods | IPeople;
 
@@ -37,6 +40,13 @@ export class SupplierViewEditComponent implements OnInit {
   pickupAddressId: number;
   headOfficeAddressId: number;
   returnAddressId: number;
+
+  webImages?: IWebImages[];
+  webImageTypes: IWebImageTypes[];
+  webImageType: IWebImageTypes;
+  confirmModal?: NzModalRef;
+  eventSubscriber: Subscription;
+  expandSet = new Set<number>();
 
   get logo(): string {
     return this.editForm.get('logo')?.value || null;
@@ -116,6 +126,22 @@ export class SupplierViewEditComponent implements OnInit {
     people: [],
   });
 
+  editWebImageForm = this.fb.group({
+    id: [],
+    title: [],
+    subTitle: [],
+    url: [null, [Validators.required]],
+    priority: [],
+    activeFlag: [true, [Validators.required]],
+    promoStartDate: [],
+    promoEndDate: [],
+    webImageTypeId: [],
+    webSitemapId: [],
+    supplierId: [],
+    productCategoryId: [],
+    productBrandId: [],
+  });
+
   public blobUrl = SERVER_API_URL + 'services/cloudblob/api/images-extend/';
 
   private unsubscribe$: Subject<any> = new Subject();
@@ -131,6 +157,10 @@ export class SupplierViewEditComponent implements OnInit {
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
     private msg: NzMessageService,
+    protected webImageTypesService: WebImageTypesService,
+    protected webImagesService: WebImagesService,
+    protected eventManager: JhiEventManager,
+    private modal: NzModalService,
   ) { }
 
   ngOnInit(): void {
@@ -144,7 +174,7 @@ export class SupplierViewEditComponent implements OnInit {
 
         this.updateForm(suppliers);
         this.loadDocumentList();
-        this.loadBannerList();
+        // this.loadBannerList();
 
         this.addressesService.query({ 'supplierId.equals': suppliers.id }).subscribe((res: HttpResponse<IAddresses[]>) => (this.addresses = res.body || []));
       }
@@ -156,6 +186,22 @@ export class SupplierViewEditComponent implements OnInit {
       this.deliveryMethodsService.query().subscribe((res: HttpResponse<IDeliveryMethods[]>) => (this.deliverymethods = res.body || []));
 
       this.peopleService.query().subscribe((res: HttpResponse<IPeople[]>) => (this.people = res.body || []));
+
+      this.webImageTypesService
+        .query()
+        .pipe(
+          filter((res: HttpResponse<IWebImageTypes[]>) => res.ok),
+          map((res: HttpResponse<IWebImageTypes[]>) => res.body)
+        )
+        .subscribe(data => {
+          this.webImageTypes = data;
+          if (data && data.length > 0) {
+            this.webImageType = data[0];
+          }
+        });
+
+      this.loadAll();
+      this.registerChangeInWebImages();
     });
   }
 
@@ -165,14 +211,14 @@ export class SupplierViewEditComponent implements OnInit {
     }).subscribe((res: HttpResponse<IPhotos[]>) => (this.documentList = res.body || []));
   }
 
-  loadBannerList() {
-    this.photosService.query({
-      'supplierBannerId.equals': this.suppliers.id
-    }).subscribe((res: HttpResponse<IPhotos[]>) => {
-      console.log('bannerlist', res.body)
-      this.bannerList = res.body || [];
-    });
-  }
+  // loadBannerList() {
+  //   this.photosService.query({
+  //     'supplierBannerId.equals': this.suppliers.id
+  //   }).subscribe((res: HttpResponse<IPhotos[]>) => {
+  //     console.log('bannerlist', res.body)
+  //     this.bannerList = res.body || [];
+  //   });
+  // }
 
   updateForm(suppliers: ISuppliers): void {
     this.editForm.patchValue({
@@ -477,39 +523,39 @@ export class SupplierViewEditComponent implements OnInit {
     });
   }
 
-  handleBannerListChange(info): void {
-    switch (info.file.status) {
-      case 'uploading':
-        break;
-      case 'done':
-        const photos: IPhotos = new Photos();
-        photos.thumbUrl = `${this.blobUrl}${info.file.response.thumbUrl}`;
-        photos.url = `${this.blobUrl}${info.file.response.url}`;
-        photos.type = info.file.type;
-        photos.uid = info.file.response.id;
-        photos.size = info.file.size;
-        photos.name = info.file.name;
-        photos.fileName = info.file.name;
-        photos.status = info.file.status;
-        photos.percent = info.file.percent;
-        photos.activeFlag = true;
-        photos.lastModified = info.file.lastModified;
-        photos.lastModifiedDate = moment(info.file.lastModifiedDate);
-        photos.blobId = info.file.response.id;
-        photos.supplierBannerId = this.suppliers.id;
-        this.saveBannerPhoto(photos);
-        break;
-      case 'error':
-        this.msg.error('Network error');
-        break;
-    }
-  }
+  // handleBannerListChange(info): void {
+  //   switch (info.file.status) {
+  //     case 'uploading':
+  //       break;
+  //     case 'done':
+  //       const photos: IPhotos = new Photos();
+  //       photos.thumbUrl = `${this.blobUrl}${info.file.response.thumbUrl}`;
+  //       photos.url = `${this.blobUrl}${info.file.response.url}`;
+  //       photos.type = info.file.type;
+  //       photos.uid = info.file.response.id;
+  //       photos.size = info.file.size;
+  //       photos.name = info.file.name;
+  //       photos.fileName = info.file.name;
+  //       photos.status = info.file.status;
+  //       photos.percent = info.file.percent;
+  //       photos.activeFlag = true;
+  //       photos.lastModified = info.file.lastModified;
+  //       photos.lastModifiedDate = moment(info.file.lastModifiedDate);
+  //       photos.blobId = info.file.response.id;
+  //       photos.supplierBannerId = this.suppliers.id;
+  //       this.saveBannerPhoto(photos);
+  //       break;
+  //     case 'error':
+  //       this.msg.error('Network error');
+  //       break;
+  //   }
+  // }
 
-  saveBannerPhoto(photos: IPhotos): void {
-    this.photosService.create(photos).subscribe(() => {
-      this.loadBannerList();
-    });
-  }
+  // saveBannerPhoto(photos: IPhotos): void {
+  //   this.photosService.create(photos).subscribe(() => {
+  //     this.loadBannerList();
+  //   });
+  // }
 
   pickupAddressChanged(event): void {
     this.editForm.patchValue({ pickupAddressId: event });
@@ -521,6 +567,124 @@ export class SupplierViewEditComponent implements OnInit {
 
   returnAddressChanged(event): void {
     this.editForm.patchValue({ returnAddressId: event });
+  }
+
+  registerChangeInWebImages(): void {
+    this.eventSubscriber = this.eventManager.subscribe('webImagesListModification', () => this.loadAll());
+  }
+
+  loadAll(): void {
+    if (this.suppliers) {
+      this.webImagesService.query({
+        'supplierId.equals': this.suppliers.id
+      }).subscribe((res: HttpResponse<IWebImages[]>) => {
+        this.webImages = res.body || [];
+        console.log(this.webImages);
+      });
+    }
+
+  }
+
+  updateWebImageForm(webImages: IWebImages): void {
+    this.editWebImageForm.patchValue({
+      id: webImages.id,
+      title: webImages.title,
+      subTitle: webImages.subTitle,
+      url: webImages.url,
+      priority: webImages.priority,
+      activeFlag: webImages.activeFlag,
+      promoStartDate: webImages.promoStartDate ? webImages.promoStartDate.format(DATE_TIME_FORMAT) : null,
+      promoEndDate: webImages.promoEndDate ? webImages.promoEndDate.format(DATE_TIME_FORMAT) : null,
+      webImageTypeId: webImages.webImageTypeId,
+      webSitemapId: webImages.webSitemapId,
+      supplierId: webImages.supplierId,
+      productCategoryId: webImages.productCategoryId,
+      productBrandId: webImages.productBrandId,
+    });
+  }
+
+  private createWebImageFromForm(): IWebImages {
+    return {
+      ...new WebImages(),
+      id: this.editWebImageForm.get(['id'])!.value,
+      title: this.editWebImageForm.get(['title'])!.value,
+      subTitle: this.editWebImageForm.get(['subTitle'])!.value,
+      url: this.editWebImageForm.get(['url'])!.value,
+      priority: this.editWebImageForm.get(['priority'])!.value,
+      activeFlag: this.editWebImageForm.get(['activeFlag'])!.value,
+      promoStartDate: this.editWebImageForm.get(['promoStartDate'])!.value
+        ? moment(this.editWebImageForm.get(['promoStartDate'])!.value, DATE_TIME_FORMAT)
+        : undefined,
+      promoEndDate: this.editWebImageForm.get(['promoEndDate'])!.value
+        ? moment(this.editWebImageForm.get(['promoEndDate'])!.value, DATE_TIME_FORMAT)
+        : undefined,
+      webImageTypeId: this.editWebImageForm.get(['webImageTypeId'])!.value,
+      webSitemapId: this.editWebImageForm.get(['webSitemapId'])!.value,
+      supplierId: this.editWebImageForm.get(['supplierId'])!.value,
+      productCategoryId: this.editWebImageForm.get(['productCategoryId'])!.value,
+      productBrandId: this.editWebImageForm.get(['productBrandId'])!.value,
+    };
+  }
+
+
+  uploadWebImage(info: { file: UploadFile }): void {
+    switch (info.file.status) {
+      case 'uploading':
+        this.loading = true;
+        break;
+      case 'done':
+        //save
+        this.saveWebImage(info.file.response.id);
+        this.loading = false;
+        break;
+      case 'error':
+        this.msg.error('Network error');
+        this.loading = false;
+        break;
+    }
+  }
+
+  saveWebImage(url?: string) {
+    const webImages = this.createWebImageFromForm();
+
+    if (webImages.id !== null) {
+      this.webImagesService.update(webImages).subscribe((res) => {
+        this.eventManager.broadcast('webImagesListModification');
+        this.onExpandChange(res.body, false);
+      });
+    } else {
+      webImages.url = url;
+      webImages.supplierId = this.suppliers.id;
+      webImages.webImageTypeId = this.webImageType.id;
+
+      this.webImagesService.create(webImages).subscribe(() => {
+        this.eventManager.broadcast('webImagesListModification');
+      });
+    }
+
+  }
+
+  deleteConfirm(webImage: IWebImages): void {
+    this.confirmModal = this.modal.confirm({
+      nzTitle: 'Do you Want to delete this web image?',
+      nzContent: 'When clicked the OK button, web image will be deleted from the system',
+      nzOnOk: () =>
+        this.webImagesService.delete(webImage.id).subscribe(() => {
+          this.imagesService.delete(webImage.url).subscribe(() => {
+            this.eventManager.broadcast('webImagesListModification');
+          });
+        })
+    });
+  }
+
+  onExpandChange(data: IWebImages, checked: boolean): void {
+    this.updateWebImageForm(data);
+
+    if (checked) {
+      this.expandSet.add(data.id);
+    } else {
+      this.expandSet.delete(data.id);
+    }
   }
 
   ngOnDestroy(): void {

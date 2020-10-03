@@ -1,0 +1,120 @@
+<div class="pagebar-content-wrapper">
+    <div class="page-header">
+        <nz-breadcrumb nzSeparator=">">
+            <nz-breadcrumb-item>
+                <a href="javascript:void(0)" [routerLink]="['../']">Discounts</a>
+            </nz-breadcrumb-item>`
+            <nz-breadcrumb-item>
+                <span>Add Discount</span>
+            </nz-breadcrumb-item>
+        </nz-breadcrumb>
+    </div>
+
+    <div class="page-sub-header">
+        <span class="page-sub-header__title">Add Discount</span>
+    </div>
+
+    <div class="page-body">
+        <form nz-form [formGroup]="editForm" (ngSubmit)="save()">
+            <div nz-row>
+                <div nz-col class="gutter-row" [nzXs]="24" [nzLg]="15">
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="id">ID
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                            <input nz-input formControlName="id" id="id" disabled />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="name">Name
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                            <input nz-input formControlName="name" id="name" />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="discountCode">Discount Code
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                            <input nz-input formControlName="discountCode" id="discountCode" />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="description">Descriptions
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                            <textarea rows="3" nz-input formControlName="description" id="description"></textarea>
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="supplier">Exclusive Store
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                            <nz-select name="supplier" nzShowSearch nzAllowClear formControlName="supplierId">
+                                <nz-option [nzValue]="suppliersOption.id" [nzLabel]="suppliersOption.storeName"
+                                    *ngFor="let suppliersOption of suppliers; trackBy: trackById">
+                                    {{ suppliersOption.name }}
+                                </nz-option>
+                            </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="discountType">Discount Type
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                            <nz-select name="discountType" nzShowSearch nzAllowClear formControlName="discountTypeId">
+                                <nz-option [nzValue]="discountTypesOption.id" [nzLabel]="discountTypesOption.name"
+                                    *ngFor="let discountTypesOption of discounttypes; trackBy: trackById">
+                                    {{ discountTypesOption.name }}
+                                </nz-option>
+                            </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="validFrom">Valid
+                            From
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                            <nz-date-picker [nzFormat]="'dd-MM-yyyy'" formControlName="validFrom" id="validFrom">
+                            </nz-date-picker>
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="validTo">Valid To
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                            <nz-date-picker [nzFormat]="'dd-MM-yyyy'" formControlName="validTo" id="validTo">
+                            </nz-date-picker>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+
+            <nz-row>
+                <nz-col nzOffset="5" [nzSm]="10" [nzXs]="24">
+                    <nz-space>
+                        <nz-space-item>
+                            <button nz-button nzType="primary" type="submit" id="save-entity"
+                                [disabled]="editForm.invalid || isSaving">
+                                <span>Save</span>
+                            </button>
+                        </nz-space-item>
+
+                        <nz-space-item>
+                            <button nz-button nzType="default" type="button" id="cancel-save" (click)="previousState()">
+                                <span>Cancel</span>
+                            </button>
+                        </nz-space-item>
+                    </nz-space>
+                </nz-col>
+            </nz-row>
+        </form>
+    </div>
+</div>

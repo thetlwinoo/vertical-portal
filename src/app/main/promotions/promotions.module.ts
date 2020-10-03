@@ -3,11 +3,15 @@ import { RouterModule } from '@angular/router';
 import { CampaignManagementModule } from './campaign-management/campaign-management.module';
 import { FreeShippingModule } from './free-shipping/free-shipping.module';
 import { SellerVoucherModule } from './seller-voucher/seller-voucher.module';
+import { DiscountTypesModule } from './discount-types/discount-types.module';
+import { DiscountsModule } from './discounts/discounts.module';
 
 const MODULES = [
   CampaignManagementModule,
   FreeShippingModule,
-  SellerVoucherModule
+  SellerVoucherModule,
+  DiscountTypesModule,
+  DiscountsModule
 ];
 
 const ROUTES = [
@@ -23,6 +27,14 @@ const ROUTES = [
   {
     path: 'seller-voucher',
     loadChildren: () => import('./seller-voucher/seller-voucher.module').then(m => m.SellerVoucherModule)
+  },
+  {
+    path: 'discount-types',
+    loadChildren: () => import('./discount-types/discount-types.module').then(m => m.DiscountTypesModule)
+  },
+  {
+    path: 'discounts',
+    loadChildren: () => import('./discounts/discounts.module').then(m => m.DiscountsModule)
   },
   { path: '**', redirectTo: 'campaign-management' },
 ];

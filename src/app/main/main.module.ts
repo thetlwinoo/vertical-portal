@@ -4,6 +4,7 @@ import { MainComponent } from './main.component';
 import { LayoutModule } from 'app/layout/layout.module';
 import { Routes, RouterModule } from '@angular/router';
 import { UserRouteAccessService } from '@vertical/core';
+import { WebContentsComponent } from './web-contents/web-contents.component';
 
 const routes: Routes = [
   {
@@ -31,6 +32,10 @@ const routes: Routes = [
         loadChildren: () => import('./store/store.module').then(m => m.StoreModule),
       },
       {
+        path: 'web-contents',
+        loadChildren: () => import('./web-contents/web-contents.module').then(m => m.WebContentsModule),
+      },
+      {
         path: 'pages',
         loadChildren: () => import('./pages/pages.module').then(m => m.PagesModule),
       },
@@ -45,7 +50,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [MainComponent],
+  declarations: [MainComponent, WebContentsComponent],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),

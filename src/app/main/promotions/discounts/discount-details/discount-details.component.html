@@ -1,0 +1,60 @@
+<div class="control-bar">
+    <nz-space>
+        <nz-space-item>
+            <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
+                <input type="text" nz-input placeholder="Search..." />
+            </nz-input-group>
+            <ng-template #suffixIconButton>
+                <button nz-button nzType="default" nzSearch>
+                    <i nz-icon nzType="search"></i>
+                </button>
+            </ng-template>
+        </nz-space-item>
+
+        <nz-space-item>
+            <button nz-button nzType="default" (click)="loadAll()">
+                View all details
+            </button>
+        </nz-space-item>
+    </nz-space>
+
+    <nz-space>
+        <nz-space-item>
+            <button nz-button nzType="default" (click)="createNewDiscountDetails()">
+                Add Details
+            </button>
+        </nz-space-item>
+    </nz-space>
+</div>
+
+<div class="record-list">
+    <nz-table #dataTable [nzData]="discountDetails" nzSize="small" nzTableLayout="fixed" [nzFrontPagination]="true"
+        [nzHideOnSinglePage]="true">
+        <thead>
+            <tr>
+                <th nzWidth="120px">ID</th>
+                <th>Name</th>
+                <th>Amount</th>
+                <th>Is Percentage</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of dataTable.data">
+                <td [nzLeft]="false">
+                    <a>{{data.id}}</a>
+                </td>
+                <td>{{data.name}}</td>
+                <td>{{data.amount}}</td>
+                <td>
+                    <label nz-checkbox [(ngModel)]="data.isPercentage" [nzDisabled]="true"></label>
+                </td>
+                <td>
+                    <a (click)="createDiscountDetailsModel(data)">Edit</a>
+                    <nz-divider nzType="vertical"></nz-divider>
+                    <a (click)="deleteConfirm(data)">Delete</a>
+                </td>
+            </tr>
+        </tbody>
+    </nz-table>
+</div>

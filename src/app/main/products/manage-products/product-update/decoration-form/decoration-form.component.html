@@ -5,7 +5,9 @@
                 <nz-form-item>
                     <nz-form-label>Care Instructions</nz-form-label>
 
-                    <textarea rows="3" nz-input formControlName="careInstructions"></textarea>
+                    <!-- <textarea rows="3" nz-input formControlName="careInstructions"></textarea> -->
+                    <quill-editor #editor formControlName="careInstructions" [sanitize]="true" ngDefaultControl>
+                    </quill-editor>
                 </nz-form-item>
 
                 <nz-form-item>
@@ -13,7 +15,9 @@
                         Long Description
                     </nz-form-label>
 
-                    <textarea rows="5" nz-input formControlName="longDescription"></textarea>
+                    <!-- <textarea rows="5" nz-input formControlName="longDescription"></textarea> -->
+                    <quill-editor #editor formControlName="longDescription" [sanitize]="true" ngDefaultControl>
+                    </quill-editor>
                 </nz-form-item>
 
                 <nz-form-item>
@@ -21,7 +25,9 @@
                         Highlights
                     </nz-form-label>
 
-                    <textarea rows="5" nz-input formControlName="highlights"></textarea>
+                    <!-- <textarea rows="5" nz-input formControlName="highlights"></textarea> -->
+                    <quill-editor #editor formControlName="highlights" [sanitize]="true" ngDefaultControl>
+                    </quill-editor>
 
                 </nz-form-item>
 
@@ -30,7 +36,9 @@
                         What In The Box
                     </nz-form-label>
 
-                    <textarea rows="5" nz-input formControlName="whatInTheBox"></textarea>
+                    <!-- <textarea rows="5" nz-input formControlName="whatInTheBox"></textarea> -->
+                    <quill-editor #editor formControlName="whatInTheBox" [sanitize]="true" ngDefaultControl>
+                    </quill-editor>
 
                 </nz-form-item>
             </form>

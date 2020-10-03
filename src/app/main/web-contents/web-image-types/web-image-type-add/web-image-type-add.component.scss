@@ -1,0 +1,13 @@
+:host {
+  overflow: hidden;
+  display: block;
+
+  .page-sub-header {
+    padding: 20px 0px;
+    font-size: 1.5em;
+
+    &__title {
+      margin-right: 0.5em;
+    }
+  }
+}

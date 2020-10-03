@@ -38,6 +38,15 @@ $panel-cell-padding: 8px;
         display: flex;
         align-items: center;
         justify-content: center;
+
+        i.anticon-down {
+          margin-left: 0.5em;
+        }
+      }
+
+      a {
+        color: #2f2f2f;
+        font-weight: 500;
       }
     }
   }

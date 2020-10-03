@@ -188,9 +188,9 @@
                     </nz-form-item>
 
                     <nz-form-item>
-                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="activeFlag">Active Flag
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="activeFlag" nzRequired>Active Flag
                         </nz-form-label>
-                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
                             <label nz-checkbox formControlName="activeFlag" id="activeFlag"></label>
                         </nz-form-control>
                     </nz-form-item>
@@ -203,7 +203,7 @@
                             <nz-select [nzMaxTagCount]="3" [nzMaxTagPlaceholder]="tagPlaceHolder" nzMode="multiple"
                                 nzPlaceHolder="Please select" formControlName="deliveryMethods">
                                 <nz-option *ngFor="let deliveryMethodsOption of deliverymethods; trackBy: trackById"
-                                    [nzLabel]="deliveryMethodsOption.name"
+                                    [nzLabel]="deliveryMethodsOption.thirdPartyName"
                                     [nzValue]="getSelected(editForm.get('deliveryMethods')!.value, deliveryMethodsOption)">
                                 </nz-option>
                             </nz-select>
@@ -235,7 +235,7 @@
                     <vs-panel [title]="'Supplier Logo'">
                         <div body>
                             <div class="upload-body-wrapper">
-                                <nz-upload class="avatar-uploader" [nzAction]="blobUrl + 'upload'"
+                                <nz-upload class="avatar-uploader" [nzAction]="blobUrl + 'upload/' + logo"
                                     nzListType="picture-card" [nzShowUploadList]="false" [nzBeforeUpload]="beforeUpload"
                                     (nzChange)="handleLogoChange($event)">
                                     <ng-container *ngIf="!logo">
@@ -252,7 +252,7 @@
                         <div body>
                             <div class="upload-body-wrapper">
                                 <div class="clearfix">
-                                    <nz-upload class="avatar-uploader" [nzAction]="blobUrl + 'upload'"
+                                    <nz-upload class="avatar-uploader" [nzAction]="blobUrl + 'upload/' + nricFrontPhoto"
                                         nzListType="picture-card" [nzShowUploadList]="false"
                                         [nzBeforeUpload]="beforeUpload" (nzChange)="handleNricFrontChange($event)">
                                         <ng-container *ngIf="!nricFrontPhoto">
@@ -271,7 +271,7 @@
                         <div body>
                             <div class="upload-body-wrapper">
                                 <div class="clearfix">
-                                    <nz-upload class="avatar-uploader" [nzAction]="blobUrl + 'upload'"
+                                    <nz-upload class="avatar-uploader" [nzAction]="blobUrl + 'upload/' + nricBackPhoto"
                                         nzListType="picture-card" [nzShowUploadList]="false"
                                         [nzBeforeUpload]="beforeUpload" (nzChange)="handleNricBackChange($event)">
                                         <ng-container *ngIf="!nricBackPhoto">
@@ -290,7 +290,7 @@
                         <div body>
                             <div class="upload-body-wrapper">
                                 <div class="clearfix">
-                                    <nz-upload class="avatar-uploader" [nzAction]="blobUrl + 'upload'"
+                                    <nz-upload class="avatar-uploader" [nzAction]="blobUrl + 'upload/' + bankBookPhoto"
                                         nzListType="picture-card" [nzShowUploadList]="false"
                                         [nzBeforeUpload]="beforeUpload"
                                         (nzChange)="handleBankBookFirstPageChange($event)">
@@ -310,7 +310,8 @@
                         <div body>
                             <div class="upload-body-wrapper">
                                 <div class="clearfix">
-                                    <nz-upload class="avatar-uploader" [nzAction]="blobUrl + 'upload'"
+                                    <nz-upload class="avatar-uploader"
+                                        [nzAction]="blobUrl + 'upload/' + companyRegistrationPhoto"
                                         nzListType="picture-card" [nzShowUploadList]="false"
                                         [nzBeforeUpload]="beforeUpload"
                                         (nzChange)="handleCompanyRegistrationPhotoChange($event)">
@@ -332,7 +333,8 @@
                         <div body>
                             <div class="upload-body-wrapper">
                                 <div class="clearfix">
-                                    <nz-upload class="avatar-uploader" [nzAction]="blobUrl + 'upload'"
+                                    <nz-upload class="avatar-uploader"
+                                        [nzAction]="blobUrl + 'upload/' + distributorCertificatePhoto"
                                         nzListType="picture-card" [nzShowUploadList]="false"
                                         [nzBeforeUpload]="beforeUpload"
                                         (nzChange)="handleDistributorCertificatePhotoChange($event)">

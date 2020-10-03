@@ -66,7 +66,7 @@
                                                 formControlName="regionId" (ngModelChange)="selectRegion(regionId)">
                                                 <nz-option [nzValue]="regionsOption.id" [nzLabel]="regionsOption.name"
                                                     *ngFor="let regionsOption of regions; trackBy: trackById">
-                                                    {{ regionsOption.code }}
+                                                    {{ regionsOption.name }}
                                                 </nz-option>
                                             </nz-select>
                                         </nz-form-control>
@@ -106,19 +106,6 @@
                                             <input nz-input formControlName="postalCode" id="postalCode" />
                                         </nz-form-control>
                                     </nz-form-item>
-
-                                    <!-- <nz-form-item>
-                                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="town">Town
-                                        </nz-form-label>
-                                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
-                                            <nz-select name="town" formControlName="townId"
-                                                (ngModelChange)="selectTown(town)" [nzDisabled]="!townshipId">
-                                                <nz-option [nzValue]="townsOption.id" [nzLabel]="townsOption.name"
-                                                    *ngFor="let townsOption of towns; trackBy: trackById">
-                                                </nz-option>
-                                            </nz-select>
-                                        </nz-form-control>
-                                    </nz-form-item> -->
 
                                     <nz-form-item>
                                         <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="addressLine1">Address

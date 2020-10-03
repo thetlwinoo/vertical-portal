@@ -60,9 +60,10 @@
                                         </nz-form-label>
 
                                         <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
-                                            <nz-upload class="avatar-uploader" [nzAction]="blobUrl + 'upload'"
-                                                nzListType="picture-card" [nzShowUploadList]="false"
-                                                [nzBeforeUpload]="beforeUpload" (nzChange)="handleChange($event)">
+                                            <nz-upload class="avatar-uploader"
+                                                [nzAction]="blobUrl + 'upload/' + iconPhoto" nzListType="picture-card"
+                                                [nzShowUploadList]="false" [nzBeforeUpload]="beforeUpload"
+                                                (nzChange)="handleChange($event)">
                                                 <ng-container *ngIf="!iconPhoto">
                                                     <i class="upload-icon" nz-icon
                                                         [nzType]="loading ? 'loading' : 'plus'"></i>
@@ -130,9 +131,109 @@
                         </div>
                     </div>
                 </nz-tab>
+
+                <nz-tab [nzTitle]="'Web Images'">
+                    <div class="control-bar">
+                        <nz-space>
+                            <nz-space-item>
+                                <nz-select class="web-image-type" [(ngModel)]="webImageType">
+                                    <nz-option [nzValue]="webImageTypeOption" [nzLabel]="webImageTypeOption.name"
+                                        *ngFor="let webImageTypeOption of webImageTypes; trackBy: trackById">
+                                    </nz-option>
+                                </nz-select>
+                            </nz-space-item>
+
+                            <nz-space-item>
+                                <span *ngIf="webImageType">{{webImageType.width}}x{{webImageType.height}}</span>
+                            </nz-space-item>
+                        </nz-space>
+
+                        <nz-space>
+                            <nz-space-item>
+                                <nz-upload class="web-image-uploader" [nzAction]="blobUrl + 'upload'"
+                                    [nzShowUploadList]="false" [nzBeforeUpload]="beforeUpload"
+                                    (nzChange)="uploadWebImage($event)">
+                                    <button nz-button type="button"><i nz-icon nzType="upload"></i>Upload</button>
+                                </nz-upload>
+                            </nz-space-item>
+                        </nz-space>
+                    </div>
+
+                    <div class="web-image-list">
+                        <nz-table class="no-hover-row" #dataTable [nzData]="webImages" nzSize="small"
+                            nzTableLayout="fixed" [nzFrontPagination]="true" [nzHideOnSinglePage]="true"
+                            nzTableLayout="fixed">
+                            <thead>
+                                <tr>
+                                    <th>Web Image</th>
+                                    <th>Type</th>
+                                    <th>Priority</th>
+                                    <th nzWidth="100px">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let data of dataTable.data">
+                                    <tr>
+                                        <td>
+                                            <img *ngIf="data.url" [src]="blobUrl + data.url + '/thumbnail'"
+                                                style="max-height: 100px" nz-popover
+                                                [nzPopoverContent]="webImageTemplate" nzPopoverPlacement="rightTop" />
+
+                                            <ng-template #webImageTemplate>
+                                                <img [src]="blobUrl + data.url + '/original'" style="max-width: 90vh">
+                                            </ng-template>
+
+                                            <a [href]="blobUrl + data.url + '/original'" target="_blank" nz-button
+                                                nzType="link" *ngIf="data.url">
+                                                <span><i nz-icon nzType="download"></i> Download</span>
+                                            </a>
+                                        </td>
+                                        <!-- <td>{{data.title}}</td>
+                                    <td>{{data.subTitle}}</td> -->
+                                        <td>{{data.webImageTypeName}}</td>
+                                        <td>
+                                            <a (click)="deleteConfirm(data)">Delete</a>
+                                        </td>
+                                    </tr>
+
+                                    <tr [nzExpand]="expandSet.has(data.id)">
+                                        <form nz-form [formGroup]="editWebImageForm">
+                                            <div class="descriptions">
+                                                <nz-descriptions>
+                                                    <nz-descriptions-item nzTitle="Title">
+                                                        <input nz-input formControlName="title" id="title" />
+                                                    </nz-descriptions-item>
+                                                    <nz-descriptions-item nzTitle="Sub Title">
+                                                        <input nz-input formControlName="subTitle" id="subTitle" />
+                                                    </nz-descriptions-item>
+                                                    <nz-descriptions-item nzTitle="Priority">
+                                                        <input nz-input formControlName="priority" id="priority" />
+                                                    </nz-descriptions-item>
+                                                    <nz-descriptions-item nzTitle="Promo StartDate">
+                                                        <nz-date-picker [nzFormat]="'dd-MM-yyyy'"
+                                                            formControlName="promoStartDate" id="promoStartDate">
+                                                        </nz-date-picker>
+                                                    </nz-descriptions-item>
+                                                    <nz-descriptions-item nzTitle="Promo EndDate">
+                                                        <nz-date-picker [nzFormat]="'dd-MM-yyyy'"
+                                                            formControlName="promoEndDate" id="promoEndDate">
+                                                        </nz-date-picker>
+                                                    </nz-descriptions-item>
+                                                </nz-descriptions>
+                                            </div>
+                                            <div class="descriptions-control">
+                                                <a (click)="saveWebImage()">Save</a>
+                                                <nz-divider nzType="vertical"></nz-divider>
+                                                <a (click)="onExpandChange(data, false)">Cancel</a>
+                                            </div>
+                                        </form>
+                                    </tr>
+                                </ng-container>
+                            </tbody>
+                        </nz-table>
+                    </div>
+                </nz-tab>
             </nz-tabset>
         </div>
-
-
     </div>
 </div>

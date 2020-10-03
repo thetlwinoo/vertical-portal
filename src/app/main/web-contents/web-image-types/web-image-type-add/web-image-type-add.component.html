@@ -1,0 +1,86 @@
+<div class="pagebar-content-wrapper">
+    <div class="page-header">
+        <nz-breadcrumb nzSeparator=">">
+            <nz-breadcrumb-item>
+                <a href="javascript:void(0)" [routerLink]="['../']">Web ImageTypes</a>
+            </nz-breadcrumb-item>`
+            <nz-breadcrumb-item>
+                <span>Add Web ImageType</span>
+            </nz-breadcrumb-item>
+        </nz-breadcrumb>
+    </div>
+
+    <div class="page-sub-header">
+        <span class="page-sub-header__title">Add Web ImageType</span>
+    </div>
+
+    <div class="page-body">
+        <form nz-form [formGroup]="editForm" (ngSubmit)="save()">
+            <div nz-row>
+                <div nz-col class="gutter-row" [nzXs]="24" [nzLg]="15">
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="id">ID
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                            <input nz-input formControlName="id" id="id" disabled />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="name">Name
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                            <input nz-input formControlName="name" id="name" (ngModelChange)="onChangeName($event)" />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="handle">Handle
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                            <input nz-input formControlName="handle" id="handle" disabled />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="width">Dimension(Width)
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                            <input nz-input formControlName="width" id="width" />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="height">Dimension(Height)
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+                            <input nz-input formControlName="height" id="height" />
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col class="gutter-row" [nzXs]="24" [nzLg]="9">
+
+                </div>
+            </div>
+
+            <nz-row>
+                <nz-col nzOffset="5" [nzSm]="10" [nzXs]="24">
+                    <nz-space>
+                        <nz-space-item>
+                            <button nz-button nzType="primary" type="submit" id="save-entity"
+                                [disabled]="editForm.invalid || isSaving">
+                                <span>Save</span>
+                            </button>
+                        </nz-space-item>
+
+                        <nz-space-item>
+                            <button nz-button nzType="default" type="button" id="cancel-save" (click)="previousState()">
+                                <span>Cancel</span>
+                            </button>
+                        </nz-space-item>
+                    </nz-space>
+                </nz-col>
+            </nz-row>
+        </form>
+    </div>
+</div>

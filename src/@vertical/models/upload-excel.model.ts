@@ -18,6 +18,8 @@ export class UploadExcel {
   productCategory?: string;
   productAttribute?: string;
   productOption?: string;
+  sellStartDate?: Moment;
+  sellEndDate?: Moment;
   releaseDate?: Moment;
   availableDate?: Moment;
   productType?: string;
@@ -49,6 +51,9 @@ export class UploadExcel {
   retailPrice?: number;
   promotionPrice?: number;
   currencyCode?: string;
+  freeDelivery?: boolean;
+  madeInMyanmar?: boolean;
+  cashOnDelivery?: boolean;
   itemLength?: number;
   itemLengthUnit?: string;
   itemWidth?: number;
@@ -65,7 +70,6 @@ export class UploadExcel {
   packageHeightUnit?: string;
   itemPackageWeight?: number;
   itemPackageWeightUnit?: string;
-  remark?: boolean;
 
   constructor(data) {
     {
@@ -84,6 +88,8 @@ export class UploadExcel {
       this.productCategory = data['Product Category'] || '';
       this.productAttribute = data['Product Attribute'] || '';
       this.productOption = data['Product Option'] || '';
+      this.sellStartDate = moment(data['Sell Start Date'], 'YYYY-MM-DD') || moment();
+      this.sellEndDate = moment(data['Sell End Date'], 'YYYY-MM-DD') || moment();
       this.releaseDate = moment(data['Release Date'], 'YYYY-MM-DD') || moment();
       this.availableDate = moment(data['Available Date'], 'YYYY-MM-DD') || moment();
       this.longDescription = data['Long Description'] || '';
@@ -114,6 +120,9 @@ export class UploadExcel {
       this.retailPrice = data['Retail Price'] || 0.0;
       this.promotionPrice = data['Promotion Price'] || 0.0;
       this.currencyCode = data['Currency Code'] || '';
+      this.freeDelivery = data['Free Delivery'] || '';
+      this.madeInMyanmar = data['Made In Myanmar'] || '';
+      this.cashOnDelivery = data['Cash On Delivery'] || '';
       this.itemLength = data['Item Length'] || 0;
       this.itemLengthUnit = data['Item Length Unit'] || '';
       this.itemWidth = data['Item Width'] || 0;
@@ -130,7 +139,6 @@ export class UploadExcel {
       this.packageHeightUnit = data['Package Height Unit'] || '';
       this.itemPackageWeight = data['Item Package Weight'] || 0;
       this.itemPackageWeightUnit = data['Item Package Weight Unit'];
-      this.remark = data.Remark || '';
     }
   }
 }

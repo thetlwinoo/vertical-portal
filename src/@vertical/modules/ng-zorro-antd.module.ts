@@ -44,6 +44,7 @@ import { NzAlertModule } from 'ng-zorro-antd/alert';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { NzCascaderModule } from 'ng-zorro-antd/cascader';
 import { NzAnchorModule } from 'ng-zorro-antd/anchor';
+import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 
 import {
   UserOutline,
@@ -177,7 +178,8 @@ const icons: IconDefinition[] = [
     NzAlertModule,
     NzDescriptionsModule,
     NzCascaderModule,
-    NzAnchorModule
+    NzAnchorModule,
+    NzCollapseModule
   ],
   providers: [
     // { provide: NZ_ICONS, useValue: icons },

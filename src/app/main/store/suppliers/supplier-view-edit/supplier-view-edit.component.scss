@@ -41,6 +41,17 @@
     padding: 16px;
     background-color: #ffffff;
   }
+
+  nz-select {
+    min-width: 200px;
+  }
+
+  .descriptions-control {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-right: 1em;
+  }
 }
 
 :host ::ng-deep .upload-list-inline .ant-upload-list-item {

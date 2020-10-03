@@ -6,12 +6,9 @@
             <nz-space-item>
                 <button nz-button nzType="default" (click)="file.click()">Import</button>
             </nz-space-item>
-            <nz-space-item>
-                <button nz-button nzType="default">Add Root Category</button>
-            </nz-space-item>
-            <nz-space-item>
+            <!-- <nz-space-item>
                 <button nz-button nzType="default" (click)="showUpdateConfirm()">Confirm Update</button>
-            </nz-space-item>
+            </nz-space-item> -->
         </nz-space>
     </div>
 </vs-pagebar>
@@ -24,34 +21,66 @@
             <div nz-col [nzXs]="24" [nzLg]="12">
                 <vs-panel [title]="'Look up'">
                     <div extra>
-                        <nz-space>
-                            <nz-space-item>
-                                <button nz-button nzType="default" [nzSize]="'medium'" (click)="nodeExpand(true)">
-                                    <i nz-icon nzType="node-expand" nzTheme="outline"></i>
+                        <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="actionMenu">
+                            Actions
+                            <i nz-icon nzType="caret-down"></i>
+                        </a>
+                        <nz-dropdown-menu #actionMenu="nzDropdownMenu">
+                            <ul nz-menu>
+                                <li nz-menu-item (click)="onAddRoot()">
+                                    Add Root
+                                </li>
+                                <li nz-menu-item (click)="onAddChildNode($event)" [nzDisabled]="!selectedCategory">
+                                    Add Child Node
+                                </li>
+                                <li nz-menu-item (click)="deleteConfirmNode(selectedCategory)"
+                                    [nzDisabled]="!selectedCategory">
+                                    Delete Node
+                                </li>
+                                <li nz-menu-divider></li>
+                                <li nz-menu-item (click)="nodeExpand(true)">
                                     Expand
-                                </button>
-                            </nz-space-item>
-                            <nz-space-item>
-                                <button nz-button nzType="default" [nzSize]="'medium'" (click)="nodeExpand(false)">
-                                    <i nz-icon nzType="node-collapse" nzTheme="outline"></i>
+                                </li>
+                                <li nz-menu-item (click)="nodeExpand(false)">
                                     Collapse
-                                </button>
-                            </nz-space-item>
-                            <nz-space-item>
-                                <nz-input-group [nzSuffix]="suffixIcon">
-                                    <input type="text" nz-input placeholder="Search" [(ngModel)]="searchValue" />
-                                </nz-input-group>
-                                <ng-template #suffixIcon>
-                                    <i nz-icon nzType="search"></i>
-                                </ng-template>
-                            </nz-space-item>
-                        </nz-space>
+                                </li>
+                            </ul>
+                        </nz-dropdown-menu>
                     </div>
 
                     <div body class="content-wrapper">
-                        <nz-tree [nzData]="(categories$ | async) | orderBy:'id'" [nzSearchValue]="searchValue"
-                            nzDraggable (nzClick)="nzClick($event)" (nzOnDrop)="nzEvent($event)"
-                            [nzExpandAll]="nodeExpandInd"> </nz-tree>
+                        <nz-input-group class="search-category" [nzSuffix]="suffixIcon">
+                            <input type="text" nz-input placeholder="Search" [(ngModel)]="searchValue" />
+                        </nz-input-group>
+                        <ng-template #suffixIcon>
+                            <i nz-icon nzType="search"></i>
+                        </ng-template>
+                        <nz-tree [nzData]="categories | orderBy:'sortOrder'" [nzSearchValue]="searchValue"
+                            [nzHideUnMatched]="true" nzDraggable (nzClick)="activeNode($event)"
+                            (nzOnDrop)="nzEvent($event)" [nzExpandAll]="nodeExpandInd" [nzTreeTemplate]="nzTreeTemplate"
+                            (contextmenu)="contextMenu($event, menu)">
+                        </nz-tree>
+                        <ng-template #nzTreeTemplate let-node let-origin="origin">
+                            <span class="custom-node">
+                                <span *ngIf="!node.isLeaf">
+                                    <!-- <i nz-icon [nzType]="node.isExpanded ? 'folder-open' : 'folder'"
+                                        (click)="nzClick(node)"></i> -->
+                                    <span class="folder-name">{{ node.title }}</span>
+                                    <!-- <span class="folder-desc">created by {{ origin.author | lowercase }}</span> -->
+                                </span>
+                                <span *ngIf="node.isLeaf">
+                                    <!-- <i nz-icon nzType="file"></i> -->
+                                    <span class="file-name">{{ node.title }}</span>
+                                    <!-- <span class="file-desc">modified by {{ origin.author | lowercase }}</span> -->
+                                </span>
+                            </span>
+                        </ng-template>
+                        <nz-dropdown-menu #menu="nzDropdownMenu">
+                            <ul nz-menu>
+                                <li nz-menu-item (click)="onAddChildNode($event)">Add Child Node</li>
+                                <li nz-menu-item (click)="onDeleteNode($event)">Delete Node</li>
+                            </ul>
+                        </nz-dropdown-menu>
                     </div>
                 </vs-panel>
             </div>
@@ -60,16 +89,18 @@
                     <div extra>
                         <nz-space>
                             <nz-space-item>
-                                <button nz-button nzType="default" [nzSize]="'small'" [disabled]="!selectedCategory"
-                                    (click)="onEditMode(selectedCategory)" *ngIf="!editMode">Edit</button>
+                                <a nz-button nzType="link" [nzSize]="'small'" [disabled]="!selectedCategory"
+                                    (click)="onEditMode(selectedCategory)" *ngIf="!editMode">Edit</a>
                             </nz-space-item>
+
                             <nz-space-item>
-                                <button nz-button nzType="default" [nzSize]="'small'"
-                                    (click)="onSaveItem(selectedCategory)" *ngIf="editMode">Save</button>
+                                <a nz-button nzType="link" [nzSize]="'small'" (click)="onSaveItem(selectedCategory)"
+                                    *ngIf="editMode">Save</a>
                             </nz-space-item>
+
                             <nz-space-item>
-                                <button nz-button nzType="default" [nzSize]="'small'"
-                                    (click)="onCancelMode(selectedCategory)" *ngIf="editMode">Cancel</button>
+                                <a nz-button nzType="link" [nzSize]="'small'" (click)="onCancelMode(selectedCategory)"
+                                    *ngIf="editMode">Cancel</a>
                             </nz-space-item>
                         </nz-space>
                     </div>
@@ -94,10 +125,11 @@
                             </nz-descriptions-item>
                             <nz-descriptions-item nzTitle="Icon">
                                 <div *ngIf="editMode;else viewThumbnailUrl">
-                                    <nz-upload class="avatar-uploader" [nzAction]="blobUrl + 'upload'"
+                                    <nz-upload class="avatar-uploader"
+                                        [nzAction]="blobUrl + 'upload/' + selectedCategory.iconPhoto"
                                         nzListType="picture-card" [nzShowUploadList]="false"
                                         [nzBeforeUpload]="beforeUpload"
-                                        (nzChange)="handleChange($event, selectedCategory)">
+                                        (nzChange)="uploadIcon($event, selectedCategory)">
                                         <ng-container *ngIf="!selectedCategory.iconPhoto">
                                             <i class="upload-icon" nz-icon [nzType]="loading ? 'loading' : 'plus'"></i>
                                             <div class="ant-upload-text">Upload</div>
@@ -116,10 +148,31 @@
                                 <input nz-input placeholder="Icon Font" [(ngModel)]="selectedCategory.iconFont"
                                     *ngIf="editMode;else viewIconFont" />
                                 <ng-template #viewIconFont>
-                                    <!-- <span>{{selectedCategory.iconFont}}</span> -->
                                     <span *ngIf="selectedCategory.iconFont">
-                                        <i class="iconfont icon-{{selectedCategory.iconFont}}"></i>
+                                        <i class="iconfont {{selectedCategory.iconFont}}"></i>
+                                        <!-- <i nz-icon [nzIconfont]="selectedCategory.iconFont"></i> -->
                                     </span>
+                                </ng-template>
+                            </nz-descriptions-item>
+                            <nz-descriptions-item nzTitle="Image">
+                                <div *ngIf="editMode;else viewImageUrl">
+                                    <nz-upload class="avatar-uploader"
+                                        [nzAction]="blobUrl + 'upload/' + selectedCategory.image"
+                                        nzListType="picture-card" [nzShowUploadList]="false"
+                                        [nzBeforeUpload]="beforeUpload"
+                                        (nzChange)="uploadImage($event, selectedCategory)">
+                                        <ng-container *ngIf="!selectedCategory.image">
+                                            <i class="upload-icon" nz-icon [nzType]="loading ? 'loading' : 'plus'"></i>
+                                            <div class="ant-upload-text">Upload</div>
+                                        </ng-container>
+                                        <img *ngIf="selectedCategory.image"
+                                            [src]="blobUrl + selectedCategory.image + '/thumbnail'"
+                                            style="width: 100%" />
+                                    </nz-upload>
+                                </div>
+                                <ng-template #viewImageUrl>
+                                    <img width="100" *ngIf="selectedCategory.image"
+                                        [src]="blobUrl + selectedCategory.image + '/thumbnail'" />
                                 </ng-template>
                             </nz-descriptions-item>
                             <nz-descriptions-item nzTitle="Just For You">
@@ -140,4 +193,110 @@
         </div>
     </div>
 
+    <div class="web-images-wrapper">
+        <vs-panel [title]="'Upload Web Images'">
+            <div extra>
+                <nz-space>
+                    <nz-space-item>
+                        <span *ngIf="webImageType">{{webImageType.width}}x{{webImageType.height}}</span>
+                    </nz-space-item>
+
+                    <nz-space-item>
+                        <nz-select class="web-image-type" [(ngModel)]="webImageType">
+                            <nz-option [nzValue]="webImageTypeOption" [nzLabel]="webImageTypeOption.name"
+                                *ngFor="let webImageTypeOption of webImageTypes; trackBy: trackById">
+                            </nz-option>
+                        </nz-select>
+                    </nz-space-item>
+
+                    <nz-space-item>
+                        <nz-upload class="web-image-uploader" [nzAction]="blobUrl + 'upload'" [nzShowUploadList]="false"
+                            [nzBeforeUpload]="beforeUpload" (nzChange)="uploadWebImage($event)">
+                            <button nz-button type="button"><i nz-icon nzType="upload"></i>Upload</button>
+                        </nz-upload>
+                    </nz-space-item>
+                </nz-space>
+            </div>
+
+            <div body class="content-wrapper">
+                <div class="web-image-list">
+                    <nz-table class="no-hover-row" #dataTable [nzData]="webImages" nzSize="small" nzTableLayout="fixed"
+                        [nzFrontPagination]="true" [nzHideOnSinglePage]="true" nzTableLayout="fixed">
+                        <thead>
+                            <tr>
+                                <th>Web Image</th>
+                                <!-- <th>Title</th>
+                                <th>Sub Title</th> -->
+                                <th>Type</th>
+                                <th>Priority</th>
+                                <th nzWidth="100px">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ng-container *ngFor="let data of dataTable.data">
+                                <tr>
+                                    <td>
+                                        <img *ngIf="data.url" [src]="blobUrl + data.url + '/thumbnail'"
+                                            style="max-height: 100px" nz-popover [nzPopoverContent]="webImageTemplate"
+                                            nzPopoverPlacement="rightTop" />
+
+                                        <ng-template #webImageTemplate>
+                                            <img [src]="blobUrl + data.url + '/original'" style="max-width: 90vh">
+                                        </ng-template>
+
+                                        <a [href]="blobUrl + data.url + '/original'" target="_blank" nz-button
+                                            nzType="link" *ngIf="data.url">
+                                            <span><i nz-icon nzType="download"></i> Download</span>
+                                        </a>
+                                    </td>
+                                    <td>{{data.webImageTypeName}}</td>
+                                    <td>{{data.priority}}</td>
+                                    <td>
+                                        <a (click)="onExpandChange(data, true)">Edit</a>
+                                        <nz-divider nzType="vertical"></nz-divider>
+                                        <a (click)="deleteConfirm(data)">Delete</a>
+                                    </td>
+                                </tr>
+
+                                <tr [nzExpand]="expandSet.has(data.id)">
+                                    <div class="descriptions">
+                                        <form nz-form [formGroup]="editWebImageForm">
+                                            <div class="descriptions">
+                                                <nz-descriptions>
+                                                    <nz-descriptions-item nzTitle="Title">
+                                                        <input nz-input formControlName="title" id="title" />
+                                                    </nz-descriptions-item>
+                                                    <nz-descriptions-item nzTitle="Sub Title">
+                                                        <input nz-input formControlName="subTitle" id="subTitle" />
+                                                    </nz-descriptions-item>
+                                                    <nz-descriptions-item nzTitle="Priority">
+                                                        <input nz-input formControlName="priority" id="priority" />
+                                                    </nz-descriptions-item>
+                                                    <nz-descriptions-item nzTitle="Promo StartDate">
+                                                        <nz-date-picker [nzFormat]="'dd-MM-yyyy'"
+                                                            formControlName="promoStartDate" id="promoStartDate">
+                                                        </nz-date-picker>
+                                                    </nz-descriptions-item>
+                                                    <nz-descriptions-item nzTitle="Promo EndDate">
+                                                        <nz-date-picker [nzFormat]="'dd-MM-yyyy'"
+                                                            formControlName="promoEndDate" id="promoEndDate">
+                                                        </nz-date-picker>
+                                                    </nz-descriptions-item>
+                                                </nz-descriptions>
+                                            </div>
+                                            <div class="descriptions-control">
+                                                <a (click)="saveWebImage()">Save</a>
+                                                <nz-divider nzType="vertical"></nz-divider>
+                                                <a (click)="onExpandChange(data, false)">Cancel</a>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </tr>
+                            </ng-container>
+                        </tbody>
+                    </nz-table>
+                </div>
+            </div>
+        </vs-panel>
+    </div>
 </div>

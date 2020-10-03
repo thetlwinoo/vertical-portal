@@ -57,7 +57,6 @@ export class AccountService {
         catchError(() => of(null)),
         tap((account: Account | null) => {
           this.authenticate(account);
-          console.log('account', account)
           // After retrieve the account info, the language will be changed to
           // the user's preferred language configured in the account setting
           if (account && account.langKey) {

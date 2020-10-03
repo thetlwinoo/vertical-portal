@@ -6,9 +6,11 @@ import { VsSharedModule } from '@vertical/shared.module';
 import { ProductsSharedModule } from '../shared/products-shared.module';
 import { ManageCategoriesComponent } from './manage-categories.component';
 import { DocumentProcessService } from '@vertical/services';
+import { ManageCategoriesAddComponent } from './manage-categories-add/manage-categories-add.component';
 
 const COMPONENTS = [
-  ManageCategoriesComponent
+  ManageCategoriesComponent,
+  ManageCategoriesAddComponent
 ];
 
 const SERVICES = [

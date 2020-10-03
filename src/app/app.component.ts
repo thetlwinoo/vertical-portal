@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 import * as fromAuth from 'app/ngrx/auth/reducers';
 import { SupplierActions } from 'app/ngrx/auth/actions';
 import { AccountService } from '@vertical/core';
+import { SplashScreenService } from '@vertical/services';
 
 @Component({
   selector: 'app-root',
@@ -22,6 +23,7 @@ export class AppComponent {
     // private translationLoaderService: TranslationLoaderService,
     private store: Store<fromAuth.State>,
     private accountService: AccountService,
+    private splashScreenService: SplashScreenService
   ) {
     this.accountService.identity().subscribe((account) => {
       if (account) {

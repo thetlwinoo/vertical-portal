@@ -1,5 +1,5 @@
 @import "../node_modules/ng-zorro-antd/ng-zorro-antd.less";
-@import "./@vertical/icon-fonts/side-cag-sets/iconfont.css";
+@import "./@vertical/icon-fonts/project-set/iconfont.css";
 @theme: default;
 
 // The prefix to use on all css classes from ant.
@@ -910,4 +910,10 @@
 
 .ant-layout-content {
   min-height: unset !important;
+}
+
+nz-table.no-hover-row {
+  .ant-table-tbody > tr.ant-table-row:hover > td {
+    background: none !important;
+  }
 }

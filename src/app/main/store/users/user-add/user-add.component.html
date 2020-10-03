@@ -19,8 +19,9 @@
             <div nz-row>
                 <div nz-col class="gutter-row" [nzXs]="24" [nzLg]="12">
                     <nz-form-control [nzOffset]="8" [nzSm]="14" [nzXs]="24" nzHasFeedback>
-                        <nz-upload id="profilePhoto" class="avatar-uploader" [nzAction]="blobUrl + 'upload'"
-                            nzListType="picture-card" [nzShowUploadList]="false" [nzBeforeUpload]="beforeUpload"
+                        <nz-upload id="profilePhoto" class="avatar-uploader"
+                            [nzAction]="blobUrl + 'upload/' + profilePhoto" nzListType="picture-card"
+                            [nzShowUploadList]="false" [nzBeforeUpload]="beforeUpload"
                             (nzChange)="handleChange($event)">
                             <ng-container *ngIf="!profilePhoto">
                                 <i class="upload-icon" nz-icon [nzType]="loading ? 'loading' : 'plus'"></i>

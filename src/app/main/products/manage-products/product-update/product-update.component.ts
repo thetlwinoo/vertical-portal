@@ -351,7 +351,7 @@ export class ProductUpdateComponent implements OnInit, OnDestroy {
       itemPackageWeightUnitId: stockItems.itemPackageWeightUnitId,
       productAttributeId: stockItems.productAttributeId,
       productOptionId: stockItems.productOptionId,
-      materialId: stockItems.materialId,
+      materials: stockItems.materials,
       currencyId: stockItems.currencyId,
       barcodeTypeId: stockItems.barcodeTypeId,
       productId: stockItems.productId,

@@ -1,0 +1,110 @@
+<form nz-form [formGroup]="editForm" (ngSubmit)="save()">
+    <nz-descriptions nzBordered [nzColumn]="2">
+        <nz-descriptions-item nzTitle="Name">
+            <nz-form-control nzHasFeedback>
+                <input nz-input formControlName="name" id="name" />
+            </nz-form-control>
+        </nz-descriptions-item>
+
+        <nz-descriptions-item nzTitle="Amount">
+            <nz-form-control nzHasFeedback>
+                <input nz-input formControlName="amount" id="amount" />
+            </nz-form-control>
+        </nz-descriptions-item>
+
+        <nz-descriptions-item nzTitle="Is Percentage">
+            <nz-form-control nzHasFeedback>
+                <label nz-checkbox formControlName="isPercentage" id="isPercentage"></label>
+            </nz-form-control>
+        </nz-descriptions-item>
+
+        <nz-descriptions-item nzTitle="Is Allow Combination">
+            <nz-form-control nzHasFeedback>
+                <label nz-checkbox formControlName="isAllowCombinationDiscount" id="isAllowCombinationDiscount"></label>
+            </nz-form-control>
+        </nz-descriptions-item>
+
+        <nz-descriptions-item nzTitle="Is Final Bill">
+            <nz-form-control nzHasFeedback>
+                <label nz-checkbox formControlName="isFinalBillDiscount" id="v"></label>
+            </nz-form-control>
+        </nz-descriptions-item>
+
+        <nz-descriptions-item nzTitle="Start Count">
+            <nz-form-control>
+                <input nz-input formControlName="startCount" id="startCount" />
+            </nz-form-control>
+        </nz-descriptions-item>
+
+        <nz-descriptions-item nzTitle="End Count">
+            <nz-form-control>
+                <input nz-input formControlName="endCount" id="endCount" />
+            </nz-form-control>
+        </nz-descriptions-item>
+
+        <nz-descriptions-item nzTitle="Multiply Count">
+            <nz-form-control>
+                <input nz-input formControlName="multiplyCount" id="multiplyCount" />
+            </nz-form-control>
+        </nz-descriptions-item>
+
+        <nz-descriptions-item nzTitle="Min Amount">
+            <nz-form-control>
+                <input nz-input formControlName="minAmount" id="minAmount" />
+            </nz-form-control>
+        </nz-descriptions-item>
+
+        <nz-descriptions-item nzTitle="Max Amount">
+            <nz-form-control>
+                <input nz-input formControlName="maxAmount" id="maxAmount" />
+            </nz-form-control>
+        </nz-descriptions-item>
+
+        <nz-descriptions-item nzTitle="Min VolumeWeight">
+            <nz-form-control>
+                <input nz-input formControlName="minVolumeWeight" id="minVolumeWeight" />
+            </nz-form-control>
+        </nz-descriptions-item>
+
+        <nz-descriptions-item nzTitle="Max VolumeWeight">
+            <nz-form-control>
+                <input nz-input formControlName="maxVolumeWeight" id="maxVolumeWeight" />
+            </nz-form-control>
+        </nz-descriptions-item>
+
+        <nz-descriptions-item nzTitle="Max Volume Weight">
+            <nz-form-control>
+                <input nz-input formControlName="maxVolumeWeight" id="maxVolumeWeight" />
+            </nz-form-control>
+        </nz-descriptions-item>
+
+        <nz-descriptions-item nzTitle="Stock Item">
+            <nz-form-control>
+                <nz-select name="stockItem" nzShowSearch nzAllowClear formControlName="stockItemId">
+                    <nz-option [nzValue]="stockItemsOption.id" [nzLabel]="stockItemsOption.name"
+                        *ngFor="let stockItemsOption of stockitems; trackBy: trackById">
+                        {{ stockItemsOption.name }}
+                    </nz-option>
+                </nz-select>
+            </nz-form-control>
+        </nz-descriptions-item>
+
+        <nz-descriptions-item nzTitle="Product Category">
+            <nz-form-control>
+                <nz-select name="productCategory" nzShowSearch nzAllowClear formControlName="productCategoryId">
+                    <nz-option [nzValue]="productCategoryOption.id" [nzLabel]="productCategoryOption.name"
+                        *ngFor="let productCategoryOption of productCategories; trackBy: trackById">
+                        {{ productCategoryOption.name }}
+                    </nz-option>
+                </nz-select>
+            </nz-form-control>
+        </nz-descriptions-item>
+
+        <!-- <nz-descriptions-item nzTitle="Modified Date">
+            <nz-form-control nzHasFeedback>
+                <nz-date-picker [nzFormat]="'dd-MM-yyyy'" formControlName="modifiedDate" id="modifiedDate">
+                </nz-date-picker>
+            </nz-form-control>
+        </nz-descriptions-item> -->
+    </nz-descriptions>
+</form>

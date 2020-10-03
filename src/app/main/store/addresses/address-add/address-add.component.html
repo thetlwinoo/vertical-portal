@@ -59,7 +59,7 @@
                             <nz-select name="region" nzShowSearch nzAllowClear formControlName="regionId"
                                 (ngModelChange)="selectRegion(regionId)">
                                 <nz-option [nzValue]="regionsOption.id" [nzLabel]="regionsOption.name"
-                                    *ngFor="let regionsOption of regions; trackBy: trackById">{{ regionsOption.code }}
+                                    *ngFor="let regionsOption of regions; trackBy: trackById">{{ regionsOption.name }}
                                 </nz-option>
                             </nz-select>
                         </nz-form-control>

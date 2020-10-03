@@ -120,7 +120,7 @@ export class SkuFormComponent implements OnInit, OnChanges {
       itemPackageWeightUnitId: [],
       productAttributeId: [],
       productOptionId: [],
-      materialId: [],
+      materials: [],
       currencyId: [],
       barcodeTypeId: [],
       productId: [],

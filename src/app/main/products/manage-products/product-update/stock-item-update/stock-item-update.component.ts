@@ -46,7 +46,7 @@ export class StockItemUpdateComponent implements OnInit, OnChanges {
   attributeInd = false;
   optionInd = false;
   unitmeasures: IUnitMeasure[] = [];
-  materials: IMaterials[] = [];
+  // materials: IMaterials[] = [];
   currencies: ICurrency[] = [];
   barcodetypes: IBarcodeTypes[] = [];
 
@@ -56,7 +56,7 @@ export class StockItemUpdateComponent implements OnInit, OnChanges {
     private modal: NzModalRef,
     private store: Store<fromProducts.State>,
     protected unitMeasureService: UnitMeasureService,
-    protected materialsService: MaterialsService,
+    // protected materialsService: MaterialsService,
     protected currencyService: CurrencyService,
     protected barcodeTypesService: BarcodeTypesService,
   ) {
@@ -88,7 +88,7 @@ export class StockItemUpdateComponent implements OnInit, OnChanges {
 
     this.unitMeasureService.query().subscribe((res: HttpResponse<IUnitMeasure[]>) => (this.unitmeasures = res.body || []));
 
-    this.materialsService.query().subscribe((res: HttpResponse<IMaterials[]>) => (this.materials = res.body || []));
+    // this.materialsService.query().subscribe((res: HttpResponse<IMaterials[]>) => (this.materials = res.body || []));
 
     this.currencyService.query().subscribe((res: HttpResponse<ICurrency[]>) => (this.currencies = res.body || []));
 

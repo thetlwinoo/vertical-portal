@@ -1,0 +1,40 @@
+:host {
+  overflow: hidden;
+  display: block;
+
+  .control-bar {
+    background: #fafafa;
+    padding: 0.5em;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #ffffff;
+
+    .search-bar {
+      display: flex;
+    }
+  }
+}
+
+.card-container ::ng-deep .ant-tabs-card .ant-tabs-content {
+  margin-top: -16px;
+}
+
+.card-container ::ng-deep .ant-tabs-card .ant-tabs-content .ant-tabs-tabpane {
+  background: #fff;
+  padding: 16px;
+}
+
+.card-container ::ng-deep .ant-tabs-card .ant-tabs-bar {
+  border-color: #fff;
+}
+
+.card-container ::ng-deep .ant-tabs-card .ant-tabs-bar .ant-tabs-tab {
+  border-color: transparent;
+  background: transparent;
+}
+
+.card-container ::ng-deep .ant-tabs-card .ant-tabs-bar .ant-tabs-tab-active {
+  border-color: #fff;
+  background: #fff;
+}
